@@ -19,7 +19,7 @@ public class AniDbBaseClient
     {
         ClientName = "nomercy",
         ClientVersion = 1,
-        LocalPort = (ushort)(Config.ExternalServerPort + 1)
+        LocalPort = (ushort)(NoMercyConfig.ExternalServerPort + 1)
     };
 
     private static readonly AniDBClient AniDbClient = new(AniDbClientOptions);

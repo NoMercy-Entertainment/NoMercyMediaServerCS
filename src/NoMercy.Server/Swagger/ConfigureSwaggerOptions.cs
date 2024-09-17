@@ -29,7 +29,7 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
                     Implicit = new OpenApiOAuthFlow
                     {
                         AuthorizationUrl =
-                            new Uri($"{Config.AuthBaseUrl}protocol/openid-connect/auth"),
+                            new Uri($"{NoMercyConfig.AuthBaseUrl}protocol/openid-connect/auth"),
                         Scopes = new Dictionary<string, string>
                         {
                             { "openid", "openid" },

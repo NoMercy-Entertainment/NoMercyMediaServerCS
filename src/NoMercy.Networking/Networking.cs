@@ -76,7 +76,7 @@ public class Networking
         if (localIp == null) return "";
 
         InternalAddress =
-            $"https://{Regex.Replace(localIp, "\\.", "-")}.{NmSystem.Info.DeviceId}.nomercy.tv:{Config.InternalServerPort}";
+            $"https://{Regex.Replace(localIp, "\\.", "-")}.{NmSystem.Info.DeviceId}.nomercy.tv:{NoMercyConfig.InternalServerPort}";
 
         return localIp;
     }
@@ -84,12 +84,12 @@ public class Networking
     private static string GetExternalIp()
     {
         HttpClient client = new();
-        client.BaseAddress = new(Config.ApiBaseUrl);
+        client.BaseAddress = new(NoMercyConfig.ApiBaseUrl);
 
         string externalIp = client.GetStringAsync($"server/ip").Result.Replace("\"", "");
 
         ExternalAddress =
-            $"https://{Regex.Replace(externalIp, "\\.", "-")}.{NmSystem.Info.DeviceId}.nomercy.tv:{Config.ExternalServerPort}";
+            $"https://{Regex.Replace(externalIp, "\\.", "-")}.{NmSystem.Info.DeviceId}.nomercy.tv:{NoMercyConfig.ExternalServerPort}";
 
         return externalIp;
     }
@@ -100,9 +100,9 @@ public class Networking
 
         try
         {
-            _device.CreatePortMap(new Mapping(Protocol.Tcp, Config.InternalServerPort, Config.ExternalServerPort, 9999999,
+            _device.CreatePortMap(new Mapping(Protocol.Tcp, NoMercyConfig.InternalServerPort, NoMercyConfig.ExternalServerPort, 9999999,
                 "NoMercy MediaServer (TCP)"));
-            _device.CreatePortMap(new Mapping(Protocol.Udp, Config.InternalServerPort, Config.ExternalServerPort, 9999999,
+            _device.CreatePortMap(new Mapping(Protocol.Udp, NoMercyConfig.InternalServerPort, NoMercyConfig.ExternalServerPort, 9999999,
                 "NoMercy MediaServer (UDP)"));
             
             ExternalIp = _device.GetExternalIP().ToString();
@@ -116,13 +116,13 @@ public class Networking
             ExternalIp = GetExternalIp();
         else
             ExternalAddress =
-                $"https://{Regex.Replace(ExternalIp, "\\.", "-")}.{NmSystem.Info.DeviceId}.nomercy.tv:{Config.ExternalServerPort}";
+                $"https://{Regex.Replace(ExternalIp, "\\.", "-")}.{NmSystem.Info.DeviceId}.nomercy.tv:{NoMercyConfig.ExternalServerPort}";
     }
 
     public static IWebHost TempServer()
     {
         return WebHost.CreateDefaultBuilder()
-            .UseUrls("http://0.0.0.0:" + Config.InternalServerPort)
+            .UseUrls("http://0.0.0.0:" + NoMercyConfig.InternalServerPort)
             .Configure(app =>
             {
                 app.Run(async context =>

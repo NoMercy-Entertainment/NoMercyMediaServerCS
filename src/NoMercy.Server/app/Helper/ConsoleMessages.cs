@@ -17,10 +17,10 @@ public abstract class ConsoleMessages
         Console.WriteLine(("╔" + Repeat("═", 46) + "╗").Pastel("#00a10d"));
         Console.WriteLine($"{_("#00a10d")}".Pastel("#00a10d") + @"     " +
                           "Secure Server running: on port:".Pastel("#5ffa71") +
-                          $" {Config.InternalServerPort}     ".Pastel("#ffffff") +
+                          $" {NoMercyConfig.InternalServerPort}     ".Pastel("#ffffff") +
                           $"{_("#00a10d")}".Pastel("#00a10d"));
         Console.WriteLine($"{_("#00a10d")}".Pastel("#00a10d") + @"      " + "  visit:".Pastel("#cccccc") +
-                          $"  {Config.AppBaseUrl}       ".Pastel("#ffffff") + $"{_("#00a10d")}".Pastel("#00a10d"));
+                          $"  {NoMercyConfig.AppBaseUrl}       ".Pastel("#ffffff") + $"{_("#00a10d")}".Pastel("#00a10d"));
         Console.WriteLine(("╚" + Repeat("═", 46) + "╝").Pastel("#00a10d"));
 
         return Task.CompletedTask;

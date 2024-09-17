@@ -24,8 +24,8 @@ public static class Register
             { "server_id", Info.DeviceId.ToString() },
             { "server_name", DeviceName() },
             { "internal_ip", Networking.Networking.InternalIp },
-            { "internal_port", Config.InternalServerPort.ToString() },
-            { "external_port", Config.ExternalServerPort.ToString() },
+            { "internal_port", NoMercyConfig.InternalServerPort.ToString() },
+            { "external_port", NoMercyConfig.ExternalServerPort.ToString() },
             { "server_version", ApiInfo.ApplicationVersion },
             { "platform", Info.Platform }
         };
@@ -33,7 +33,7 @@ public static class Register
         Logger.Register("Registering Server, this takes a moment...");
 
         HttpClient client = new();
-        client.BaseAddress = new(Config.ApiServerBaseUrl);
+        client.BaseAddress = new(NoMercyConfig.ApiServerBaseUrl);
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
         string content = client.PostAsync("register",
@@ -59,7 +59,7 @@ public static class Register
         };
 
         HttpClient client = new();
-        client.BaseAddress = new Uri(Config.ApiServerBaseUrl);
+        client.BaseAddress = new Uri(NoMercyConfig.ApiServerBaseUrl);
         client.DefaultRequestHeaders.Add("Accept", "application/json");
         client.DefaultRequestHeaders.Add("User-Agent", ApiInfo.UserAgent);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Auth.AccessToken);

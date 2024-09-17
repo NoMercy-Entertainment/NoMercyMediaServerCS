@@ -12,12 +12,12 @@ namespace NoMercy.Networking;
 public static class Auth
 {
     public static Action<string, string> Logger;
-    private static string BaseUrl => Config.AuthBaseUrl;
+    private static string BaseUrl => NoMercyConfig.AuthBaseUrl;
     private static readonly string TokenUrl = $"{BaseUrl}protocol/openid-connect/token";
 
     private static string? PublicKey { get; set; }
-    private static string? TokenClientId => Config.TokenClientId;
-    private static string? TokenClientSecret => Config.TokenClientSecret;
+    private static string? TokenClientId => NoMercyConfig.TokenClientId;
+    private static string? TokenClientSecret => NoMercyConfig.TokenClientSecret;
 
     private static string? RefreshToken { get; set; }
     public static string? AccessToken { get; private set; }
@@ -31,7 +31,7 @@ public static class Auth
 
     public static Task Init()
     {
-        if (!File.Exists(Config.TokenFile)) File.WriteAllText(Config.TokenFile, "{}");
+        if (!File.Exists(NoMercyConfig.TokenFile)) File.WriteAllText(NoMercyConfig.TokenFile, "{}");
 
         AuthKeys();
 
@@ -134,7 +134,7 @@ public static class Auth
     private static void TokenByBrowser()
     {
         Uri baseUrl = new($"{BaseUrl}protocol/openid-connect/auth");
-        string redirectUri = HttpUtility.UrlEncode($"http://localhost:{Config.InternalServerPort}/sso-callback");
+        string redirectUri = HttpUtility.UrlEncode($"http://localhost:{NoMercyConfig.InternalServerPort}/sso-callback");
 
         IEnumerable<string> query = new Dictionary<string, string>
         {
@@ -174,13 +174,13 @@ public static class Auth
 
         if (data.access_token == null || data.refresh_token == null || data.expires_in == null)
         {
-            File.Delete(Config.TokenFile);
+            File.Delete(NoMercyConfig.TokenFile);
             TokenByBrowserOrPassword();
 
             return;
         }
 
-        FileStream tmp = File.OpenWrite(Config.TokenFile);
+        FileStream tmp = File.OpenWrite(NoMercyConfig.TokenFile);
         tmp.SetLength(0);
         tmp.Write(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(data, Formatting.Indented)));
         tmp.Close();
@@ -195,7 +195,7 @@ public static class Auth
 
     private static dynamic TokenData()
     {
-        return JsonConvert.DeserializeObject(File.ReadAllText(Config.TokenFile))
+        return JsonConvert.DeserializeObject(File.ReadAllText(NoMercyConfig.TokenFile))
                ?? throw new Exception("Failed to deserialize JSON");
     }
 
@@ -313,7 +313,7 @@ public static class Auth
             new KeyValuePair<string, string>("client_secret", TokenClientSecret),
             new KeyValuePair<string, string>("scope", "openid offline_access email profile"),
             new KeyValuePair<string, string>("redirect_uri",
-                $"http://localhost:{Config.InternalServerPort}/sso-callback"),
+                $"http://localhost:{NoMercyConfig.InternalServerPort}/sso-callback"),
             new KeyValuePair<string, string>("code", code)
         ];
 

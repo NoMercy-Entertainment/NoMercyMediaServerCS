@@ -27,7 +27,7 @@ public partial class ApiInfo
     {
         HttpClient client = new();
         client.Timeout = TimeSpan.FromSeconds(15);
-        client.BaseAddress = new Uri(Config.ApiBaseUrl);
+        client.BaseAddress = new Uri(NoMercyConfig.ApiBaseUrl);
         HttpResponseMessage response = await client.GetAsync("v1/info");
         string? content = await response.Content.ReadAsStringAsync();
 

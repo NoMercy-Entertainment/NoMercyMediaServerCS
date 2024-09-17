@@ -86,10 +86,10 @@ public static class Certificate
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Auth.AccessToken);
 
-        string serverUrl = $"{Config.ApiServerBaseUrl}certificate?server_id={Info.DeviceId}";
+        string serverUrl = $"{NoMercyConfig.ApiServerBaseUrl}certificate?server_id={Info.DeviceId}";
 
         if (File.Exists(AppFiles.CertFile))
-            serverUrl = $"{Config.ApiServerBaseUrl}renewcertificate?server_id={Info.DeviceId}";
+            serverUrl = $"{NoMercyConfig.ApiServerBaseUrl}renewcertificate?server_id={Info.DeviceId}";
 
         string response = client
             .GetStringAsync(serverUrl)

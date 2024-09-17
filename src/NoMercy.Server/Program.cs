@@ -40,7 +40,7 @@ public static class Program
             Shutdown().Wait();
         };
 
-        return Parser.Default.ParseArguments<StartupOptions>(args)
+        return Parser.Default.ParseArguments<StartupArgs>(args)
             .MapResult(Start, ErrorParsingArguments);
 
         static Task ErrorParsingArguments(IEnumerable<Error> errors)
@@ -50,7 +50,7 @@ public static class Program
         }
     }
 
-    private async static Task Start(StartupOptions options)
+    private async static Task Start(StartupArgs options)
     {
         Console.Clear();
         Console.Title = "NoMercy Server";
@@ -59,14 +59,14 @@ public static class Program
         {
             Logger.App("Running in development mode.");
             
-            Config.IsDev = true;
+            NoMercyConfig.IsDev = true;
             
-            Config.AppBaseUrl = "https://app-dev.nomercy.tv/";
-            Config.ApiBaseUrl = "https://api-dev.nomercy.tv/";
-            Config.ApiServerBaseUrl = $"{Config.ApiBaseUrl}v1/server/";
+            NoMercyConfig.AppBaseUrl = "https://app-dev.nomercy.tv/";
+            NoMercyConfig.ApiBaseUrl = "https://api-dev.nomercy.tv/";
+            NoMercyConfig.ApiServerBaseUrl = $"{NoMercyConfig.ApiBaseUrl}v1/server/";
             
-            Config.AuthBaseUrl = "https://auth-dev.nomercy.tv/realms/NoMercyTV/";
-            Config.TokenClientSecret = "1lHWBazSTHfBpuIzjAI6xnNjmwUnryai";
+            NoMercyConfig.AuthBaseUrl = "https://auth-dev.nomercy.tv/realms/NoMercyTV/";
+            NoMercyConfig.TokenClientSecret = "1lHWBazSTHfBpuIzjAI6xnNjmwUnryai";
         }
         
         if(options.Seed)
@@ -81,18 +81,18 @@ public static class Program
             Logger.SetLogLevel(Enum.Parse<LogEventLevel>(options.LogLevel.ToTitleCase()));
         }
         
-        Logger.App(Config.AuthBaseUrl);
+        Logger.App(NoMercyConfig.AuthBaseUrl);
 
         if (options.InternalPort != 0)
         {
             Logger.App("Setting internal port to " + options.InternalPort);
-            Config.InternalServerPort = options.InternalPort;
+            NoMercyConfig.InternalServerPort = options.InternalPort;
         }
         
         if (options.ExternalPort != 0)
         {
             Logger.App("Setting external port to " + options.ExternalPort);
-            Config.ExternalServerPort = options.ExternalPort;
+            NoMercyConfig.ExternalServerPort = options.ExternalPort;
         }
 
         Stopwatch stopWatch = new();
@@ -143,7 +143,7 @@ public static class Program
         UriBuilder? url = new UriBuilder
         {
             Host = IPAddress.Any.ToString(),
-            Port = Config.InternalServerPort,
+            Port = NoMercyConfig.InternalServerPort,
             Scheme = "https"
         };
 
@@ -197,11 +197,11 @@ public static class Program
             Logger.App($"Configuration: {config.Key} = {config.Value}");
             if (config.Key == "InternalServerPort")
             {
-                Config.InternalServerPort = int.Parse(config.Value);
+                NoMercyConfig.InternalServerPort = int.Parse(config.Value);
             }
             else if (config.Key == "ExternalServerPort")
             {
-                Config.ExternalServerPort = int.Parse(config.Value);
+                NoMercyConfig.ExternalServerPort = int.Parse(config.Value);
             }
         }
 

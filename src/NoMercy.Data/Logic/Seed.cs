@@ -197,7 +197,7 @@ public class Seed : IDisposable, IAsyncDisposable
         Logger.Setup("Adding Users");
         
         HttpClient client = new();
-        client.BaseAddress = new Uri(Config.ApiServerBaseUrl);
+        client.BaseAddress = new Uri(NoMercyConfig.ApiServerBaseUrl);
         client.DefaultRequestHeaders.Add("Accept", "application/json");
         client.DefaultRequestHeaders.Add("User-Agent", ApiInfo.UserAgent);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Auth.AccessToken);

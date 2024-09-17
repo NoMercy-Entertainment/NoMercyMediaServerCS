@@ -138,7 +138,7 @@ public class Startup
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                options.Authority = Config.AuthBaseUrl;
+                options.Authority = NoMercyConfig.AuthBaseUrl;
                 options.RequireHttpsMetadata = true;
                 options.Audience = "nomercy-ui";
                 options.Audience = "nomercy-server";
