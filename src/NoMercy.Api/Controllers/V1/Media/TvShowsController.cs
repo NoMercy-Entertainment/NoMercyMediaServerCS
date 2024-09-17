@@ -24,14 +24,7 @@ namespace NoMercy.Api.Controllers.V1.Media;
 [ApiVersion(1.0)]
 [Authorize]
 [Route("api/v{version:apiVersion}/tv/{id:int}")] // match themoviedb.org API
-public class TvShowsController : BaseController
-{
-    private readonly ITvShowRepository _tvShowRepository;
-
-    public TvShowsController(ITvShowRepository tvShowRepository)
-    {
-        _tvShowRepository = tvShowRepository;
-    }
+public class TvShowsController(ITvShowRepository tvShowRepository) : BaseController {
 
     [HttpGet]
     public async Task<IActionResult> Tv(int id)
@@ -42,7 +35,7 @@ public class TvShowsController : BaseController
 
         string language = Language();
 
-        Tv? tv = await _tvShowRepository.GetTvAsync(userId, id, language);
+        Tv? tv = await tvShowRepository.GetTvAsync(userId, id, language);
 
         if (tv is not null)
             return Ok(new InfoResponseDto
@@ -56,7 +49,7 @@ public class TvShowsController : BaseController
         if (tvShowAppends is null)
             return NotFoundResponse("Tv show not found");
 
-        await _tvShowRepository.AddTvShowAsync(id);
+        await tvShowRepository.AddTvShowAsync(id);
 
         return Ok(new InfoResponseDto
         {
@@ -72,7 +65,7 @@ public class TvShowsController : BaseController
         if (!User.IsAllowed())
             return UnauthorizedResponse("You do not have permission to view tv shows");
 
-        bool available = await _tvShowRepository.GetTvAvailableAsync(userId, id);
+        bool available = await tvShowRepository.GetTvAvailableAsync(userId, id);
 
         if (!available)
             return NotFound(new AvailableResponseDto
@@ -96,7 +89,7 @@ public class TvShowsController : BaseController
 
         string language = Language();
 
-        Tv? tv = await _tvShowRepository.GetTvPlaylistAsync(userId, id, language);
+        Tv? tv = await tvShowRepository.GetTvPlaylistAsync(userId, id, language);
 
         if (tv is null)
             return NotFoundResponse("Tv show not found");
@@ -124,7 +117,7 @@ public class TvShowsController : BaseController
         if (!User.IsAllowed())
             return UnauthorizedResponse("You do not have permission to like tv shows");
 
-        bool success = await _tvShowRepository.LikeTvAsync(id, userId, request.Value);
+        bool success = await tvShowRepository.LikeTvAsync(id, userId, request.Value);
 
         if (!success)
             return UnprocessableEntityResponse("Tv show not found");

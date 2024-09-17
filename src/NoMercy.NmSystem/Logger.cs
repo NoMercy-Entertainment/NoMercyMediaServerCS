@@ -74,20 +74,12 @@ public static class Logger
         return level >= _maxLogLevel;
     }
 
-    public class LogType
-    {
-        [JsonProperty("name")] public string Name { get; set; }
-        [JsonProperty("display_name")] public string DisplayName { get; set; }
-        [JsonProperty("color")] public string Color { get; set; }
-        [JsonProperty("type")] public string Type { get; set; }
+    public class LogType(string name, string displayName, Color color, string type) {
+        [JsonProperty("name")] public string Name { get; set; } = name;
+        [JsonProperty("display_name")] public string DisplayName { get; set; } = displayName;
+        [JsonProperty("color")] public string Color { get; set; } = ToHexString(color);
+        [JsonProperty("type")] public string Type { get; set; } = type ?? "log";
 
-        public LogType(string name, string displayName, Color color, string type)
-        {
-            Name = name;
-            DisplayName = displayName;
-            Color = ToHexString(color);
-            Type = type ?? "log";
-        }
     }
 
     public static readonly List<LogType> LogTypes =

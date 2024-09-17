@@ -6,18 +6,11 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace NoMercy.Server.Swagger;
 
-public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
-{
-    private readonly IApiVersionDescriptionProvider _provider;
-
-    public ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider)
-    {
-        _provider = provider;
-    }
+public class ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider) : IConfigureOptions<SwaggerGenOptions> {
 
     public void Configure(SwaggerGenOptions options)
     {
-        foreach (ApiVersionDescription description in _provider.ApiVersionDescriptions)
+        foreach (ApiVersionDescription description in provider.ApiVersionDescriptions)
         {
             options.SwaggerDoc(description.GroupName, CreateInfoForApiVersion(description));
 

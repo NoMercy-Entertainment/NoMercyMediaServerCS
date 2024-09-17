@@ -140,7 +140,7 @@ public static class Program
 
     private static IWebHostBuilder CreateWebHostBuilder(this IWebHostBuilder _)
     {
-        UriBuilder url = new UriBuilder
+        UriBuilder url = new ()
         {
             Host = IPAddress.Any.ToString(),
             Port = NoMercyConfig.InternalServerPort,
@@ -192,16 +192,13 @@ public static class Program
         await using MediaContext mediaContext = new();
         List<Configuration> configuration = mediaContext.Configuration.ToList();
         
-        foreach (Configuration? config in configuration)
-        {
+        foreach (Configuration? config in configuration) {
             Logger.App($"Configuration: {config.Key} = {config.Value}");
-            if (config.Key == "InternalServerPort")
-            {
-                NoMercyConfig.InternalServerPort = int.Parse(config.Value);
-            }
-            else if (config.Key == "ExternalServerPort")
-            {
-                NoMercyConfig.ExternalServerPort = int.Parse(config.Value);
+            switch (config.Key) {
+                case "InternalServerPort": NoMercyConfig.InternalServerPort = int.Parse(config.Value);
+                    break;
+                case "ExternalServerPort": NoMercyConfig.ExternalServerPort = int.Parse(config.Value);
+                    break;
             }
         }
 

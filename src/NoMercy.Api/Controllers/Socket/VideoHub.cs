@@ -10,14 +10,9 @@ using NoMercy.Networking;
 using NoMercy.NmSystem;
 
 namespace NoMercy.Api.Controllers.Socket;
-public class VideoHub : ConnectionHub
-{
+public class VideoHub(IHttpContextAccessor httpContextAccessor) : ConnectionHub(httpContextAccessor) {
     private static readonly ConcurrentDictionary<Guid, string> CurrentDevices = new();
     private static readonly ConcurrentDictionary<Guid, PlayerState> PlayerState = new();
-
-    public VideoHub(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
-    {
-    }
 
     public async Task SetTime(VideoProgressRequest request)
     {

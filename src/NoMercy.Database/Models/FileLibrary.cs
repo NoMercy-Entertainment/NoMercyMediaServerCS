@@ -8,17 +8,11 @@ namespace NoMercy.Database.Models;
 [PrimaryKey(nameof(FileId), nameof(LibraryId))]
 [Index(nameof(FileId))]
 [Index(nameof(LibraryId))]
-public class FileLibrary
-{
-    [JsonProperty("file_id")] public Ulid FileId { get; set; }
+public class FileLibrary(Ulid fileId, Ulid libraryId) {
+    [JsonProperty("file_id")] public Ulid FileId { get; set; } = fileId;
     public File File { get; set; }
 
-    [JsonProperty("library_id")] public Ulid LibraryId { get; set; }
+    [JsonProperty("library_id")] public Ulid LibraryId { get; set; } = libraryId;
     public Library Library { get; set; }
 
-    public FileLibrary(Ulid fileId, Ulid libraryId)
-    {
-        FileId = fileId;
-        LibraryId = libraryId;
-    }
 }

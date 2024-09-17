@@ -18,14 +18,7 @@ namespace NoMercy.Api.Controllers.V1.Dashboard;
 [ApiVersion(1.0)]
 [Authorize]
 [Route("api/v{version:apiVersion}/dashboard/devices", Order = 10)]
-public class DevicesController : BaseController
-{
-    private readonly IDeviceRepository _deviceRepository;
-
-    public DevicesController(IDeviceRepository deviceRepository)
-    {
-        _deviceRepository = deviceRepository;
-    }
+public class DevicesController(IDeviceRepository deviceRepository) : BaseController {
 
     [HttpGet]
     public Task<IActionResult> Index()
@@ -33,7 +26,7 @@ public class DevicesController : BaseController
         if (!User.IsModerator())
             return Task.FromResult(UnauthorizedResponse("You do not have permission to view devices"));
 
-        IIncludableQueryable<Device, ICollection<ActivityLog>> devices = _deviceRepository.GetDevicesAsync();
+        IIncludableQueryable<Device, ICollection<ActivityLog>> devices = deviceRepository.GetDevicesAsync();
 
         IEnumerable<DevicesDto> devicesDtos = devices
             .Select(x => new DevicesDto

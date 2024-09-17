@@ -40,14 +40,7 @@ using MovieRepository = NoMercy.Data.Repositories.MovieRepository;
 
 namespace NoMercy.Server;
 
-public class Startup
-{
-    private readonly IApiVersionDescriptionProvider _provider;
-
-    public Startup(IApiVersionDescriptionProvider provider)
-    {
-        _provider = provider;
-    }
+public class Startup(IApiVersionDescriptionProvider provider) {
 
     public void ConfigureServices(IServiceCollection services)
     {
@@ -260,7 +253,7 @@ public class Startup
             options.EnablePersistAuthorization();
             options.EnableTryItOutByDefault();
 
-            IReadOnlyList<ApiVersionDescription> descriptions = _provider.ApiVersionDescriptions;
+            IReadOnlyList<ApiVersionDescription> descriptions = provider.ApiVersionDescriptions;
             foreach (ApiVersionDescription description in descriptions)
             {
                 string url = $"/swagger/{description.GroupName}/swagger.json";

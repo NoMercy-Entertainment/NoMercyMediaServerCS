@@ -3,9 +3,4 @@ using NoMercy.Networking;
 
 namespace NoMercy.Api.Controllers.Socket;
 
-public class SocketHub : ConnectionHub
-{
-    public SocketHub(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
-    {
-    }
-}
+public class SocketHub(IHttpContextAccessor httpContextAccessor) : ConnectionHub(httpContextAccessor);

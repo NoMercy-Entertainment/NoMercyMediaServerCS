@@ -7,9 +7,7 @@ using NoMercy.NmSystem;
 
 namespace NoMercy.Api.Middleware;
 
-public class AccessLogMiddleware
-{
-    private readonly RequestDelegate _next;
+public class AccessLogMiddleware(RequestDelegate next) {
 
     private readonly string[] _ignoredStartsWithRoutes =
     [
@@ -36,11 +34,6 @@ public class AccessLogMiddleware
         "/status"
     ];
 
-    public AccessLogMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
-
     public async Task InvokeAsync(HttpContext context)
     {
         string path = HttpUtility.UrlDecode(context.Request.Path);
@@ -53,7 +46,7 @@ public class AccessLogMiddleware
 
         if (ignoreStart || ignoreExactRoute)
         {
-            await _next(context);
+            await next(context);
             return;
         }
 
@@ -65,12 +58,12 @@ public class AccessLogMiddleware
         {
             if (ignoreIfGuest)
             {
-                await _next(context);
+                await next(context);
                 return;
             }
 
             Logger.Http($"Unknown: {context.Connection.RemoteIpAddress}: {path}");
-            await _next(context);
+            await next(context);
             return;
         }
 
@@ -80,12 +73,12 @@ public class AccessLogMiddleware
         {
             if (ignoreIfGuest)
             {
-                await _next(context);
+                await next(context);
                 return;
             }
 
             Logger.Http($"Unknown: {context.Connection.RemoteIpAddress}: {path}");
-            await _next(context);
+            await next(context);
             return;
         }
 
@@ -94,13 +87,13 @@ public class AccessLogMiddleware
 
         if (ignoreIfAuthenticated)
         {
-            await _next(context);
+            await next(context);
             return;
         }
 
         if (ClaimsPrincipleExtensions.FolderIds.Any(x => path.StartsWith("/" + x)))
         {
-            await _next(context);
+            await next(context);
             return;
         }
 
@@ -108,6 +101,6 @@ public class AccessLogMiddleware
 
         Logger.Http($"{user?.Name ?? $"Unknown: {context.Connection.RemoteIpAddress}:"}: {path}");
 
-        await _next(context);
+        await next(context);
     }
 }

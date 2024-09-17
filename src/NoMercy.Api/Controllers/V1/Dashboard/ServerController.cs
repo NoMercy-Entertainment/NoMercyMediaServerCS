@@ -37,14 +37,8 @@ namespace NoMercy.Api.Controllers.V1.Dashboard;
 [ApiVersion(1.0)]
 [Authorize]
 [Route("api/v{version:apiVersion}/dashboard/server", Order = 10)]
-public class ServerController : BaseController
-{
-    private IHostApplicationLifetime ApplicationLifetime { get; }
-
-    public ServerController(IHostApplicationLifetime appLifetime)
-    {
-        ApplicationLifetime = appLifetime;
-    }
+public class ServerController(IHostApplicationLifetime appLifetime) : BaseController {
+    private IHostApplicationLifetime ApplicationLifetime { get; } = appLifetime;
 
     [HttpGet]
     public IActionResult Index()

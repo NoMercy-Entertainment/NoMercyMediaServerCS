@@ -4,11 +4,7 @@ using NoMercy.NmSystem;
 
 namespace NoMercy.Api.Controllers.Socket;
 
-public class DashboardHub : ConnectionHub
-{
-    public DashboardHub(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
-    {
-    }
+public class DashboardHub(IHttpContextAccessor httpContextAccessor) : ConnectionHub(httpContextAccessor) {
 
     public async override Task OnDisconnectedAsync(Exception? exception)
     {

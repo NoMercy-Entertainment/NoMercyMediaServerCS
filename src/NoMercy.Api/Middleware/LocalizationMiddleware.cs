@@ -2,14 +2,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace NoMercy.Api.Middleware;
 
-public class LocalizationMiddleware
-{
-    private readonly RequestDelegate _next;
-
-    public LocalizationMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
+public class LocalizationMiddleware(RequestDelegate next) {
 
     public async Task InvokeAsync(HttpContext context)
     {
@@ -25,6 +18,6 @@ public class LocalizationMiddleware
         else
             context.Request.Headers.AcceptLanguage = "en-US".Split('-');
 
-        await _next(context);
+        await next(context);
     }
 }

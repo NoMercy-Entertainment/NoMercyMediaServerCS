@@ -24,14 +24,7 @@ namespace NoMercy.Api.Controllers.V1.Media;
 [ApiVersion(1.0)]
 [Authorize]
 [Route("api/v{version:apiVersion}/movie/{id:int}")] // match themoviedb.org API
-public class MoviesController : BaseController
-{
-    private readonly IMovieRepository _movieRepository;
-
-    public MoviesController(IMovieRepository movieRepository)
-    {
-        _movieRepository = movieRepository;
-    }
+public class MoviesController(IMovieRepository movieRepository) : BaseController {
 
     [HttpGet]
     public async Task<IActionResult> Movie(int id)
@@ -43,7 +36,7 @@ public class MoviesController : BaseController
         string language = Language();
         string country = Country();
 
-        Movie? movie = await _movieRepository.GetMovieAsync(userId, id, language);
+        Movie? movie = await movieRepository.GetMovieAsync(userId, id, language);
 
         if (movie is not null)
             return Ok(new InfoResponseDto
@@ -57,7 +50,7 @@ public class MoviesController : BaseController
         if (movieAppends is null)
             return NotFoundResponse("Movie not found");
 
-        await _movieRepository.AddMovieAsync(id);
+        await movieRepository.AddMovieAsync(id);
 
         return Ok(new InfoResponseDto
         {
@@ -73,7 +66,7 @@ public class MoviesController : BaseController
         if (!User.IsAllowed())
             return UnauthorizedResponse("You do not have permission to view movies");
 
-        bool available = await _movieRepository.GetMovieAvailableAsync(userId, id);
+        bool available = await movieRepository.GetMovieAvailableAsync(userId, id);
 
         if (!available)
             return NotFound(new AvailableResponseDto
@@ -97,7 +90,7 @@ public class MoviesController : BaseController
 
         string language = Language();
 
-        IEnumerable<PlaylistResponseDto> playlist = _movieRepository.GetMoviePlaylistAsync(userId, id, language)
+        IEnumerable<PlaylistResponseDto> playlist = movieRepository.GetMoviePlaylistAsync(userId, id, language)
             .Select(movie => new PlaylistResponseDto(movie));
 
         if (!playlist.Any())
@@ -114,7 +107,7 @@ public class MoviesController : BaseController
         if (!User.IsAllowed())
             return UnauthorizedResponse("You do not have permission to like movies");
 
-        bool success = await _movieRepository.LikeMovieAsync(id, userId, request.Value);
+        bool success = await movieRepository.LikeMovieAsync(id, userId, request.Value);
 
         if (!success)
             return UnprocessableEntityResponse("Movie not found");

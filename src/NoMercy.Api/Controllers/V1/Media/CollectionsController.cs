@@ -17,14 +17,7 @@ namespace NoMercy.Api.Controllers.V1.Media;
 [ApiVersion(1.0)]
 [Authorize]
 [Route("api/v{version:apiVersion}/collection")] // match themoviedb.org API
-public class CollectionsController : BaseController
-{
-    private readonly ICollectionRepository _collectionRepository;
-
-    public CollectionsController(ICollectionRepository collectionRepository)
-    {
-        _collectionRepository = collectionRepository;
-    }
+public class CollectionsController(ICollectionRepository collectionRepository) : BaseController {
 
     [HttpGet]
     public async Task<IActionResult> Collections([FromQuery] PageRequestDto request)
@@ -36,7 +29,7 @@ public class CollectionsController : BaseController
         string language = Language();
 
         List<Collection> collections =
-            await _collectionRepository.GetCollectionsAsync(userId, language, request.Take, request.Page);
+            await collectionRepository.GetCollectionsAsync(userId, language, request.Take, request.Page);
 
         if (request.Version != "lolomo")
         {
@@ -79,7 +72,7 @@ public class CollectionsController : BaseController
         string language = Language();
         string country = Country();
 
-        Collection? collection = await _collectionRepository.GetCollectionAsync(userId, id, language, country);
+        Collection? collection = await collectionRepository.GetCollectionAsync(userId, id, language, country);
 
         if (collection is not null && collection.CollectionMovies.Count > 0 && collection.Images.Count > 0)
             return Ok(new CollectionResponseDto
@@ -119,7 +112,7 @@ public class CollectionsController : BaseController
         if (!User.IsAllowed())
             return UnauthorizedResponse("You do not have permission to view collections");
 
-        Collection? collection = await _collectionRepository.GetAvailableCollectionAsync(userId, id);
+        Collection? collection = await collectionRepository.GetAvailableCollectionAsync(userId, id);
 
         bool available = collection is not null && collection.CollectionMovies
             .Select(movie => movie.Movie.VideoFiles)
@@ -148,7 +141,7 @@ public class CollectionsController : BaseController
         string language = Language();
         string country = Country();
 
-        Collection? collection = await _collectionRepository.GetWatchCollectionAsync(userId, id, language, country);
+        Collection? collection = await collectionRepository.GetWatchCollectionAsync(userId, id, language, country);
 
         if (collection is null)
             return NotFoundResponse("Collection not found");
@@ -165,7 +158,7 @@ public class CollectionsController : BaseController
         if (!User.IsAllowed())
             return UnauthorizedResponse("You do not have permission to like collections");
 
-        bool success = await _collectionRepository.LikeCollectionAsync(id, userId, request.Value);
+        bool success = await collectionRepository.LikeCollectionAsync(id, userId, request.Value);
 
         if (!success)
             return UnprocessableEntityResponse("Collection not found");

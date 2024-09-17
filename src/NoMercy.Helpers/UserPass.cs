@@ -1,14 +1,7 @@
 namespace NoMercy.Helpers;
-public class UserPass
-{
-    public string Username { get; set; }
-    public string Password { get; set; }
-    public string? ApiKey { get; set; }
+public class UserPass(string username, string password, string apiKey) {
+    public string Username { get; set; } = username;
+    public string Password { get; set; } = password;
+    public string? ApiKey { get; set; } = apiKey;
 
-    public UserPass(string username, string password, string apiKey)
-    {
-        Username = username;
-        Password = password;
-        ApiKey = apiKey;
-    }
 }

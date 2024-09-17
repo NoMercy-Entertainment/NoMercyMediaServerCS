@@ -1,10 +1,6 @@
 namespace NoMercy.Encoder.Core;
 
-public class VideoFile : VideoAudioFile
-{
+public class VideoFile(MediaAnalysis? fMediaAnalysis, string ffmpegPath) : VideoAudioFile(fMediaAnalysis, ffmpegPath) {
     internal override bool IsVideo => true;
 
-    public VideoFile(MediaAnalysis? fMediaAnalysis, string ffmpegPath) : base(fMediaAnalysis, ffmpegPath)
-    {
-    }
 }

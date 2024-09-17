@@ -17,14 +17,7 @@ namespace NoMercy.Api.Controllers.V1.Dashboard;
 [ApiVersion(1.0)]
 [Authorize]
 [Route("api/v{version:apiVersion}/dashboard/encoderprofiles", Order = 10)]
-public class EncoderController : BaseController
-{
-    private readonly IEncoderRepository _encoderRepository;
-
-    public EncoderController(IEncoderRepository encoderRepository)
-    {
-        _encoderRepository = encoderRepository;
-    }
+public class EncoderController(IEncoderRepository encoderRepository) : BaseController {
 
     [HttpGet]
     public async Task<IActionResult> Index()
@@ -33,7 +26,7 @@ public class EncoderController : BaseController
             return UnauthorizedResponse("You do not have permission to view encoder profiles");
 
         await using MediaContext mediaContext = new();
-        List<EncoderProfile> profiles = await _encoderRepository.GetEncoderProfilesAsync();
+        List<EncoderProfile> profiles = await encoderRepository.GetEncoderProfilesAsync();
 
         List<EncoderProfileDto> encoderProfiles = profiles
             .Where(profile => profile.Param != null)
@@ -90,7 +83,7 @@ public class EncoderController : BaseController
         try
         {
             await using MediaContext mediaContext = new();
-            int encoderProfiles = await _encoderRepository.GetEncoderProfileCountAsync();
+            int encoderProfiles = await encoderRepository.GetEncoderProfileCountAsync();
 
             EncoderProfile profile = new()
             {
@@ -108,7 +101,7 @@ public class EncoderController : BaseController
                 })
             };
 
-            await _encoderRepository.AddEncoderProfileAsync(profile);
+            await encoderRepository.AddEncoderProfileAsync(profile);
 
             return Ok(new StatusResponseDto<EncoderProfile>
             {
@@ -136,7 +129,7 @@ public class EncoderController : BaseController
         if (!User.IsModerator())
             return UnauthorizedResponse("You do not have permission to remove encoder profiles");
 
-        EncoderProfile? profile = await _encoderRepository.GetEncoderProfileByIdAsync(id);
+        EncoderProfile? profile = await encoderRepository.GetEncoderProfileByIdAsync(id);
 
         if (profile == null)
             return NotFound(new StatusResponseDto<string>
@@ -145,7 +138,7 @@ public class EncoderController : BaseController
                 Data = "Encoder profile not found"
             });
 
-        await _encoderRepository.DeleteEncoderProfileAsync(profile);
+        await encoderRepository.DeleteEncoderProfileAsync(profile);
 
         return Ok(new StatusResponseDto<string>
         {

@@ -15,14 +15,7 @@ namespace NoMercy.Api.Controllers.V1.Media;
 [ApiVersion(1.0)]
 [Authorize]
 [Route("api/v{version:apiVersion}/genres")]
-public class GenresController : BaseController
-{
-    private readonly IGenreRepository _genreRepository;
-
-    public GenresController(IGenreRepository genreRepository)
-    {
-        _genreRepository = genreRepository;
-    }
+public class GenresController(IGenreRepository genreRepository) : BaseController {
 
     [HttpGet]
     public async Task<IActionResult> Genres([FromQuery] PageRequestDto request)
@@ -35,7 +28,7 @@ public class GenresController : BaseController
 
         string language = Language();
 
-        List<GenresResponseItemDto> genres = await _genreRepository
+        List<GenresResponseItemDto> genres = await genreRepository
             .GetGenresAsync(userId, language, request.Take, request.Page)
             .Select(genre => new GenresResponseItemDto(genre))
             .ToListAsync();
@@ -53,7 +46,7 @@ public class GenresController : BaseController
 
         string language = Language();
 
-        Genre genre = await _genreRepository.GetGenreAsync(userId, genreId, language, request.Take, request.Page);
+        Genre genre = await genreRepository.GetGenreAsync(userId, genreId, language, request.Take, request.Page);
 
         if (genre.GenreTvShows.Count == 0 && genre.GenreMovies.Count == 0)
             return NotFoundResponse("Genre not found");

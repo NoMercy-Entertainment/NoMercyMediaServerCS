@@ -15,14 +15,7 @@ namespace NoMercy.Api.Controllers.V1.Media;
 [ApiVersion(1.0)]
 [Authorize]
 [Route("api/v{version:apiVersion}/libraries")]
-public class LibrariesController : BaseController
-{
-    private readonly ILibraryRepository _libraryRepository;
-
-    public LibrariesController(ILibraryRepository libraryRepository)
-    {
-        _libraryRepository = libraryRepository;
-    }
+public class LibrariesController(ILibraryRepository libraryRepository) : BaseController {
 
     [HttpGet]
     public async Task<IActionResult> Libraries()
@@ -31,7 +24,7 @@ public class LibrariesController : BaseController
         if (!User.IsAllowed())
             return UnauthorizedResponse("You do not have permission to view libraries");
 
-        IQueryable<Library> libraries = _libraryRepository.GetLibrariesAsync(userId);
+        IQueryable<Library> libraries = libraryRepository.GetLibrariesAsync(userId);
 
         List<LibrariesResponseItemDto> response = libraries
             .Select(library => new LibrariesResponseItemDto(library))
@@ -53,9 +46,9 @@ public class LibrariesController : BaseController
 
         string language = Language();
 
-        IEnumerable<Movie> movies = _libraryRepository
+        IEnumerable<Movie> movies = libraryRepository
             .GetLibraryMoviesAsync(userId, libraryId, language, request.Take, request.Page);
-        IEnumerable<Tv> shows = _libraryRepository
+        IEnumerable<Tv> shows = libraryRepository
             .GetLibraryShowsAsync(userId, libraryId, language, request.Take, request.Page);
 
         if (request.Version != "lolomo")

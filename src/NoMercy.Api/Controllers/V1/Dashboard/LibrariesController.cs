@@ -21,21 +21,12 @@ namespace NoMercy.Api.Controllers.V1.Dashboard;
 [ApiVersion(1.0)]
 [Authorize]
 [Route("api/v{version:apiVersion}/dashboard/libraries", Order = 10)]
-public class LibrariesController : BaseController
-{
-    private readonly ILibraryRepository _libraryRepository;
-    private readonly IEncoderRepository _encoderRepository;
-    private readonly IFolderRepository _folderRepository;
-    private readonly ILanguageRepository _languageRepository;
-
-    public LibrariesController(ILibraryRepository libraryRepository, IEncoderRepository encoderRepository,
-        IFolderRepository folderRepository, ILanguageRepository languageRepository)
-    {
-        _libraryRepository = libraryRepository;
-        _encoderRepository = encoderRepository;
-        _folderRepository = folderRepository;
-        _languageRepository = languageRepository;
-    }
+public class LibrariesController(
+    ILibraryRepository libraryRepository,
+    IEncoderRepository encoderRepository,
+    IFolderRepository folderRepository,
+    ILanguageRepository languageRepository)
+    : BaseController {
 
     [HttpGet]
     public Task<IActionResult> Index()
@@ -43,7 +34,7 @@ public class LibrariesController : BaseController
         Guid userId = User.UserId();
         if (!User.IsAllowed())
             return Task.FromResult(UnauthorizedResponse("You do not have permission to view libraries"));
-        IQueryable<Library> libraries = _libraryRepository.GetLibrariesAsync(userId);
+        IQueryable<Library> libraries = libraryRepository.GetLibrariesAsync(userId);
         return Task.FromResult<IActionResult>(Ok(new LibrariesDto
         {
             Data = libraries.Select(library => new LibrariesResponseItemDto(library))
@@ -74,7 +65,7 @@ public class LibrariesController : BaseController
                 Type = "",
                 Order = 99
             };
-            await _libraryRepository.AddLibraryAsync(library, userId);
+            await libraryRepository.AddLibraryAsync(library, userId);
             return Ok(new StatusResponseDto<Library>
             {
                 Status = "ok", Data = library, Message = "Successfully created a new library.", Args = []
@@ -96,7 +87,7 @@ public class LibrariesController : BaseController
         if (!User.IsModerator())
             return UnauthorizedResponse("You do not have permission to update the library");
 
-        Library? library = await _libraryRepository.GetLibraryByIdAsync(id);
+        Library? library = await libraryRepository.GetLibraryByIdAsync(id);
         if (library is null)
             return NotFound(new StatusResponseDto<string> { Status = "error", Data = "Library not found" });
 
@@ -108,7 +99,7 @@ public class LibrariesController : BaseController
             library.SpecialSeasonName = request.SpecialSeasonName;
             library.Type = request.Type;
             library.LanguageLibraries.Clear();
-            List<Language> languages = await _languageRepository.GetLanguagesAsync();
+            List<Language> languages = await languageRepository.GetLanguagesAsync();
             foreach (string subtitle in request.Subtitles)
             {
                 Language? language = languages.FirstOrDefault(l => l.Iso6391 == subtitle);
@@ -116,7 +107,7 @@ public class LibrariesController : BaseController
                 library.LanguageLibraries.Add(new LanguageLibrary { LibraryId = library.Id, LanguageId = language.Id });
             }
 
-            await _libraryRepository.UpdateLibraryAsync(library);
+            await libraryRepository.UpdateLibraryAsync(library);
         }
         catch (Exception e)
         {
@@ -128,12 +119,12 @@ public class LibrariesController : BaseController
 
         try
         {
-            List<Folder> folders = await _folderRepository.GetFoldersByLibraryIdAsync(request.FolderLibrary);
+            List<Folder> folders = await folderRepository.GetFoldersByLibraryIdAsync(request.FolderLibrary);
             FolderLibrary[] folderLibraries = folders.Select(folder => new FolderLibrary
             {
                 LibraryId = library.Id, FolderId = folder.Id
             }).ToArray();
-            await _folderRepository.AddFolderLibraryAsync(folderLibraries);
+            await folderRepository.AddFolderLibraryAsync(folderLibraries);
         }
         catch (Exception e)
         {
@@ -147,12 +138,12 @@ public class LibrariesController : BaseController
 
         try
         {
-            List<LanguageLibrary> languages = await _languageRepository.GetLanguagesAsync(request.Subtitles);
+            List<LanguageLibrary> languages = await languageRepository.GetLanguagesAsync(request.Subtitles);
             LanguageLibrary[] languageLibraries = languages.Select(language => new LanguageLibrary
             {
                 LibraryId = library.Id, LanguageId = language.LanguageId
             }).ToArray();
-            await _libraryRepository.AddLanguageLibraryAsync(languageLibraries);
+            await libraryRepository.AddLanguageLibraryAsync(languageLibraries);
         }
         catch (Exception e)
         {
@@ -166,14 +157,14 @@ public class LibrariesController : BaseController
 
         try
         {
-            List<Data.Repositories.FolderDto> folders = _libraryRepository.GetFoldersAsync();
+            List<Data.Repositories.FolderDto> folders = libraryRepository.GetFoldersAsync();
             List<EncoderProfileFolder> encoderProfileFolders = [];
 
             foreach (Data.Repositories.FolderDto folder in folders)
                 encoderProfileFolders.AddRange(folder.EncoderProfiles.Select(profile =>
                     new EncoderProfileFolder { FolderId = folder.Id, EncoderProfileId = profile }));
 
-            await _libraryRepository.AddEncoderProfileFolderAsync(encoderProfileFolders);
+            await libraryRepository.AddEncoderProfileFolderAsync(encoderProfileFolders);
         }
         catch (Exception e)
         {
@@ -199,7 +190,7 @@ public class LibrariesController : BaseController
         if (!User.IsModerator())
             return UnauthorizedResponse("You do not have permission to delete the library");
 
-        Library? library = await _libraryRepository.GetLibraryByIdAsync(id);
+        Library? library = await libraryRepository.GetLibraryByIdAsync(id);
 
         if (library is null)
             return Ok(new StatusResponseDto<string>
@@ -208,7 +199,7 @@ public class LibrariesController : BaseController
             });
         try
         {
-            await _libraryRepository.DeleteLibraryAsync(library);
+            await libraryRepository.DeleteLibraryAsync(library);
             return Ok(new StatusResponseDto<string>
             {
                 Status = "ok", Message = "Successfully deleted {0} library.", Args = [library.Title]
@@ -230,7 +221,7 @@ public class LibrariesController : BaseController
         if (!User.IsModerator())
             return UnauthorizedResponse("You do not have permission to sort the libraries");
 
-        List<Library> libraries = await _libraryRepository.GetAllLibrariesAsync();
+        List<Library> libraries = await libraryRepository.GetAllLibrariesAsync();
 
         if (libraries.Count == 0)
             return Ok(new StatusResponseDto<string> { Status = "error", Message = "No libraries exist.", Args = [] });
@@ -244,7 +235,7 @@ public class LibrariesController : BaseController
                 lib.Order = item.Order;
             }
 
-            await _libraryRepository.UpdateLibraryAsync(libraries.First());
+            await libraryRepository.UpdateLibraryAsync(libraries.First());
             return Ok(new StatusResponseDto<string>
             {
                 Status = "ok", Message = "Successfully sorted libraries.", Args = []
@@ -265,7 +256,7 @@ public class LibrariesController : BaseController
         if (!User.IsModerator())
             return UnauthorizedResponse("You do not have permission to rescan all libraries");
 
-        List<Library> librariesList = await _libraryRepository.GetAllLibrariesAsync();
+        List<Library> librariesList = await libraryRepository.GetAllLibrariesAsync();
 
         if (librariesList.Count == 0)
             return NotFound(new StatusResponseDto<List<string?>>
@@ -309,14 +300,14 @@ public class LibrariesController : BaseController
         if (!User.IsModerator())
             return UnauthorizedResponse("You do not have permission to add a new folder to the library");
 
-        Library? library = await _libraryRepository.GetLibraryByIdAsync(id);
+        Library? library = await libraryRepository.GetLibraryByIdAsync(id);
         if (library is null)
             return NotFoundResponse("Library not found");
 
         try
         {
             Folder folder = new() { Id = Ulid.NewUlid(), Path = request.Path };
-            await _folderRepository.AddFolderAsync(folder);
+            await folderRepository.AddFolderAsync(folder);
             DynamicStaticFilesMiddleware.AddPath(library.Id, folder.Path);
         }
         catch (Exception e)
@@ -331,7 +322,7 @@ public class LibrariesController : BaseController
 
         try
         {
-            Folder? folder = await _folderRepository.GetFolderByPathAsync(request.Path);
+            Folder? folder = await folderRepository.GetFolderByPathAsync(request.Path);
             if (folder is null)
                 return NotFound(new StatusResponseDto<string>
                 {
@@ -339,7 +330,7 @@ public class LibrariesController : BaseController
                 });
 
             FolderLibrary folderLibrary = new() { LibraryId = library.Id, FolderId = folder.Id };
-            await _folderRepository.AddFolderLibraryAsync(folderLibrary);
+            await folderRepository.AddFolderLibraryAsync(folderLibrary);
         }
         catch (Exception e)
         {
@@ -364,14 +355,14 @@ public class LibrariesController : BaseController
         if (!User.IsModerator())
             return UnauthorizedResponse("You do not have permission to update the library folder");
 
-        Folder? folder = await _folderRepository.GetFolderByIdAsync(folderId);
+        Folder? folder = await folderRepository.GetFolderByIdAsync(folderId);
         if (folder is null)
             return NotFound(new StatusResponseDto<string> { Status = "error", Data = "Folder not found" });
 
         try
         {
             folder.Path = request.Path;
-            await _folderRepository.UpdateFolderAsync(folder);
+            await folderRepository.UpdateFolderAsync(folder);
             DynamicStaticFilesMiddleware.RemovePath(folder.Id);
             DynamicStaticFilesMiddleware.AddPath(id, folder.Path);
             return Ok(new StatusResponseDto<string>
@@ -397,13 +388,13 @@ public class LibrariesController : BaseController
         if (!User.IsModerator())
             return UnauthorizedResponse("You do not have permission to delete the library folder");
 
-        Folder? folder = await _folderRepository.GetFolderByIdAsync(folderId);
+        Folder? folder = await folderRepository.GetFolderByIdAsync(folderId);
         if (folder is null)
             return NotFound(new StatusResponseDto<string> { Status = "error", Data = "Folder not found" });
 
         try
         {
-            await _folderRepository.DeleteFolderAsync(folder);
+            await folderRepository.DeleteFolderAsync(folder);
             DynamicStaticFilesMiddleware.RemovePath(folder.Id);
             return Ok(new StatusResponseDto<string>
             {
@@ -428,7 +419,7 @@ public class LibrariesController : BaseController
         if (!User.IsModerator())
             return UnauthorizedResponse("You do not have permission to add a new encoder profile to the folder");
 
-        Folder? folder = await _folderRepository.GetFolderByIdAsync(folderId);
+        Folder? folder = await folderRepository.GetFolderByIdAsync(folderId);
         if (folder is null)
             return NotFound(new StatusResponseDto<string> { Status = "error", Data = "Folder not found" });
 
@@ -437,7 +428,7 @@ public class LibrariesController : BaseController
             EncoderProfileFolder[] encoderProfileFolder = request.Profiles.Select(profile =>
                 new EncoderProfileFolder { FolderId = folder.Id, EncoderProfileId = Ulid.Parse(profile) }).ToArray();
 
-            await _libraryRepository.AddEncoderProfileFolderAsync(encoderProfileFolder);
+            await libraryRepository.AddEncoderProfileFolderAsync(encoderProfileFolder);
             return Ok(new StatusResponseDto<string>
             {
                 Status = "ok", Message = "Successfully added encoder profile to {0} folder.", Args = [id.ToString()]
@@ -461,13 +452,13 @@ public class LibrariesController : BaseController
         if (!User.IsModerator())
             return UnauthorizedResponse("You do not have permission to delete the encoder profile");
 
-        EncoderProfile? encoderProfile = await _encoderRepository.GetEncoderProfileByIdAsync(profileId);
+        EncoderProfile? encoderProfile = await encoderRepository.GetEncoderProfileByIdAsync(profileId);
         if (encoderProfile is null)
             return NotFound(new StatusResponseDto<string> { Status = "error", Data = "Encoder profile not found" });
 
         try
         {
-            await _encoderRepository.DeleteEncoderProfileAsync(encoderProfile);
+            await encoderRepository.DeleteEncoderProfileAsync(encoderProfile);
             return Ok(new StatusResponseDto<string>
             {
                 Status = "ok", Message = "Successfully deleted encoder profile {0}.", Args = [encoderProfile.Name]
