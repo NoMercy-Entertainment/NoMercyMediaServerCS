@@ -1,13 +1,7 @@
-// ---------------------------------------------------------------------------------------------------------------------
-// Imports
-// ---------------------------------------------------------------------------------------------------------------------
 using System.Runtime.InteropServices;
 
-namespace NoMercy.Server.StartupServices;
+namespace NoMercy.Server.StartupServices.TrayIcon;
 
-// ---------------------------------------------------------------------------------------------------------------------
-// Code
-// ---------------------------------------------------------------------------------------------------------------------
 public static class TrayIconFactory {
     public static Task MakeIcon()
     {
@@ -21,7 +15,7 @@ public static class TrayIconFactory {
             return Task.CompletedTask;
         }
             
-        TrayIcon trayIcon = new(iconPath);
+        WindowsTrayIcon trayIcon = new(iconPath);
         trayIcon.Create();
 
         return Task.CompletedTask;

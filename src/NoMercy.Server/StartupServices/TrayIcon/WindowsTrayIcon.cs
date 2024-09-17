@@ -2,10 +2,10 @@ using H.NotifyIcon.Core;
 using System.Drawing;
 using System.Runtime.Versioning;
 
-namespace NoMercy.Server.StartupServices;
+namespace NoMercy.Server.StartupServices.TrayIcon;
 
 [SupportedOSPlatform("windows10.0.18362")]
-public class TrayIcon(string iconPath)
+public class WindowsTrayIcon(string iconPath)
 {
     private Icon IconImage { get; } = new(iconPath);
 

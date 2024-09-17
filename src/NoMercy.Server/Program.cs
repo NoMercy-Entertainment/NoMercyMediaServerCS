@@ -13,6 +13,7 @@ using NoMercy.Providers.AniDb.Clients;
 using NoMercy.Queue;
 using NoMercy.Server.App.Helper;
 using NoMercy.Server.StartupServices;
+using NoMercy.Server.StartupServices.TrayIcon;
 using Serilog.Events;
 using AppFiles = NoMercy.NmSystem.AppFiles;
 
