@@ -1,4 +1,7 @@
-﻿namespace NoMercy.App;
+﻿using Android.App;
+using Android.Runtime;
+
+namespace NoMercy.App;
 
 [Application]
 public class MainApplication : MauiApplication
