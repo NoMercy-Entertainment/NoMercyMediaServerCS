@@ -17,6 +17,10 @@ public static class Certificate
         options.ConfigureEndpointDefaults(listenOptions =>
             listenOptions.UseHttps(HttpsConnectionAdapterOptions()));
         options.AddServerHeader = false;
+        options.Limits.MaxRequestBodySize = null;
+        options.Limits.MaxRequestBufferSize = null;
+        options.Limits.MaxConcurrentConnections = null;
+        options.Limits.MaxConcurrentUpgradedConnections = null;
     }
 
     private static X509Certificate2 CombinePublicAndPrivateCerts()

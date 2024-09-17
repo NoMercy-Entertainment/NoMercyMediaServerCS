@@ -31,6 +31,7 @@
         <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="8.0.8"/>
         <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="8.0.2"/>
         <PackageReference Include="MimeMapping" Version="3.0.1"/>
+        <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
         <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.7.3"/>
         <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.7.3"/>
         <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.7.3"/>

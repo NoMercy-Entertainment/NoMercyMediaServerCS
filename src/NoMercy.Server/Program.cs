@@ -12,7 +12,6 @@ using NoMercy.NmSystem;
 using NoMercy.Providers.AniDb.Clients;
 using NoMercy.Queue;
 using NoMercy.Server.App.Helper;
-using NoMercy.Server.StartupServices;
 using NoMercy.Server.StartupServices.TrayIcon;
 using Serilog.Events;
 using AppFiles = NoMercy.NmSystem.AppFiles;
@@ -26,7 +25,7 @@ public static class Program
     {
         AppDomain.CurrentDomain.UnhandledException += (_, eventArgs) =>
         {
-            Exception exception = (Exception)eventArgs.ExceptionObject;
+            var exception = (Exception)eventArgs.ExceptionObject;
             Logger.App("UnhandledException " + exception);
         };
 
