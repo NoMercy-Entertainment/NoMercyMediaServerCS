@@ -1,7 +1,6 @@
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using NoMercy.MediaProcessing.Images;
 using NoMercy.Database;
 using NoMercy.Database.Models;
@@ -796,76 +795,4 @@ public class Seed : IDisposable, IAsyncDisposable
         GC.WaitForPendingFinalizers();
         return ValueTask.CompletedTask;
     }
-}
-
-public class ServerUserDto
-{
-    [JsonProperty("user_id")] public Guid UserId { get; set; }
-    [JsonProperty("name")] public string Name { get; set; }= string.Empty;
-    [JsonProperty("email")] public string Email { get; set; }= string.Empty;
-    [JsonProperty("enabled")] public bool Enabled { get; set; }
-    [JsonProperty("cache_id")] public string CacheId { get; set; }= string.Empty;
-    [JsonProperty("avatar")] public Uri? Avatar { get; set; }
-    [JsonProperty("is_owner")] public bool IsOwner { get; set; }
-}
-
-public class LibrarySeedDto
-{
-    [JsonProperty("id")] public Ulid Id { get; set; }
-    [JsonProperty("image")] public string Image { get; set; } = string.Empty;
-    [JsonProperty("title")] public string Title { get; set; } = string.Empty;
-    [JsonProperty("type")] public string Type { get; set; } = string.Empty;
-    [JsonProperty("order")] public int Order { get; set; } = 99;
-    [JsonProperty("specialSeasonName")] public string SpecialSeasonName { get; set; } = string.Empty;
-    [JsonProperty("realtime")] public bool Realtime { get; set; }
-    [JsonProperty("autoRefreshInterval")] public int AutoRefreshInterval { get; set; }
-    [JsonProperty("chapterImages")] public bool ChapterImages { get; set; }
-
-    [JsonProperty("extractChaptersDuring")]
-    public bool ExtractChaptersDuring { get; set; }
-
-    [JsonProperty("extractChapters")] public bool ExtractChapters { get; set; }
-    [JsonProperty("perfectSubtitleMatch")] public bool PerfectSubtitleMatch { get; set; }
-    [JsonProperty("folders")] public FolderDto[] Folders { get; set; } = [];
-}
-
-public class FolderDto
-{
-    [JsonProperty("id")] public Ulid Id { get; set; }
-}
-
-public class EncoderProfileDto
-{
-    [JsonProperty("id")] public Ulid Id { get; set; }
-    [JsonProperty("name")] public string Name { get; set; } = string.Empty;
-    [JsonProperty("container")] public string Container { get; set; } = string.Empty;
-    [JsonProperty("params")] public EncoderProfileParamsDto Params { get; set; } = new();
-}
-
-public class EncoderProfileParamsDto
-{
-    [JsonProperty("width")] public int Width { get; set; }
-    [JsonProperty("crf")] public int Crf { get; set; }
-    [JsonProperty("preset")] public string Preset { get; set; } = string.Empty;
-    [JsonProperty("profile")] public string Profile { get; set; } = string.Empty;
-    [JsonProperty("codec")] public string Codec { get; set; } = string.Empty;
-    [JsonProperty("audio")] public string Audio { get; set; } = string.Empty;
-}
-
-public class SpecialItemDto
-{
-    [JsonProperty("id")] public int Id { get; set; }
-    [JsonProperty("type")] public string Type { get; set; } = string.Empty;
-}
-
-public class SpecialDto
-{
-    [JsonProperty("id")] public string Id { get; set; } = string.Empty;
-    [JsonProperty("title")] public string Title { get; set; }= string.Empty;
-    [JsonProperty("backdrop")] public string Backdrop { get; set; }= string.Empty;
-    [JsonProperty("poster")] public string Poster { get; set; }= string.Empty;
-    [JsonProperty("logo")] public string Logo { get; set; }= string.Empty;
-    [JsonProperty("description")] public string Description { get; set; }= string.Empty;
-    [JsonProperty("Item")] public SpecialItemDto[] Item { get; set; } = [];
-    [JsonProperty("creator")] public string Creator { get; set; }= string.Empty;
 }

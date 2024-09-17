@@ -1,56 +1,6 @@
-using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
 using Serilog.Events;
 
 namespace NoMercy.NmSystem;
-
-public class LogEntry
-{
-    [JsonProperty("type")] public string Type { get; set; } = string.Empty;
-
-    // [JsonProperty("message")] public string Message { get; set; } = string.Empty;
-    [JsonProperty("color")] public string Color { get; set; } = string.Empty;
-    [JsonProperty("threadId")] public int ThreadId { get; set; }
-    [JsonProperty("time")] public DateTime Time { get; set; }
-
-    [System.Text.Json.Serialization.JsonIgnore]
-    public dynamic LogMessage { get; set; } = default!;
-
-    [NotMapped]
-    [JsonProperty("message")]
-    public string Message
-    {
-        get => LogMessage;
-        set => LogMessage = value;
-    }
-
-    [System.Text.Json.Serialization.JsonIgnore]
-    public LogEventLevel LogLevel { get; set; }
-
-    [NotMapped]
-    [JsonProperty("level")]
-    public string Level
-    {
-        get => LogLevel.ToString();
-        set => LogLevel = Enum.Parse<LogEventLevel>(value);
-    }
-}
-
-public static class LogCache
-{
-    private static readonly Dictionary<string, List<LogEntry>?> Cache = new();
-
-    public static bool TryGetCachedEntries(string filePath, out List<LogEntry>? cachedEntries)
-    {
-        return Cache.TryGetValue(filePath, out cachedEntries);
-    }
-
-    public static void AddToCache(string filePath, List<LogEntry>? entries)
-    {
-        Cache[filePath] = entries;
-    }
-}
-
 public static class LogReader
 {
     public static async Task<List<LogEntry>> GetLastDailyLogsAsync(string logDirectoryPath, int limit = 10,

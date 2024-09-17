@@ -26,13 +26,3 @@ public class TmdbKnownFor
     [JsonProperty("name")] public string Name { get; set; }
     [JsonProperty("original_name")] public string OriginalName { get; set; }
 }
-
-public class TmdbKnownForMovie
-{
-    [JsonProperty("release_date")] public DateTime? ReleaseDate { get; set; }
-}
-
-public class TmdbKnownForTv
-{
-    [JsonProperty("first_air_date")] public DateTime? FirstAirDate { get; set; }
-}

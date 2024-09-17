@@ -68,17 +68,3 @@ public class Track : ColorPaletteTimeStamps
     [JsonProperty("genre_track")] public ICollection<MusicGenreTrack> MusicGenreTrack { get; set; }
     [JsonProperty("music_plays")] public ICollection<MusicPlay> MusicPlays { get; set; }
 }
-
-public class Lyric
-{
-    [JsonProperty("text")] public string Text;
-    [JsonProperty("time")] public LineTime Time;
-
-    public class LineTime
-    {
-        [JsonProperty("total")] public double Total;
-        [JsonProperty("minutes")] public int Minutes;
-        [JsonProperty("seconds")] public int Seconds;
-        [JsonProperty("hundredths")] public int Hundredths;
-    }
-}

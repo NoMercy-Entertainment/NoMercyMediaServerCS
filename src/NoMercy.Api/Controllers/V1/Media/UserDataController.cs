@@ -2,7 +2,6 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using NoMercy.Api.Controllers.V1.DTO;
 using NoMercy.Api.Controllers.V1.Media.DTO;
 using NoMercy.Api.Controllers.V1.Music;
@@ -280,10 +279,4 @@ public class UserDataController : BaseController
             Message = "Item marked as favorite"
         });
     }
-}
-
-public class FavoriteRequest
-{
-    [JsonProperty("id")] public string Id { get; set; } = "";
-    [JsonProperty("type")] public string Type { get; set; } = "";
 }

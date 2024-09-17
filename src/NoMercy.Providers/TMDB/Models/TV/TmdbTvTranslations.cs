@@ -8,13 +8,3 @@ public class TmdbTvTranslations : TmdbSharedTranslations
 {
     [JsonProperty("translations")] public new TmdbTvTranslation[] Translations { get; set; } = [];
 }
-
-public class TmdbTvTranslation : TmdbSharedTranslation
-{
-    [JsonProperty("data")] public new TmdbTvTranslationData Data { get; set; }
-}
-
-public class TmdbTvTranslationData : TmdbSharedTranslationData
-{
-    [JsonProperty("name")] public string Name { get; set; }
-}

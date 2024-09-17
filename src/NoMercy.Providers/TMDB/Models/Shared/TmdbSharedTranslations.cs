@@ -9,19 +9,3 @@ public class TmdbSharedTranslations
     [JsonProperty("id")] public int Id { get; set; }
     [JsonProperty("translations")] public TmdbSharedTranslation[] Translations { get; set; } = [];
 }
-
-public class TmdbSharedTranslation
-{
-    [JsonProperty("iso_3166_1")] public string Iso31661 { get; set; }
-    [JsonProperty("iso_639_1")] public string Iso6391 { get; set; }
-    [JsonProperty("name")] public string Name { get; set; }
-    [JsonProperty("english_name")] public string EnglishName { get; set; }
-    [JsonProperty("data")] public TmdbSharedTranslationData Data { get; set; }
-}
-
-public class TmdbSharedTranslationData
-{
-    [JsonProperty("overview")] public string Overview { get; set; }
-    [JsonProperty("homepage")] public Uri Homepage { get; set; }
-    [JsonProperty("tagline")] public string Tagline { get; set; }
-}

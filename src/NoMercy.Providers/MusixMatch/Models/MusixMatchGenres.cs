@@ -7,8 +7,3 @@ public class MusixMatchGenres
 {
     [JsonProperty("music_genre_list")] public MusixMatchMusicGenreList[] MusicGenreList { get; set; }
 }
-
-public class MusixMatchMusicGenreList
-{
-    [JsonProperty("music_genre")] public MusixMatchMusicGenre MusixMatchMusicGenre { get; set; }
-}

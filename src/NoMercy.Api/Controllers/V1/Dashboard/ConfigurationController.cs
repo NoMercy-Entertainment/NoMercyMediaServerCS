@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using NoMercy.Api.Controllers.V1.Music;
 using NoMercy.Database;
 using NoMercy.Database.Models;
@@ -91,18 +90,4 @@ public class ConfigurationController : BaseController
             Code = country.Iso31661
         }).ToList());
     }
-}
-
-public class LanguageDto
-{
-    [JsonProperty("id")] public int Id { get; set; }
-    [JsonProperty("iso_639_1")] public string? Iso6391 { get; set; }
-    [JsonProperty("english_name")] public string? EnglishName { get; set; }
-    [JsonProperty("name")] public string? Name { get; set; }
-}
-
-public class CountryDto
-{
-    [JsonProperty("name")] public string? Name { get; set; }
-    [JsonProperty("code")] public string? Code { get; set; }
 }

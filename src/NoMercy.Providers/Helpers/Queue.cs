@@ -5,27 +5,6 @@ using NoMercy.NmSystem;
 using Serilog.Events;
 
 namespace NoMercy.Providers.Helpers;
-
-public enum State
-{
-    Idle,
-    Running,
-    Stopped
-}
-
-public class QueueOptions
-{
-    public int Concurrent { get; init; } = 5;
-    public int Interval { get; init; } = 500;
-    public bool Start { get; init; } = true;
-}
-
-public class QueueEventArgs : EventArgs
-{
-    public object? Result { get; set; }
-    public Exception? Error { get; set; }
-}
-
 public class Queue(QueueOptions options)
 {
     private readonly Dictionary<string, Func<Task>> _tasks = [];

@@ -13,26 +13,3 @@ public class TmdbCreditDetails
     [JsonProperty("id")] public string Id { get; set; } = string.Empty;
     [JsonProperty("person")] public TmdbPerson TmdbPerson { get; set; } = new();
 }
-
-public class TmdbMedia
-{
-    [JsonProperty("id")] public int Id { get; set; }
-    [JsonProperty("name")] public string Name { get; set; } = string.Empty;
-    [JsonProperty("original_name")] public string OriginalName { get; set; } = string.Empty;
-    [JsonProperty("character")] public string Character { get; set; } = string.Empty;
-    [JsonProperty("episodes")] public Episode.TmdbEpisode[] Episodes { get; set; } = [];
-    [JsonProperty("seasons")] public Season.TmdbSeason[] Seasons { get; set; } = [];
-}
-
-public class S : Season.TmdbSeason
-{
-    [JsonProperty("air_date")] public new DateTime AirDate { get; set; }
-    [JsonProperty("poster_path")] public new string? PosterPath { get; set; }
-    [JsonProperty("season_number")] public new int SeasonNumber { get; set; }
-}
-
-public class TmdbPerson
-{
-    [JsonProperty("name")] public string Name { get; set; }
-    [JsonProperty("id")] public int Id { get; set; }
-}

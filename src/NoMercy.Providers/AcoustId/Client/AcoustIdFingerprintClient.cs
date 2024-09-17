@@ -2,7 +2,6 @@
 
 using System.Diagnostics;
 using AcoustID;
-using Newtonsoft.Json;
 using NoMercy.Networking;
 using NoMercy.NmSystem;
 using NoMercy.Providers.AcoustId.Models;
@@ -58,17 +57,5 @@ public class AcoustIdFingerprintClient : AcoustIdBaseClient
             "usermeta",
             "sources"
         ], fingerprintData, priority));
-    }
-}
-
-public class FingerPrintData
-{
-    [JsonProperty("duration")] public double _duration { get; set; }
-    [JsonProperty("fingerprint")] public string Fingerprint { get; set; }
-
-    public int Duration
-    {
-        get => (int)Math.Floor(_duration);
-        set => _duration = value;
     }
 }

@@ -3,15 +3,6 @@
 using Newtonsoft.Json;
 
 namespace NoMercy.Providers.TMDB.Models.People;
-
-public enum TmdbGender
-{
-    Unknown,
-    Female,
-    Male,
-    NonBinary
-}
-
 public class TmdbPerson
 {
     [JsonProperty("birthday")] public DateTime? BirthDay { get; set; }

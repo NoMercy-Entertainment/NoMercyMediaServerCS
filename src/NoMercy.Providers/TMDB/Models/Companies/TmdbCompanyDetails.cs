@@ -13,10 +13,3 @@ public class TmdbCompanyDetails
     [JsonProperty("origin_country")] public string? OriginCountry { get; set; }
     [JsonProperty("parent_company")] public TmdbParentCompany? ParentCompany { get; set; }
 }
-
-public class TmdbParentCompany
-{
-    [JsonProperty("name")] public string Name { get; set; } = string.Empty;
-    [JsonProperty("id")] public int Id { get; set; }
-    [JsonProperty("logo_path")] public string? LogoPath { get; set; }
-}

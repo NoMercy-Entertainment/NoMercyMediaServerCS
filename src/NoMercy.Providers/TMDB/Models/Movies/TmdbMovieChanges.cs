@@ -6,19 +6,3 @@ public class TmdbMovieChanges
 {
     [JsonProperty("changes")] public TmdbChanges[] ChangesChanges { get; set; } = [];
 }
-
-public class TmdbChanges
-{
-    [JsonProperty("key")] public string Key { get; set; } = string.Empty;
-    [JsonProperty("items")] public TmdbChange[] Items { get; set; } = [];
-}
-
-public class TmdbChange
-{
-    [JsonProperty("id")] public string Id { get; set; } = string.Empty;
-    [JsonProperty("action")] public string Action { get; set; } = string.Empty;
-    [JsonProperty("time")] public string Time { get; set; } = string.Empty;
-    [JsonProperty("iso_639_1")] public string Iso6391 { get; set; } = string.Empty;
-    [JsonProperty("value")] public string Value { get; set; } = string.Empty;
-    [JsonProperty("original_value")] public string OriginalValue { get; set; } = string.Empty;
-}

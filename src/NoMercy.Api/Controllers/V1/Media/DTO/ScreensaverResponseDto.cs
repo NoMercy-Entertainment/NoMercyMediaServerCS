@@ -12,15 +12,3 @@ public record ScreensaverResponseDto
     [JsonProperty("color_palette")] public IColorPalettes ColorPaletteDto { get; set; }
     [JsonProperty("meta")] public MetaDto MetaDto { get; set; }
 }
-
-public record MetaDto
-{
-    [JsonProperty("title")] public string Title { get; set; }
-    [JsonProperty("logo")] public LogoDto LogoDto { get; set; }
-}
-
-public record LogoDto
-{
-    [JsonProperty("aspectRatio")] public double AspectRatio { get; set; }
-    [JsonProperty("src")] public string Src { get; set; }
-}

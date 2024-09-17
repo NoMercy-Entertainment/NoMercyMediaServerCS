@@ -3,89 +3,8 @@ using System.Text.RegularExpressions;
 using FFMpegCore;
 using MovieFileLibrary;
 using Serilog.Events;
-using DateTime = System.DateTime;
 
 namespace NoMercy.NmSystem;
-
-public class MovieFileExtend
-{
-    public string? Title { get; init; }
-    public string? Year { get; init; }
-    public bool IsSeries { get; set; }
-    public int? Season { get; init; }
-    public int? Episode { get; init; }
-    public bool IsSuccess { get; set; }
-    public string FilePath { get; set; } = string.Empty;
-
-    public int DiscNumber
-    {
-        get
-        {
-            if (Title is null) return 0;
-            string pattern = @"^((?<discNumber>\d+)(-|\s))?(?<trackNumber>\d+)";
-            Match match = Regex.Match(Title, pattern);
-            return match.Groups["discNumber"].Success ? int.Parse(match.Groups["discNumber"].Value) : 0;
-        }
-    }
-    
-    public int TrackNumber
-    {
-        get
-        {
-            if (Title is null) return 0;
-            string pattern = @"^((?<discNumber>\d+)-)?(?<trackNumber>\d+)";
-            Match match = Regex.Match(Title, pattern);
-            return match.Groups["trackNumber"].Success ? int.Parse(match.Groups["trackNumber"].Value) : 0;
-        }
-    }
-}
-
-public class MediaFolder
-{
-    public string Name { get; init; } = string.Empty;
-    public string Path { get; init; } = string.Empty;
-    public DateTime Created { get; set; }
-    public DateTime Modified { get; set; }
-    public DateTime Accessed { get; set; }
-    public string Type { get; set; } = string.Empty;
-    public MovieFileExtend? Parsed { get; init; }
-}
-
-public class MediaFolderExtend: MediaFolder
-{
-    public ConcurrentBag<MediaFile>? Files { get; init; } = [];
-    public ConcurrentBag<MediaFolderExtend>? SubFolders { get; init; } = [];
-}
-
-public class FFprobeData
-{
-    public TimeSpan Duration { get; set; }
-    public MediaFormat Format { get; set; }
-    public AudioStream? PrimaryAudioStream { get; set; }
-    public VideoStream? PrimaryVideoStream { get; set; }
-    public SubtitleStream? PrimarySubtitleStream { get; set; }
-    public List<VideoStream> VideoStreams { get; set; }
-    public List<AudioStream> AudioStreams { get; set; }
-    public List<SubtitleStream> SubtitleStreams { get; set; }
-    public IReadOnlyList<string> ErrorData { get; set; }
-}
-
-public class MediaFile
-{
-    public string Name { get; init; } = string.Empty;
-    public string Path { get; init; } = string.Empty;
-    public string Extension { get; set; } = string.Empty;
-    public int Size { get; set; }
-    public DateTime Created { get; set; }
-    public DateTime Modified { get; set; }
-    public DateTime Accessed { get; set; }
-    public string Type { get; set; } = string.Empty;
-    public MovieFileExtend? Parsed { get; init; }
-
-    public FFprobeData? FFprobe { get; init; }
-    // public Fingerprint? FingerPint { get; init; }
-}
-
 public class MediaScan : IDisposable, IAsyncDisposable
 {
     private readonly MovieDetector _movieDetector = new();

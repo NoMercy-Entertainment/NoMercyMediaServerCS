@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query;
-using Newtonsoft.Json;
 using NoMercy.Api.Controllers.V1.Music;
 using NoMercy.Data.Repositories;
 using NoMercy.Database.Models;
@@ -91,32 +90,4 @@ public class DevicesController : BaseController
             Data = []
         });
     }
-}
-
-public class DevicesDto
-{
-    [JsonProperty("id")] public string Id { get; set; }
-    [JsonProperty("device_id")] public string DeviceId { get; set; }
-    [JsonProperty("browser")] public string Browser { get; set; }
-    [JsonProperty("os")] public string Os { get; set; }
-    [JsonProperty("device")] public string? Device { get; set; }
-    [JsonProperty("type")] public string Type { get; set; }
-    [JsonProperty("name")] public string Name { get; set; }
-    [JsonProperty("custom_name")] public object? CustomName { get; set; }
-    [JsonProperty("version")] public string Version { get; set; }
-    [JsonProperty("ip")] public string Ip { get; set; }
-    [JsonProperty("created_at")] public DateTime CreatedAt { get; set; }
-    [JsonProperty("updated_at")] public DateTime UpdatedAt { get; set; }
-    [JsonProperty("activity_logs")] public IEnumerable<ActivityLogDto> ActivityLogs { get; set; }
-}
-
-public class ActivityLogDto
-{
-    [JsonProperty("id")] public int Id { get; set; }
-    [JsonProperty("type")] public string Type { get; set; }
-    [JsonProperty("time")] public DateTime Time { get; set; }
-    [JsonProperty("created_at")] public DateTime CreatedAt { get; set; }
-    [JsonProperty("updated_at")] public DateTime UpdatedAt { get; set; }
-    [JsonProperty("user_id")] public Guid UserId { get; set; }
-    [JsonProperty("device_id")] public string DeviceId { get; set; }
 }

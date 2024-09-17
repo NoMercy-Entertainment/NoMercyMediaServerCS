@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Mono.Nat;
-using Newtonsoft.Json;
 using NoMercy.NmSystem;
 
 namespace NoMercy.Networking;
@@ -195,9 +194,4 @@ public class Networking
 
         return true;
     }
-}
-
-public class RefreshLibraryDto
-{
-    [JsonProperty("queryKey")] public dynamic?[] QueryKey { get; set; } = [];
 }

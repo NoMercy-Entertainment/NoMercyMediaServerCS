@@ -1,54 +1,7 @@
-using System.Runtime.InteropServices;
 using LibreHardwareMonitor.Hardware;
-using Newtonsoft.Json;
 using NoMercy.NmSystem;
 
 namespace NoMercy.Helpers.Monitoring;
-
-public class Resource
-{
-    [JsonProperty("cpu")] public Cpu Cpu { get; set; } = new();
-    internal Dictionary<Identifier, Gpu> _gpu { get; set; } = [];
-    [JsonProperty("memory")] public Memory Memory { get; set; } = new();
-    [JsonProperty("gpu")] public List<Gpu> Gpu => _gpu.Values.ToList();
-}
-
-public class Cpu
-{
-    [JsonProperty("total")] public double Total { get; set; }
-    [JsonProperty("max")] public double Max { get; set; }
-    [JsonProperty("core")] public List<Core> Core { get; set; } = [];
-}
-
-public class Core
-{
-    [JsonProperty("index")] public int Index { get; set; }
-    [JsonProperty("utilization")] public double Utilization { get; set; }
-}
-
-public class Gpu
-{
-    [JsonProperty("d3d")] public double D3D { get; set; }
-    [JsonProperty("decode")] public double Decode { get; set; }
-    [JsonProperty("core")] public double Core { get; set; }
-    [JsonProperty("memory")] public double Memory { get; set; }
-    [JsonProperty("encode")] public double Encode { get; set; }
-    [JsonProperty("power")] public double Power { get; set; }
-    [JsonProperty("identifier")] internal Identifier Identifier { get; set; } = new();
-    [JsonProperty("index")] public int Index => int.Parse(Identifier.ToString().Split('/').LastOrDefault() ?? "0");
-}
-
-public class Memory
-{
-    [JsonProperty("available")] public double Available { get; set; }
-    [JsonProperty("use")] public double Use { get; set; }
-    [JsonProperty("total")] public double Total { get; set; }
-
-    [JsonProperty("percentage")]
-    public double Percentage =>
-        Use / Total * (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? 0.1 : 100);
-}
-
 public class ResourceMonitor
 {
     private static Computer? _computer;

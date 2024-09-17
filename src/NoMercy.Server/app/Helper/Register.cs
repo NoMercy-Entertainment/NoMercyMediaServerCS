@@ -102,10 +102,3 @@ public static class Register
         return Task.CompletedTask;
     }
 }
-
-public class ServerRegisterResponse
-{
-    [JsonProperty("status")] public string Status { get; set; } = string.Empty;
-    [JsonProperty("id")] public string ServerId { get; set; } = string.Empty;
-    [JsonProperty("user")] public User User { get; set; } = new();
-}

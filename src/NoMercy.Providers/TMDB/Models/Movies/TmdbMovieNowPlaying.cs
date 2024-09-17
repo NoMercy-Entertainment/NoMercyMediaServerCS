@@ -7,9 +7,3 @@ public class TmdbMovieNowPlaying : TmdbPaginatedResponse<TmdbMovie>
 {
     [JsonProperty("dates")] public TmdbDates TmdbDates { get; set; } = new();
 }
-
-public class TmdbDates
-{
-    [JsonProperty("maximum")] public DateTime? Maximum { get; set; }
-    [JsonProperty("minimum")] public DateTime? Minimum { get; set; }
-}

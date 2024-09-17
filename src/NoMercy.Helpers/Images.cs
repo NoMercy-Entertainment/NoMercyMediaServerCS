@@ -1,8 +1,4 @@
 using HeyRed.ImageSharp.Heif.Formats.Avif;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using NoMercy.NmSystem;
-using Serilog.Events;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -10,37 +6,6 @@ using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Formats.Png;
 
 namespace NoMercy.Helpers;
-
-public class ImageConvertArguments
-{
-    [JsonProperty("width")] public int? Width { get; set; }
-    [JsonProperty("type")] public string? Type { get; set; }
-    [JsonProperty("quality")] public int Quality { get; set; } = 100;
-    
-    public IImageFormat Format
-    {
-        get
-        {
-            IImageFormat result;
-            try
-            {
-                result = Images.Parse(Type ?? "png");
-            }
-            catch (Exception e)
-            {
-                result = Images.Parse("png");
-                Logger.Error(e, LogEventLevel.Error);
-            }
-
-            return result;
-        }
-    }
-    
-    [FromQuery(Name = "aspect_ratio")]
-    [JsonProperty("aspect_ratio")]
-    public double? AspectRatio { get; set; }
-}
-
 public static class Images
 {
     static Images()

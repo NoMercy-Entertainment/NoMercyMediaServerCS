@@ -4,7 +4,6 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using NoMercy.Api.Controllers.V1.DTO;
 using NoMercy.Helpers;
 using NoMercy.Networking;
@@ -75,19 +74,4 @@ public class PluginController : BaseController
             Args = [request.Key]
         });
     }
-}
-
-public class AniDbCredentialsRequest
-{
-    [JsonProperty("key")] public string Key { get; set; }
-    [JsonProperty("username")] public string Username { get; set; }
-    [JsonProperty("password")] public string? Password { get; set; }
-    [JsonProperty("api_key")] public string ApiKey { get; set; }
-}
-
-public class AniDbCredentialsResponse
-{
-    [JsonProperty("key")] public string Key { get; set; }
-    [JsonProperty("username")] public string Username { get; set; }
-    [JsonProperty("api_key")] public string? ApiKey { get; set; }
 }

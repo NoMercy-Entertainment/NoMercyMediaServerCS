@@ -9,23 +9,3 @@ public class FanArtAlbum
     [JsonProperty("mbid_id")] public string MbId { get; set; }
     [JsonProperty("albums")] public Dictionary<Guid, Albums> Albums { get; set; } = [];
 }
-
-public class Albums
-{
-    private Image[]? _cover = [];
-    private Image[]? _cdart = [];
-
-    [JsonProperty("albumcover")]
-    public Image[] Cover
-    {
-        get => _cover ?? [];
-        set => _cover = value;
-    }
-
-    [JsonProperty("cdart")]
-    public Image[] CdArt
-    {
-        get => _cdart ?? [];
-        set => _cdart = value;
-    }
-}

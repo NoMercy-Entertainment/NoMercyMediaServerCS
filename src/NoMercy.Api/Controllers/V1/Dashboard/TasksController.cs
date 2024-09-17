@@ -2,7 +2,6 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using NoMercy.Api.Controllers.V1.DTO;
 using NoMercy.Api.Controllers.V1.Music;
 using NoMercy.Networking;
@@ -131,14 +130,4 @@ public class TasksController : BaseController
             Data = []
         });
     }
-}
-
-public class TaskDto
-{
-    [JsonProperty("id")] public string Id { get; set; }
-    [JsonProperty("title")] public string Title { get; set; }
-    [JsonProperty("value")] public int Value { get; set; }
-    [JsonProperty("type")] public string Type { get; set; }
-    [JsonProperty("created_at")] public DateTime CreatedAt { get; set; }
-    [JsonProperty("updated_at")] public DateTime UpdatedAt { get; set; }
 }

@@ -1,110 +1,12 @@
 using System.Drawing;
-using System.Globalization;
-using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
-using Pastel;
 using Serilog;
-using Serilog.Core;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
 using ILogger = Serilog.ILogger;
 
 namespace NoMercy.NmSystem;
-
-internal class WithThreadId : ILogEventEnricher
-{
-    public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
-    {
-        logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty(
-            "ThreadId", Thread.CurrentThread.ManagedThreadId));
-    }
-}
-
-internal class ConsoleTimestampEnricher : ILogEventEnricher
-{
-    public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
-    {
-        string? timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Pastel(Color.DarkGray);
-
-        logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty(
-            "Time", timestamp));
-    }
-}
-
-internal class ConsoleTypeEnricher : ILogEventEnricher
-{
-    private static string SpacerEnd(string text, int padding)
-    {
-        StringBuilder spacing = new();
-        spacing.Append(text);
-        for (int i = 0; i < padding - text.Length; i++) spacing.Append(' ');
-
-        return spacing.ToString();
-    }
-
-    private static string SpacerBegin(string text, int padding)
-    {
-        StringBuilder spacing = new();
-        for (int i = 0; i < padding - text.Length; i++) spacing.Append(' ');
-        spacing.Append(text);
-
-        return spacing.ToString();
-    }
-
-    private static string Spacer(string text, int padding, bool begin = false)
-    {
-        return begin ? SpacerBegin(text, padding) : SpacerEnd(text, padding);
-    }
-
-    public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
-    {
-        logEvent.Properties.TryGetValue("ConsoleType", out LogEventPropertyValue? value);
-
-        string type = value?.ToString().Replace("\"", "") ?? "app";
-
-        Color color = Logger.GetColor(type);
-
-        logEvent.AddOrUpdateProperty(propertyFactory.CreateProperty(
-            "ConsoleType", Spacer(Logger.Capitalize[type], 12, true).Pastel(color)));
-    }
-}
-
-internal class FileMessageEnricher : ILogEventEnricher
-{
-    public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
-    {
-        logEvent.RemovePropertyIfPresent("@mt");
-    }
-}
-
-internal class FileTimestampEnricher : ILogEventEnricher
-{
-    public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
-    {
-        string timestamp = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
-
-        logEvent.RemovePropertyIfPresent("@t");
-        logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty(
-            "Time", timestamp));
-    }
-}
-
-internal class FileTypeEnricher : ILogEventEnricher
-{
-    public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
-    {
-        logEvent.Properties.TryGetValue("ConsoleType", out LogEventPropertyValue? value);
-
-        string type = value?.ToString().Replace("\"", "") ?? "app";
-
-        Color color = Logger.GetColor(type);
-
-        logEvent.AddOrUpdateProperty(propertyFactory.CreateProperty(
-            "Type", type.ToString()));
-    }
-}
-
 public static class Logger
 {
     private static Serilog.Core.Logger ConsoleLog { get; set; }

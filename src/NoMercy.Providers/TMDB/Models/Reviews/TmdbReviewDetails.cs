@@ -17,11 +17,3 @@ public class TmdbReviewDetails
     [JsonProperty("updated_at")] public DateTime? UpdatedAt { get; set; }
     [JsonProperty("url")] public Uri? Url { get; set; }
 }
-
-public class TmdbAuthorDetails
-{
-    [JsonProperty("name")] public string Name { get; set; } = string.Empty;
-    [JsonProperty("username")] public string Username { get; set; } = string.Empty;
-    [JsonProperty("avatar_path")] public string AvatarPath { get; set; } = string.Empty;
-    [JsonProperty("rating")] public int Rating { get; set; }
-}

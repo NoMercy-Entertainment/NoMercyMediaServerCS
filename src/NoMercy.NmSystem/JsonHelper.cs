@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using JsonConverter = Newtonsoft.Json.JsonConverter;
 
 namespace NoMercy.NmSystem;
 
@@ -50,68 +49,5 @@ public static class JsonHelper
     public static string ToJson<T>(this T self)
     {
         return JsonConvert.SerializeObject(self, Settings);
-    }
-}
-
-public class ParseNumbersAsInt32Converter : JsonConverter
-{
-    public override bool CanConvert(Type objectType)
-    {
-        return objectType == typeof(long) || objectType == typeof(object);
-    }
-
-    public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
-    {
-        if (value is int intValue)
-        {
-            writer.WriteValue(intValue);
-        }
-        else
-        {
-            // Fallback to default serialization for other types
-            // serializer.Serialize(writer, value);
-        }
-    }
-
-    public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue,
-        JsonSerializer serializer)
-    {
-        return reader.Value is long
-            ? Convert.ToInt64(reader.Value ?? 0)
-            : reader.Value;
-    }
-}
-
-public class DoubleConverter : JsonConverter
-{
-    public override bool CanConvert(Type objectType)
-    {
-        return objectType == typeof(double) || objectType == typeof(double?);
-    }
-
-    public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
-    {
-        if (value is double doubleValue)
-        {
-            if (double.IsInfinity(doubleValue) || double.IsNaN(doubleValue))
-                writer.WriteNull();
-            else
-                writer.WriteValue(doubleValue);
-        }
-        else
-        {
-            writer.WriteNull();
-        }
-    }
-
-    public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue,
-        JsonSerializer serializer)
-    {
-        if (reader.TokenType == JsonToken.Null) return null;
-
-        if (reader.TokenType == JsonToken.Float || reader.TokenType == JsonToken.Integer)
-            return Convert.ToDouble(reader.Value);
-
-        throw new JsonSerializationException($"Unexpected token {reader.TokenType} when parsing double.");
     }
 }

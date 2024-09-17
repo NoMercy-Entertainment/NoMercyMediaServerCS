@@ -2,7 +2,6 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using NoMercy.Api.Controllers.V1.Music.DTO;
 using NoMercy.Database;
 using NoMercy.Database.Models;
@@ -106,9 +105,4 @@ public class PlaylistsController : BaseController
             Data = []
         });
     }
-}
-
-public class PlaceholderResponse
-{
-    [JsonProperty("data")] public string[] Data { get; set; }
 }

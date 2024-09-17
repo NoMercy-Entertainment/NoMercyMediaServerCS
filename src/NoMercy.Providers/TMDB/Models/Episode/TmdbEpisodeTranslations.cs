@@ -7,13 +7,3 @@ public class TmdbEpisodeTranslations : TmdbSharedTranslations
 {
     [JsonProperty("translations")] public new EpisodeTranslation[] Translations { get; set; } = [];
 }
-
-public class EpisodeTranslation : TmdbSharedTranslation
-{
-    [JsonProperty("data")] public new EpisodeTranslationData Data { get; set; } = new();
-}
-
-public class EpisodeTranslationData : TmdbSharedTranslationData
-{
-    [JsonProperty("name")] public string Name { get; set; } = string.Empty;
-}

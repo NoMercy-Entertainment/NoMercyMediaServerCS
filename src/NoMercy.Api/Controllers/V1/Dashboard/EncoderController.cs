@@ -176,33 +176,3 @@ public class EncoderController : BaseController
         });
     }
 }
-
-public class EncoderProfileDto
-{
-    [JsonProperty("id")] public string Id { get; set; } = string.Empty;
-    [JsonProperty("name")] public string Name { get; set; } = string.Empty;
-    [JsonProperty("container")] public string? Container { get; set; }
-    [JsonProperty("created_at")] public DateTime CreatedAt { get; set; }
-    [JsonProperty("updated_at")] public DateTime UpdatedAt { get; set; }
-    [JsonProperty("params")] public ParamsDto? Params { get; set; }
-}
-
-public class ContainerDto
-{
-    [JsonProperty("label")] public string Label { get; set; } = string.Empty;
-    [JsonProperty("value")] public string Value { get; set; } = string.Empty;
-    [JsonProperty("type")] public string Type { get; set; } = string.Empty;
-    [JsonProperty("default")] public bool IsDefault { get; set; }
-}
-
-public class ParamsDto
-{
-    [JsonProperty("video")] public int Width { get; set; }
-    [JsonProperty("crf")] public int Crf { get; set; }
-    [JsonProperty("preset")] public string Preset { get; set; } = string.Empty;
-    [JsonProperty("profile")] public string Profile { get; set; } = string.Empty;
-    [JsonProperty("codec")] public string Codec { get; set; } = string.Empty;
-    [JsonProperty("audio")] public string Audio { get; set; } = string.Empty;
-    [JsonProperty("tune")] public string Tune { get; set; } = string.Empty;
-    [JsonProperty("level")] public string Level { get; set; } = string.Empty;
-}

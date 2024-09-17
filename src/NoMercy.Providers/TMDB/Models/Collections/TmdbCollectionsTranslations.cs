@@ -9,13 +9,3 @@ public class TmdbCollectionsTranslations : TmdbSharedTranslations
 {
     [JsonProperty("translations")] public new TmdbCollectionsTranslation[] Translations { get; set; }
 }
-
-public class TmdbCollectionsTranslation : TmdbSharedTranslation
-{
-    [JsonProperty("data")] public new TmdbCollectionsTranslationData Data { get; set; }
-}
-
-public class TmdbCollectionsTranslationData : TmdbSharedTranslationData
-{
-    [JsonProperty("title")] public string? Title { get; set; }
-}

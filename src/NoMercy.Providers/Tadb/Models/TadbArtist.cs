@@ -2,12 +2,6 @@
 using Newtonsoft.Json;
 
 namespace NoMercy.Providers.Tadb.Models;
-
-public class TadbArtistResponse
-{
-    [JsonProperty("artists")] public TadbArtist[]? Artists { get; set; }
-}
-
 public class TadbArtist
 {
     [JsonProperty("idArtist")] public string? IdArtist { get; set; }

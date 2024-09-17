@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
@@ -17,7 +16,6 @@ using Serilog.Events;
 using AppFiles = NoMercy.NmSystem.AppFiles;
 
 namespace NoMercy.Server;
-public delegate Task TaskDelegate();
 public static class Program
 {
     private static bool ShouldSeedMarvel { get; set; }
@@ -222,14 +220,5 @@ public static class Program
         {
             await task.Invoke();
         }
-    }
-}
-
-internal class DefaultSunsetPolicyManager : ISunsetPolicyManager
-{
-    public bool TryGetPolicy(string? name, ApiVersion? apiVersion, [MaybeNullWhen(false)] out SunsetPolicy sunsetPolicy)
-    {
-        sunsetPolicy = new SunsetPolicy();
-        return true;
     }
 }

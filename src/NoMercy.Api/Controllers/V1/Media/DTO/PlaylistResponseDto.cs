@@ -290,30 +290,3 @@ public record PlaylistResponseDto
         };
     }
 }
-
-public record SourceDto
-{
-    [JsonProperty("src")] public string Src { get; set; }
-    [JsonProperty("type")] public string Type { get; set; }
-    [JsonProperty("languages")] public string?[]? Languages { get; set; }
-}
-
-public record TextTrackDto
-{
-    [JsonProperty("label")] public string Label { get; set; }
-    [JsonProperty("file")] public string File { get; set; }
-    [JsonProperty("language")] public string Language { get; set; }
-    [JsonProperty("kind")] public string Kind { get; set; }
-}
-
-public record ProgressDto
-{
-    [JsonProperty("percentage")] public int? Percentage { get; set; }
-    [JsonProperty("date")] public DateTime? Date { get; set; }
-}
-
-public record FontDto
-{
-    [JsonProperty("file")] public string File { get; set; }
-    [JsonProperty("type")] public string Type { get; set; }
-}

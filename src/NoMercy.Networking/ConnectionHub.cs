@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
-using Newtonsoft.Json;
 using NoMercy.Database;
 using NoMercy.Database.Models;
 using Hub = Microsoft.AspNetCore.SignalR.Hub;
@@ -169,24 +168,4 @@ public class ConnectionHub : Hub
             })
             .ToList();
     }
-}
-
-public class ClientRequest
-{
-    [JsonProperty("id")] public string Id { get; set; }
-    [JsonProperty("browser")] public string Browser { get; set; }
-    [JsonProperty("os")] public string Os { get; set; }
-    [JsonProperty("device")] public string Device { get; set; }
-    [JsonProperty("custom_name")] public string CustomName { get; set; }
-    [JsonProperty("type")] public string Type { get; set; }
-    [JsonProperty("name")] public string Name { get; set; }
-    [JsonProperty("version")] public string Version { get; set; }
-}
-
-public class Client : Device
-{
-    public Guid Sub { get; set; }
-    public int? Ping { get; set; }
-    public ISingleClientProxy Socket { get; set; }
-    public string Endpoint { get; set; }
 }

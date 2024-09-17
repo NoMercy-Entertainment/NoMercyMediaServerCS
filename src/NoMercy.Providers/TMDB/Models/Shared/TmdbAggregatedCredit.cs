@@ -16,29 +16,3 @@ public class TmdbAggregatedCredit
     [JsonProperty("profile_path")] public string? ProfilePath { get; set; }
     [JsonProperty("order")] public int Order { get; set; }
 }
-
-public class TmdbTmdbAggregatedCrew : TmdbAggregatedCredit
-{
-    [JsonProperty("jobs")] public TmdbAggregatedCrewJob[] Jobs { get; set; } = [];
-}
-
-public class TmdbAggregatedCrewJob
-{
-    [JsonProperty("credit_id")] public string? CreditId { get; set; }
-    [JsonProperty("job")] public string? Job { get; set; }
-    [JsonProperty("episode_count")] public int EpisodeCount { get; set; }
-    [JsonProperty("order")] public int? Order { get; set; }
-}
-
-public class TmdbTmdbAggregatedCast : TmdbAggregatedCredit
-{
-    [JsonProperty("roles")] public TmdbAggregatedCreditRole[] Roles { get; set; } = [];
-}
-
-public class TmdbAggregatedCreditRole
-{
-    [JsonProperty("credit_id")] public string? CreditId { get; set; }
-    [JsonProperty("character")] public string? Character { get; set; }
-    [JsonProperty("episode_count")] public int EpisodeCount { get; set; }
-    [JsonProperty("order")] public int? Order { get; set; }
-}
