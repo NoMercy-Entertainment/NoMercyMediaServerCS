@@ -20,7 +20,7 @@ public class AddSeasonExtraDataJob : AbstractShowExtraDataJob<TmdbSeasonAppends,
     public override string QueueName => "queue";
     public override int Priority => 1;
 
-    public override async Task Handle()
+    public async override Task Handle()
     {
         await using MediaContext context = new();
         JobDispatcher jobDispatcher = new();

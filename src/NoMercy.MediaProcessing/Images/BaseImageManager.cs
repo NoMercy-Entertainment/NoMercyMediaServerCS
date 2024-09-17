@@ -68,7 +68,7 @@ public class BaseImageManager (
         return GetColorPaletteColors(image);
     }
 
-    public static async Task<string> ColorPalette(DownloadUrl client, string type, Uri path, bool? download = true)
+    public async static Task<string> ColorPalette(DownloadUrl client, string type, Uri path, bool? download = true)
     {
         Image<Rgba32>? imageData = await client.Invoke(path, download);
 
@@ -82,7 +82,7 @@ public class BaseImageManager (
         });
     }
 
-    public static async Task<string> MultiColorPalette(DownloadUrl client, IEnumerable<MultiUriType> items,
+    public async static Task<string> MultiColorPalette(DownloadUrl client, IEnumerable<MultiUriType> items,
         bool? download = true)
     {
         List<ColorPaletteArgument> list = new();
@@ -99,7 +99,7 @@ public class BaseImageManager (
         return GenerateColorPalette(list);
     }
 
-    public static async Task<string> ColorPalette(DownloadPath client, string type, string? path,
+    public async static Task<string> ColorPalette(DownloadPath client, string type, string? path,
         bool? download = true)
     {
         Image<Rgba32>? imageData = await client.Invoke(path, download);
@@ -114,7 +114,7 @@ public class BaseImageManager (
         });
     }
 
-    public static async Task<string> MultiColorPalette(DownloadPath client, IEnumerable<MultiStringType> items,
+    public async static Task<string> MultiColorPalette(DownloadPath client, IEnumerable<MultiStringType> items,
         bool? download = true)
     {
         List<ColorPaletteArgument> list = new();

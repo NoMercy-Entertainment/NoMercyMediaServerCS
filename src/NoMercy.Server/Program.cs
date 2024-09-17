@@ -50,7 +50,7 @@ public static class Program
         }
     }
 
-    private static async Task Start(StartupOptions options)
+    private async static Task Start(StartupOptions options)
     {
         Console.Clear();
         Console.Title = "NoMercy Server";
@@ -128,12 +128,12 @@ public static class Program
         await Task.Delay(-1);
     }
 
-    private static async Task Shutdown()
+    private async static Task Shutdown()
     {
         await Task.CompletedTask;
     }
 
-    private static async Task Restart()
+    private async static Task Restart()
     {
         await Task.CompletedTask;
     }
@@ -168,7 +168,7 @@ public static class Program
             .UseStartup<Startup>();
     }
 
-    private static async Task Init()
+    private async static Task Init()
     {
         ApiInfo.RequestInfo().Wait();
 
@@ -214,7 +214,7 @@ public static class Program
         t.Start();
     }
 
-    private static async Task RunStartup(List<TaskDelegate> startupTasks)
+    private async static Task RunStartup(List<TaskDelegate> startupTasks)
     {
         foreach (TaskDelegate task in startupTasks)
         {

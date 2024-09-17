@@ -13,7 +13,7 @@ public class FanArtImageManager(
     JobDispatcher jobDispatcher
 ) : IFanArtImageManager
 {
-    public static async Task<string> ColorPalette(string type, Uri url, bool? download = true)
+    public async static Task<string> ColorPalette(string type, Uri url, bool? download = true)
     {
         return await BaseImageManager.ColorPalette(FanArtImageClient.Download, type, url, download);
     }

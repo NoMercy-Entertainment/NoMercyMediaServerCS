@@ -76,7 +76,7 @@ public class SeasonManager(
         Logger.MovieDb($"Show: {showName}, Season {season.SeasonNumber}: Removed", LogEventLevel.Debug);
     }
 
-    internal async Task StoreTranslations(string showName, TmdbSeasonAppends season)
+    async internal Task StoreTranslations(string showName, TmdbSeasonAppends season)
     {
         IEnumerable<Translation> translations = season.Translations.Translations
             .Where(translation => translation.Data.Title != null || translation.Data.Overview != "")
@@ -96,7 +96,7 @@ public class SeasonManager(
         Logger.MovieDb($"Show: {showName}, Season {season.SeasonNumber}: Translations stored", LogEventLevel.Debug);
     }
 
-    internal async Task StoreImages(string showName, TmdbSeasonAppends season)
+    async internal Task StoreImages(string showName, TmdbSeasonAppends season)
     {
         IEnumerable<Image> posters = season.TmdbSeasonImages.Posters
             .Select(image => new Image

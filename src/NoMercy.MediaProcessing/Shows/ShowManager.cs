@@ -106,7 +106,7 @@ public class ShowManager(
         throw new NotImplementedException();
     }
 
-    internal async Task StoreAlternativeTitles(TmdbTvShowAppends show)
+    async internal Task StoreAlternativeTitles(TmdbTvShowAppends show)
     {
         IEnumerable<AlternativeTitle> alternativeTitles = show.AlternativeTitles.Results.Select(
             tmdbShowAlternativeTitles => new AlternativeTitle
@@ -121,7 +121,7 @@ public class ShowManager(
         Logger.MovieDb($"Show {show.Name}: AlternativeTitles stored", LogEventLevel.Debug);
     }
 
-    internal async Task StoreTranslations(TmdbTvShowAppends show)
+    async internal Task StoreTranslations(TmdbTvShowAppends show)
     {
         IEnumerable<Translation> translations = show.Translations.Translations
             .Select(translation => new Translation
@@ -142,7 +142,7 @@ public class ShowManager(
         Logger.MovieDb($"Show {show.Name}: Translations stored", LogEventLevel.Debug);
     }
 
-    internal async Task StoreContentRatings(TmdbTvShowAppends show)
+    async internal Task StoreContentRatings(TmdbTvShowAppends show)
     {
         List<CertificationCriteria> certificationCriteria = show.ContentRatings.Results
             .Select(r => new CertificationCriteria
@@ -159,7 +159,7 @@ public class ShowManager(
         Logger.MovieDb($"Show {show.Name}: Content Ratings stored", LogEventLevel.Debug);
     }
 
-    internal async Task StoreSimilar(TmdbTvShowAppends show)
+    async internal Task StoreSimilar(TmdbTvShowAppends show)
     {
         IEnumerable<Similar> similar = show.Similar.Results
             .Select(similar => new Similar
@@ -182,7 +182,7 @@ public class ShowManager(
         Logger.MovieDb($"Show {show.Name}: Similar stored", LogEventLevel.Debug);
     }
 
-    internal async Task StoreRecommendations(TmdbTvShowAppends show)
+    async internal Task StoreRecommendations(TmdbTvShowAppends show)
     {
         IEnumerable<Recommendation> recommendations = show.Recommendations.Results
             .Select(recommendation => new Recommendation
@@ -207,7 +207,7 @@ public class ShowManager(
         Logger.MovieDb($"Show {show.Name}: Recommendations stored", LogEventLevel.Debug);
     }
 
-    internal async Task StoreVideos(TmdbTvShowAppends show)
+    async internal Task StoreVideos(TmdbTvShowAppends show)
     {
         IEnumerable<Media> videos = show.Videos.Results
             .Select(media => new Media
@@ -228,7 +228,7 @@ public class ShowManager(
         Logger.MovieDb($"Show {show.Name}: Videos stored", LogEventLevel.Debug);
     }
 
-    internal async Task StoreImages(TmdbTvShowAppends show)
+    async internal Task StoreImages(TmdbTvShowAppends show)
     {
         IEnumerable<Image> posters = show.Images.Posters
             .Select(image => new Image
@@ -306,7 +306,7 @@ public class ShowManager(
             jobDispatcher.DispatchJob<ImagePaletteJob, Image>(show.Id, logosJobItems);
     }
 
-    internal async Task StoreKeywords(TmdbTvShowAppends show)
+    async internal Task StoreKeywords(TmdbTvShowAppends show)
     {
         IEnumerable<Keyword> keywords = show.Keywords.Results.Select(
             keyword => new Keyword
@@ -329,7 +329,7 @@ public class ShowManager(
         Logger.MovieDb($"Show {show.Name}: Keywords linked to Show", LogEventLevel.Debug);
     }
 
-    internal async Task StoreGenres(TmdbTvShowAppends show)
+    async internal Task StoreGenres(TmdbTvShowAppends show)
     {
         IEnumerable<GenreTv> genreShows = show.Genres.Select(
             genre => new GenreTv
@@ -342,13 +342,13 @@ public class ShowManager(
         Logger.MovieDb($"Show {show.Name}: Genres stored", LogEventLevel.Debug);
     }
 
-    internal async Task StoreWatchProviders(TmdbTvShowAppends show)
+    async internal Task StoreWatchProviders(TmdbTvShowAppends show)
     {
         Logger.MovieDb($"Show {show.Name}: WatchProviders stored", LogEventLevel.Debug);
         await Task.CompletedTask;
     }
 
-    internal async Task StoreNetworks(TmdbTvShowAppends show)
+    async internal Task StoreNetworks(TmdbTvShowAppends show)
     {
         // List<Network> networks = show.Networks.Results.ToList()
         //     .ConvertAll<Network>(x => new Network(x));
@@ -359,7 +359,7 @@ public class ShowManager(
         await Task.CompletedTask;
     }
 
-    internal async Task StoreCompanies(TmdbTvShowAppends show)
+    async internal Task StoreCompanies(TmdbTvShowAppends show)
     {
         // List<Company> companies = show.ProductionCompanies.Results.ToList()
         //     .ConvertAll<ProductionCompany>(x => new ProductionCompany(x));
@@ -370,11 +370,11 @@ public class ShowManager(
         await Task.CompletedTask;
     }
 
-    internal async Task StoreCast(TmdbTvShowAppends show)
+    async internal Task StoreCast(TmdbTvShowAppends show)
     {
     }
     
-    internal async Task StoreCrew(TmdbTvShowAppends show)
+    async internal Task StoreCrew(TmdbTvShowAppends show)
     {
     }
 }

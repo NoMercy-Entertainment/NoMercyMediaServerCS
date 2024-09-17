@@ -67,7 +67,7 @@ public class BaseClient : IDisposable
         });
     }
 
-    protected virtual async Task<T?> Get<T>(string url, Dictionary<string, string?>? query, bool? priority = false)
+    async protected virtual Task<T?> Get<T>(string url, Dictionary<string, string?>? query, bool? priority = false)
         where T : class
     {
         query ??= new Dictionary<string, string?>();

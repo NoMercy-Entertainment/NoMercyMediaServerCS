@@ -49,7 +49,7 @@ public class MusixMatchBaseClient : IDisposable
 
     protected Guid Id { get; private set; }
 
-    protected async Task<T?> Get<T>(string url, Dictionary<string, string?> query, bool? priority = false)
+    async protected Task<T?> Get<T>(string url, Dictionary<string, string?> query, bool? priority = false)
         where T : class
     {
         query.Add("format", "json");

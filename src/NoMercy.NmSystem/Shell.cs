@@ -4,7 +4,7 @@ namespace NoMercy.NmSystem;
 
 public static class Shell
 {
-    public static async Task<string> Exec(string command, string args)
+    public async static Task<string> Exec(string command, string args)
     {
         Process process = new()
         {

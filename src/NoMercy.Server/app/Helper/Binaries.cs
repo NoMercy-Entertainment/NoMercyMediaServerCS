@@ -50,7 +50,7 @@ public static class Binaries
         return Task.CompletedTask;
     }
 
-    private static async Task Download(Download program)
+    private async static Task Download(Download program)
     {
         Logger.Setup($"Downloading {program.Name}");
 
@@ -62,7 +62,7 @@ public static class Binaries
         await File.WriteAllBytesAsync(Path.Combine(AppFiles.BinariesPath, baseName), content);
     }
 
-    private static async Task Extract(Download program)
+    private async static Task Extract(Download program)
     {
         string sourceArchiveFileName =
             Path.Combine(AppFiles.BinariesPath, Path.GetFileName(program.Url?.ToString() ?? ""));
@@ -95,7 +95,7 @@ public static class Binaries
         await Task.Delay(0);
     }
 
-    private static async Task Cleanup(Download program)
+    private async static Task Cleanup(Download program)
     {
         if (program.Filter == "")
         {

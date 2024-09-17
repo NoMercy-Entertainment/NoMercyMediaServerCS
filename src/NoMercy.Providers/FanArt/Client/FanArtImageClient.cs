@@ -25,7 +25,7 @@ public class FanArtImageClient : FanArtBaseClient
         return Get<CoverArtCovers>("release/" + Id, queryParams, priority);
     }
 
-    public static async Task<Image<Rgba32>?> Download(Uri url, bool? download = true)
+    public async static Task<Image<Rgba32>?> Download(Uri url, bool? download = true)
     {
         string filePath = Path.Combine(AppFiles.MusicImagesPath, Path.GetFileName(url.LocalPath));
 

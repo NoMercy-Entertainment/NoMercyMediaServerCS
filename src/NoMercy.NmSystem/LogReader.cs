@@ -3,7 +3,7 @@ using Serilog.Events;
 namespace NoMercy.NmSystem;
 public static class LogReader
 {
-    public static async Task<List<LogEntry>> GetLastDailyLogsAsync(string logDirectoryPath, int limit = 10,
+    public async static Task<List<LogEntry>> GetLastDailyLogsAsync(string logDirectoryPath, int limit = 10,
         Func<LogEntry, bool>? filter = null)
     {
         IOrderedEnumerable<FileInfo> logFiles = GetLogFilesSortedByDate(logDirectoryPath);
@@ -30,7 +30,7 @@ public static class LogReader
             .OrderByDescending(f => f.LastWriteTime);
     }
 
-    private static async Task<IEnumerable<LogEntry>?> ProcessFileAsync(string filePath, int limit,
+    private async static Task<IEnumerable<LogEntry>?> ProcessFileAsync(string filePath, int limit,
         Func<LogEntry, bool>? filter)
     {
         List<LogEntry> logEntries = new();

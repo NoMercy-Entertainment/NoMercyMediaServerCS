@@ -43,7 +43,7 @@ public class AcoustIdBaseClient : IDisposable
 
     protected Guid Id { get; private set; }
 
-    protected async Task<T?> Get<T>(string url, Dictionary<string, string?>? query = default, bool? priority = false)
+    async protected Task<T?> Get<T>(string url, Dictionary<string, string?>? query = default, bool? priority = false)
         where T : class
     {
         query ??= new Dictionary<string, string?>();

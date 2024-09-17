@@ -302,7 +302,7 @@ public static class Logger
         // { "xteve", "Xteve" }
     };
 
-    internal static Color GetColor(string type)
+    static internal Color GetColor(string type)
     {
         return LogColors?[type] ?? Color.White;
     }
@@ -887,7 +887,7 @@ public static class Logger
         Log(level, message, "webhook");
     }
 
-    public static async Task<List<LogEntry>> GetLogs(int limit = 10, Func<LogEntry, bool>? filter = null)
+    public async static Task<List<LogEntry>> GetLogs(int limit = 10, Func<LogEntry, bool>? filter = null)
     {
         return await LogReader.GetLastDailyLogsAsync(AppFiles.LogPath, limit, filter);
     }

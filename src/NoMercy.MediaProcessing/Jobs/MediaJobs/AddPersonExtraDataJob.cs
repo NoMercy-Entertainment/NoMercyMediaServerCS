@@ -21,7 +21,7 @@ public class AddPersonExtraDataJob : AbstractShowExtraDataJob<TmdbPersonAppends,
     public override int Priority => 1;
     
     /** Note: TmdbPersonAppends is a reduced set to improve performance. */
-    public override async Task Handle()
+    public async override Task Handle()
     {
         await using MediaContext context = new();
         JobDispatcher jobDispatcher = new();

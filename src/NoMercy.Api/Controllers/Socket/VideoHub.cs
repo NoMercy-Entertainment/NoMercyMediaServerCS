@@ -216,7 +216,7 @@ public class VideoHub : ConnectionHub
         if (state.Muted) Clients.All.SendAsync("Mute", state.Muted);
     }
 
-    public override async Task OnDisconnectedAsync(Exception? exception)
+    public async override Task OnDisconnectedAsync(Exception? exception)
     {
         await base.OnDisconnectedAsync(exception);
 

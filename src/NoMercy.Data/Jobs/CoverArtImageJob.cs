@@ -73,7 +73,7 @@ public class CoverArtImageJob : IShouldQueue
         public Uri? Url { get; set; }
     }
 
-    private static async Task<CoverPalette?> FetchCover(MusicBrainzReleaseAppends musicBrainzReleaseAppends)
+    private async static Task<CoverPalette?> FetchCover(MusicBrainzReleaseAppends musicBrainzReleaseAppends)
     {
         bool hasCover = musicBrainzReleaseAppends.CoverArtArchive.Front;
         if (!hasCover) return null;

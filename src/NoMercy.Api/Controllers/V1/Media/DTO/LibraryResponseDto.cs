@@ -14,7 +14,7 @@ public record LibraryResponseDto
 
     [JsonProperty("data")] public List<LibraryResponseItemDto> Data { get; set; }
 
-    public static async Task<List<Movie>> GetLibraryMovies(Guid userId, Ulid libraryId, string language, int take,
+    public async static Task<List<Movie>> GetLibraryMovies(Guid userId, Ulid libraryId, string language, int take,
         int page = 0)
     {
         await using MediaContext mediaContext = new();
@@ -51,7 +51,7 @@ public record LibraryResponseDto
         return movies;
     }
 
-    public static async Task<List<Tv>> GetLibraryShows(Guid userId, Ulid libraryId, string language, int take,
+    public async static Task<List<Tv>> GetLibraryShows(Guid userId, Ulid libraryId, string language, int take,
         int page = 0)
     {
         await using MediaContext mediaContext = new();

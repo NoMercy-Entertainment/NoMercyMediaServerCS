@@ -10,7 +10,7 @@ public class DashboardHub : ConnectionHub
     {
     }
 
-    public override async Task OnDisconnectedAsync(Exception? exception)
+    public async override Task OnDisconnectedAsync(Exception? exception)
     {
         await base.OnDisconnectedAsync(exception);
         Logger.Socket("Dashboard client disconnected");

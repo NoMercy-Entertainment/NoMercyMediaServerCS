@@ -50,7 +50,7 @@ public class EpisodeManager(
         jobDispatcher.DispatchJob<AddEpisodeExtraDataJob, TmdbEpisodeAppends>(episodeAppends, show.Name);
     }
 
-    private static async Task<List<TmdbEpisodeAppends>> Collect(
+    private async static Task<List<TmdbEpisodeAppends>> Collect(
         TmdbTvShow show, TmdbSeasonAppends season)
     {
         List<TmdbEpisodeAppends> episodeAppends = [];
@@ -74,7 +74,7 @@ public class EpisodeManager(
         return episodeAppends;
     }
 
-    internal async Task StoreTranslations(string showName, TmdbEpisodeAppends episode)
+    async internal Task StoreTranslations(string showName, TmdbEpisodeAppends episode)
     {
         IEnumerable<Translation> translations = episode.Translations.Translations
             .Where(translation => translation.Data.Title != null || translation.Data.Overview != "")
@@ -96,7 +96,7 @@ public class EpisodeManager(
             $"Show: {showName}, Season {episode.SeasonNumber} Episode {episode.EpisodeNumber}: Translations stored");
     }
 
-    internal async Task StoreImages(string showName, TmdbEpisodeAppends episode)
+    async internal Task StoreImages(string showName, TmdbEpisodeAppends episode)
     {
         IEnumerable<Image> stills = episode.TmdbEpisodeImages.Stills
             .Select(image => new Image

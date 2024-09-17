@@ -59,7 +59,7 @@ public static class CacheController
         }
     }
 
-    public static async Task Write(string url, string data, int retry = 0)
+    public async static Task Write(string url, string data, int retry = 0)
     {
         string fullname = Path.Combine(AppFiles.ApiCachePath, GenerateFileName(url));
 

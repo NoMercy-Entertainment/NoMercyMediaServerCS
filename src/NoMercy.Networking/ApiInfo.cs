@@ -23,7 +23,7 @@ public partial class ApiInfo
     public static string Quote { get; private set; } = string.Empty;
     public const string UserAgent = "NoMercy MediaServer/0.1.0 ( admin@nomercy.tv )";
 
-    public static async Task RequestInfo()
+    public async static Task RequestInfo()
     {
         HttpClient client = new();
         client.Timeout = TimeSpan.FromSeconds(15);

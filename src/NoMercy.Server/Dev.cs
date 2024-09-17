@@ -18,7 +18,7 @@ namespace NoMercy.Server;
 
 public class Dev
 {
-    public static async void Run()
+    public async static void Run()
     {
         // MediaContext mediaContext = new();
         // JobDispatcher jobDispatcher = new();

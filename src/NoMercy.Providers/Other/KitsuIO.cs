@@ -6,7 +6,7 @@ namespace NoMercy.Providers.Other;
 
 public static class KitsuIo
 {
-    public static async Task<bool> IsAnime(string title, int year)
+    public async static Task<bool> IsAnime(string title, int year)
     {
         bool isAnime = false;
 

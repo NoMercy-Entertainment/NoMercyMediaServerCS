@@ -23,7 +23,7 @@ public static class QueueRunner
     private static readonly JobQueue JobQueue = new(new QueueContext());
     private static bool _isUpdating;
 
-    public static async Task Initialize()
+    public async static Task Initialize()
     {
         if (_isInitialized) return;
 
@@ -151,7 +151,7 @@ public static class QueueRunner
         return Task.CompletedTask;
     }
 
-    public static async Task<bool> SetWorkerCount(string name, int max)
+    public async static Task<bool> SetWorkerCount(string name, int max)
     {
         if (!Workers.ContainsKey(name)) return false;
 

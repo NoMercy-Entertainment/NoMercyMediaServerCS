@@ -40,11 +40,11 @@ public abstract class BaseVideo : Classes
     protected internal virtual string[] AvailableLevels => [];
     protected virtual CodecDto[] AvailableCodecs => [];
 
-    internal readonly Dictionary<string, dynamic> _extraParameters = [];
-    internal readonly Dictionary<string, dynamic> _filters = [];
-    internal readonly Dictionary<string, dynamic> _ops = [];
+    readonly internal Dictionary<string, dynamic> _extraParameters = [];
+    readonly internal Dictionary<string, dynamic> _filters = [];
+    readonly internal Dictionary<string, dynamic> _ops = [];
 
-    protected internal static VideoQualityDto[] AvailableVideoSizes =>
+    protected static internal VideoQualityDto[] AvailableVideoSizes =>
     [
         FrameSizes._240p, FrameSizes._360p,
         FrameSizes._480p, FrameSizes._720p,

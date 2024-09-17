@@ -22,7 +22,7 @@ public class ProcessFanartArtistImagesJob : AbstractFanArtDataJob
     public override string QueueName => "image";
     public override int Priority => 7;
 
-    public override async Task Handle()
+    public async override Task Handle()
     {
         await using MediaContext context = new();
         JobDispatcher jobDispatcher = new();

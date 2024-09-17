@@ -11,7 +11,7 @@ public class CoverArtImageManagerManager(
     JobDispatcher jobDispatcher
 ): ICoverArtImageManagerManager
 {
-    public static async Task<string> ColorPalette(string type, Uri url, bool? download = true)
+    public async static Task<string> ColorPalette(string type, Uri url, bool? download = true)
     {
         return await BaseImageManager.ColorPalette(CoverArtCoverArtClient.Download, type, url, download);
     }
@@ -27,7 +27,7 @@ public class CoverArtImageManagerManager(
         public Uri? Url { get; set; }
     }
 
-    public static async Task<CoverPalette?> Add(Guid id)
+    public async static Task<CoverPalette?> Add(Guid id)
     {
         try
         {

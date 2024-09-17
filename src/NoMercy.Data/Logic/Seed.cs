@@ -34,14 +34,14 @@ public class Seed : IDisposable, IAsyncDisposable
     private static User[] _users = [];
     private static bool ShouldSeedMarvel { get; set; }
 
-    public static async Task Init(bool shouldSeedMarvel)
+    public async static Task Init(bool shouldSeedMarvel)
     { 
         ShouldSeedMarvel = shouldSeedMarvel;
         await CreateDatabase();
         await SeedDatabase();
     }
 
-    private static async Task CreateDatabase()
+    private async static Task CreateDatabase()
     {
         try
         {
@@ -62,7 +62,7 @@ public class Seed : IDisposable, IAsyncDisposable
         }
     }
 
-    private static async Task SeedDatabase()
+    private async static Task SeedDatabase()
     {
         try
         {
@@ -88,7 +88,7 @@ public class Seed : IDisposable, IAsyncDisposable
         }
     }
 
-    private static async Task AddEncoderProfiles()
+    private async static Task AddEncoderProfiles()
     {
         bool hasEncoderProfiles = await MediaContext.EncoderProfiles.AnyAsync();
         if (hasEncoderProfiles) return;
@@ -192,7 +192,7 @@ public class Seed : IDisposable, IAsyncDisposable
             .RunAsync();
     }
 
-    private static async Task Users()
+    private async static Task Users()
     {
         Logger.Setup("Adding Users");
         
@@ -276,7 +276,7 @@ public class Seed : IDisposable, IAsyncDisposable
             .RunAsync();
     }
 
-    private static async Task AddGenres()
+    private async static Task AddGenres()
     {
         bool hasGenres = await MediaContext.Genres.AnyAsync();
         if (hasGenres) return;
@@ -315,7 +315,7 @@ public class Seed : IDisposable, IAsyncDisposable
             .RunAsync();
     }
 
-    private static async Task AddCertifications()
+    private async static Task AddCertifications()
     {
         bool hasCertifications = await MediaContext.Certifications.AnyAsync();
         if (hasCertifications) return;
@@ -358,7 +358,7 @@ public class Seed : IDisposable, IAsyncDisposable
             .RunAsync();
     }
 
-    private static async Task AddLanguages()
+    private async static Task AddLanguages()
     {
         bool hasLanguages = await MediaContext.Languages.AnyAsync();
         if (hasLanguages) return;
@@ -384,7 +384,7 @@ public class Seed : IDisposable, IAsyncDisposable
             .RunAsync();
     }
 
-    private static async Task AddCountries()
+    private async static Task AddCountries()
     {
         bool hasCountries = await MediaContext.Countries.AnyAsync();
         if (hasCountries) return;
@@ -410,7 +410,7 @@ public class Seed : IDisposable, IAsyncDisposable
             .RunAsync();
     }
 
-    private static async Task AddMusicGenres()
+    private async static Task AddMusicGenres()
     {
         bool hasMusicGenres = await MediaContext.MusicGenres.AnyAsync();
         if (hasMusicGenres) return;
@@ -438,7 +438,7 @@ public class Seed : IDisposable, IAsyncDisposable
         await Task.CompletedTask;
     }
 
-    private static async Task AddFolderRoots()
+    private async static Task AddFolderRoots()
     {
         try
         {
@@ -464,7 +464,7 @@ public class Seed : IDisposable, IAsyncDisposable
         }
     }
 
-    private static async Task AddLibraries()
+    private async static Task AddLibraries()
     {
         try
         {
@@ -532,7 +532,7 @@ public class Seed : IDisposable, IAsyncDisposable
         }
     }
 
-    private static async Task AddSpecial()
+    private async static Task AddSpecial()
     {
         Logger.Setup("Adding Special");
 

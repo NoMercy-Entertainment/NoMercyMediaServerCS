@@ -26,7 +26,7 @@ public partial class ProcessReleaseFolderJob : AbstractMusicFolderJob
 
     private bool _fromFingerprint = false;
 
-    public override async Task Handle()
+    public async override Task Handle()
     {
         await using MediaContext context = new();
         JobDispatcher jobDispatcher = new();

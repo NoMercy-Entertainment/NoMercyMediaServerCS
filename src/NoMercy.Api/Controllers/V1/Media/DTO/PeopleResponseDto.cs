@@ -12,7 +12,7 @@ public record PeopleResponseDto
     [JsonProperty("nextId")] public long? NextId { get; set; }
     [JsonProperty("data")] public IEnumerable<PeopleResponseItemDto> Data { get; set; } = [];
 
-    public static async Task<List<PeopleResponseItemDto>> GetPeople(Guid userId, string language, int take,
+    public async static Task<List<PeopleResponseItemDto>> GetPeople(Guid userId, string language, int take,
         int page = 0)
     {
         await using MediaContext mediaContext = new();

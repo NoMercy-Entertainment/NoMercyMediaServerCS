@@ -91,7 +91,7 @@ public class CollectionManager(
         Logger.MovieDb($"Collection: {collection.Name}: Translations stored", LogEventLevel.Debug);
     }
 
-    internal async Task StoreImages(TmdbCollectionAppends collection)
+    async internal Task StoreImages(TmdbCollectionAppends collection)
     {
         IEnumerable<Image> posters = collection.Images.Posters
             .Select(image => new Image

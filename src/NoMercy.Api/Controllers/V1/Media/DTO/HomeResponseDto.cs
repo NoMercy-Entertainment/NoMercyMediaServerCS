@@ -14,7 +14,7 @@ public record HomeResponseDto<T>
 
 public abstract record HomeResponseDto
 {
-    public static async Task<List<Genre>> GetHome(MediaContext mediaContext, Guid userId, string? language, int take,
+    public async static Task<List<Genre>> GetHome(MediaContext mediaContext, Guid userId, string? language, int take,
         int page = 0)
     {
         IOrderedQueryable<Genre> query = mediaContext.Genres.AsNoTracking()

@@ -70,7 +70,7 @@ public static class Certificate
         return certificate.NotAfter >= DateTime.Now - TimeSpan.FromDays(30);
     }
 
-    public static async Task RenewSslCertificate()
+    public async static Task RenewSslCertificate()
     {
         if (ValidateSslCertificate())
         {

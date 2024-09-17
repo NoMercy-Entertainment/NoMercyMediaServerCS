@@ -30,10 +30,10 @@ public class BaseContainer : Classes
         new() { Name = VideoContainers.Webm, Type = "video", IsDefault = false }
     ];
 
-    internal readonly Dictionary<string, dynamic> _extraParameters = [];
+    readonly internal Dictionary<string, dynamic> _extraParameters = [];
     private readonly Dictionary<string, dynamic> _filters = [];
     private readonly Dictionary<string, dynamic> _ops = [];
-    protected internal readonly Dictionary<int, dynamic> Streams = [];
+    protected readonly internal Dictionary<int, dynamic> Streams = [];
 
     protected virtual CodecDto[] AvailableCodecs => [];
     protected virtual string[] AvailablePresets => [];

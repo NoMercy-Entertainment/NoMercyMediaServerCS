@@ -21,7 +21,7 @@ public class AddCollectionJob : AbstractMediaJob
     public override string QueueName => "queue";
     public override int Priority => 4;
 
-    public override async Task Handle()
+    public async override Task Handle()
     {
         await using MediaContext context = new();
         JobDispatcher jobDispatcher = new();

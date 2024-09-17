@@ -81,7 +81,7 @@ public class FfMpeg : Classes
         return Open(inputFile);
     }
 
-    public static async Task<string> Exec(string args, string? cwd = null, string? executable = null)
+    public async static Task<string> Exec(string args, string? cwd = null, string? executable = null)
     {
         Process ffmpeg = new();
         ffmpeg.StartInfo = new ProcessStartInfo
@@ -108,7 +108,7 @@ public class FfMpeg : Classes
         return error;
     }
 
-    public static async Task<string> Run(string args, string cwd, ProgressMeta meta)
+    public async static Task<string> Run(string args, string cwd, ProgressMeta meta)
     {
         Process ffmpeg = new();
         ffmpeg.StartInfo = new ProcessStartInfo

@@ -54,7 +54,7 @@ public class TmdbBaseClient : IDisposable
 
     public int Id { get; private set; }
 
-    protected async Task<T?> Get<T>(string url, Dictionary<string, string>? query = null, bool? priority = false)
+    async protected Task<T?> Get<T>(string url, Dictionary<string, string>? query = null, bool? priority = false)
         where T : class
     {
         query ??= new Dictionary<string, string>();
@@ -74,7 +74,7 @@ public class TmdbBaseClient : IDisposable
         return data;
     }
 
-    protected async Task<List<T>?> Paginated<T>(string url, int limit) where T : class
+    async protected Task<List<T>?> Paginated<T>(string url, int limit) where T : class
     {
         List<T> list = new();
 

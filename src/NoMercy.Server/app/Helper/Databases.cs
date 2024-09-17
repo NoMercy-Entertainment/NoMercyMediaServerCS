@@ -5,6 +5,6 @@ namespace NoMercy.Server.app.Helper;
 
 public static class Databases
 {
-    internal static QueueContext QueueContext { get; set; }
-    internal static MediaContext MediaContext { get; set; }
+    static internal QueueContext QueueContext { get; set; }
+    static internal MediaContext MediaContext { get; set; }
 }

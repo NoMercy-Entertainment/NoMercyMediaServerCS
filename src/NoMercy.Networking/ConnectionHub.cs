@@ -22,7 +22,7 @@ public class ConnectionHub : Hub
         // Logger.Socket($"Connected to {Endpoint}");
     }
 
-    public override async Task OnConnectedAsync()
+    public async override Task OnConnectedAsync()
     {
         User? user = Context.User.User();
         if (user is null) return;
@@ -120,7 +120,7 @@ public class ConnectionHub : Hub
         await base.OnConnectedAsync();
     }
 
-    public override async Task OnDisconnectedAsync(Exception? exception)
+    public async override Task OnDisconnectedAsync(Exception? exception)
     {
         if (Networking.SocketClients.TryGetValue(Context.ConnectionId, out Client? client))
         {

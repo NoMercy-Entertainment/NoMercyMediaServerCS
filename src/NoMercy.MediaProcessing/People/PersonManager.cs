@@ -207,7 +207,7 @@ public class PersonManager(
         throw new NotImplementedException();
     }
 
-    internal async Task StoreTranslations(TmdbPersonAppends person)
+    async internal Task StoreTranslations(TmdbPersonAppends person)
     {
         IEnumerable<Translation> translations = person.Translations.Translations
             .Where(translation => translation.TmdbPersonTranslationData.Overview != "")
@@ -224,7 +224,7 @@ public class PersonManager(
         await personRepository.StoreTranslationsAsync(translations);
     }
 
-    internal async Task StoreImages(TmdbPersonAppends person)
+    async internal Task StoreImages(TmdbPersonAppends person)
     {
         IEnumerable<Image> posters = person.Images.Profiles
             .Select(image => new Image

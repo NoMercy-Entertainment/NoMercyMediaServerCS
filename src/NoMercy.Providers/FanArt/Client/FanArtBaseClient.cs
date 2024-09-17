@@ -41,7 +41,7 @@ public class FanArtBaseClient : IDisposable
         return _queue ??= new Queue(new QueueOptions { Concurrent = 3, Interval = 1000, Start = true });
     }
 
-    protected async Task<T?> Get<T>(string url, Dictionary<string, string>? query = null, bool? priority = false)
+    async protected Task<T?> Get<T>(string url, Dictionary<string, string>? query = null, bool? priority = false)
         where T : class
     {
         query ??= new Dictionary<string, string>();
