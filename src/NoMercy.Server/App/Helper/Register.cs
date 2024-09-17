@@ -1,12 +1,12 @@
-using System.Net.Http.Headers;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using NoMercy.Database;
 using NoMercy.Database.Models;
 using NoMercy.Networking;
 using NoMercy.NmSystem;
+using System.Net.Http.Headers;
 
-namespace NoMercy.Server.app.Helper;
+namespace NoMercy.Server.App.Helper;
 
 public static class Register
 {

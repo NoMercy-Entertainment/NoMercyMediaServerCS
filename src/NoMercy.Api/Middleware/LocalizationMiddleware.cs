@@ -6,10 +6,10 @@ public class LocalizationMiddleware(RequestDelegate next) {
 
     public async Task InvokeAsync(HttpContext context)
     {
-        string userLanguages = context.Request.Headers["Accept-Language"].ToString();
+        string userLanguages = context.Request.Headers.AcceptLanguage.ToString();
 
         // if the language string does not match the format "{language}-{country}" we add the uppercase version of the language
-        if (!userLanguages.Contains("-")) userLanguages = userLanguages + "-" + userLanguages.ToUpper();
+        if (!userLanguages.Contains('-')) userLanguages = userLanguages + '-' + userLanguages.ToUpper();
 
         string[]? firstLang = userLanguages.Split(',').FirstOrDefault()?.Split('-');
 

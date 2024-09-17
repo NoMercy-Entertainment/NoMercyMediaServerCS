@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace NoMercy.Server.app.Helper;
+namespace NoMercy.Server.App.Helper;
 
 public static class Screen
 {

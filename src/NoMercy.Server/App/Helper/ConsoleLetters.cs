@@ -1,4 +1,4 @@
-namespace NoMercy.Server.app.Helper;
+namespace NoMercy.Server.App.Helper;
 
 public class ConsoleLetters
 {

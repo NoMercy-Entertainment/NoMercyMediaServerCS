@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using NoMercy.Database.Models;
 
-namespace NoMercy.Server.app.Helper;
+namespace NoMercy.Server.App.Helper;
 public class ServerRegisterResponse
 {
     [JsonProperty("status")] public string Status { get; set; } = string.Empty;

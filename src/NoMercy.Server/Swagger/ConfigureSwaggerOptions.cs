@@ -21,12 +21,10 @@ public class ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider) : 
                 {
                     Implicit = new OpenApiOAuthFlow
                     {
-                        AuthorizationUrl =
-                            new Uri($"{NoMercyConfig.AuthBaseUrl}protocol/openid-connect/auth"),
-                        Scopes = new Dictionary<string, string>
-                        {
-                            { "openid", "openid" },
-                            { "profile", "profile" }
+                        AuthorizationUrl = new Uri($"{NoMercyConfig.AuthBaseUrl}protocol/openid-connect/auth"),
+                        Scopes = new Dictionary<string, string> {
+                            ["openid"] = "openid" ,
+                            ["profile"] = "profile" 
                         }
                     }
                 }
@@ -58,11 +56,10 @@ public class ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider) : 
 
     private static OpenApiInfo CreateInfoForApiVersion(ApiVersionDescription description)
     {
-        OpenApiInfo info = new()
-        {
+        return new OpenApiInfo {
             Title = "NoMercy API",
             Version = description.ApiVersion.ToString(),
-            Description = "NoMercy API",
+            Description = "NoMercy API" + (description.IsDeprecated ? " (deprecated)" : ""),
             Contact = new OpenApiContact
             {
                 Name = "NoMercy",
@@ -71,9 +68,5 @@ public class ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider) : 
             },
             TermsOfService = new Uri("https://nomercy.tv/terms-of-service")
         };
-
-        if (description.IsDeprecated) info.Description += " This API version has been deprecated.";
-
-        return info;
     }
 }

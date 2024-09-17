@@ -1,14 +1,14 @@
-using System.Net.Http.Headers;
-using System.Security.Authentication;
-using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Newtonsoft.Json;
 using NoMercy.Networking;
 using NoMercy.NmSystem;
+using System.Net.Http.Headers;
+using System.Security.Authentication;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 
-namespace NoMercy.Server.app.Helper;
+namespace NoMercy.Server.App.Helper;
 
 public static class Certificate
 {

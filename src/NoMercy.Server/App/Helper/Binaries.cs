@@ -1,10 +1,10 @@
-using System.IO.Compression;
-using System.Runtime.InteropServices;
 using NoMercy.Networking;
 using NoMercy.NmSystem;
 using Serilog.Events;
+using System.IO.Compression;
+using System.Runtime.InteropServices;
 
-namespace NoMercy.Server.app.Helper;
+namespace NoMercy.Server.App.Helper;
 
 public static class Binaries
 {

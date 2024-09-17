@@ -11,7 +11,8 @@ using NoMercy.Networking;
 using NoMercy.NmSystem;
 using NoMercy.Providers.AniDb.Clients;
 using NoMercy.Queue;
-using NoMercy.Server.app.Helper;
+using NoMercy.Server.App.Helper;
+using NoMercy.Server.StartupServices;
 using Serilog.Events;
 using AppFiles = NoMercy.NmSystem.AppFiles;
 
@@ -182,7 +183,7 @@ public static class Program
             new (Register.Init),
             new (Binaries.DownloadAll),
             // new (AniDbBaseClient.Init),
-            new (TrayIcon.Make)
+            new (TrayIconFactory.MakeIcon)
         ];
 
         AppDomain.CurrentDomain.ProcessExit += (_, _) => { AniDbBaseClient.Dispose(); };

@@ -209,8 +209,6 @@ public class Startup(IApiVersionDescriptionProvider provider) {
         services.AddResponseCompression(options => { options.EnableForHttps = true; });
 
         services.AddTransient<DynamicStaticFilesMiddleware>();
-        
-        // services.AddSingleton(LibraryFileWatcher.Instance);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -253,8 +251,7 @@ public class Startup(IApiVersionDescriptionProvider provider) {
             options.EnablePersistAuthorization();
             options.EnableTryItOutByDefault();
 
-            IReadOnlyList<ApiVersionDescription> descriptions = provider.ApiVersionDescriptions;
-            foreach (ApiVersionDescription description in descriptions)
+            foreach (ApiVersionDescription description in provider.ApiVersionDescriptions)
             {
                 string url = $"/swagger/{description.GroupName}/swagger.json";
                 string name = description.GroupName.ToUpperInvariant();
@@ -299,7 +296,7 @@ public class Startup(IApiVersionDescriptionProvider provider) {
 
         // Initialize Dynamic Static Files Middleware
         MediaContext mediaContext = new();
-        List<Folder> folderLibraries = mediaContext.Folders.ToList();
+        List<Folder> folderLibraries = mediaContext.Folders.ToList(); // Todo always interact with the db async
 
         foreach (Folder folder in folderLibraries.Where(folder => Directory.Exists(folder.Path)))
             DynamicStaticFilesMiddleware.AddPath(folder.Id, folder.Path);

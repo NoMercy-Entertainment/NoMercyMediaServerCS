@@ -1,8 +1,8 @@
-using System.Text;
 using NoMercy.Networking;
 using Pastel;
+using System.Text;
 
-namespace NoMercy.Server.app.Helper;
+namespace NoMercy.Server.App.Helper;
 
 public abstract class ConsoleMessages
 {
