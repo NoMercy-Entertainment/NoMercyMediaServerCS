@@ -40,7 +40,7 @@ public partial class ProcessReleaseFolderJob : AbstractMusicFolderJob
         Logger.App("Processing music folder " + FilePath);
 
         await using MediaScan mediaScan = new();
-        ConcurrentBag<MediaFolderExtend>? rootFolders = await mediaScan
+        ConcurrentBag<MediaFolderExtend> rootFolders = await mediaScan
             .DisableRegexFilter()
             .EnableFileListing()
             .Process(FilePath, 2);

@@ -46,7 +46,7 @@ public class UserDataController : BaseController
                 Message = "You do not have permission to view continue watching"
             });
 
-        string? language = Language();
+        string language = Language();
         string country = Country();
 
         await using MediaContext mediaContext = new();

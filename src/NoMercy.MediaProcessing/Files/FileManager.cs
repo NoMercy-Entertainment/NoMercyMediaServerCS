@@ -28,7 +28,7 @@ public partial class FileManager(
 
         foreach (Folder folder in Folders)
         {
-            ConcurrentBag<MediaFolderExtend>? files = await GetFiles(library, folder.Path);
+            ConcurrentBag<MediaFolderExtend> files = await GetFiles(library, folder.Path);
 
             if (!files.IsEmpty) Files.AddRange(files);
         }

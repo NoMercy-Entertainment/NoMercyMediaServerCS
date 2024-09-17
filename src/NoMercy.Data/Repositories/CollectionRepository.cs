@@ -8,7 +8,7 @@ public class CollectionRepository(MediaContext context) : ICollectionRepository
 {
     public async Task<List<Collection>> GetCollectionsAsync(Guid userId, string language, int take, int page)
     {
-        IOrderedQueryable<Collection>? query = context.Collections
+        IOrderedQueryable<Collection> query = context.Collections
             .AsNoTracking()
             .Where(collection => collection.Library.LibraryUsers
                 .Any(u => u.UserId == userId)
@@ -31,7 +31,7 @@ public class CollectionRepository(MediaContext context) : ICollectionRepository
             .ThenInclude(genreMovie => genreMovie.Genre)
             .OrderBy(collection => collection.TitleSort);
 
-        List<Collection>? collections = await query
+        List<Collection> collections = await query
             .Skip(page * take)
             .Take(take)
             .ToListAsync();

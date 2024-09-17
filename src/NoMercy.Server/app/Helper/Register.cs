@@ -64,7 +64,7 @@ public static class Register
         client.DefaultRequestHeaders.Add("User-Agent", ApiInfo.UserAgent);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Auth.AccessToken);
         
-        string? content = client
+        string content = client
             .PostAsync("assign", new FormUrlEncodedContent(serverData))
             .Result.Content.ReadAsStringAsync().Result;
         

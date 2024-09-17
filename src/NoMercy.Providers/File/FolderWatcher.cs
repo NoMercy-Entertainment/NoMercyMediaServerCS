@@ -128,7 +128,7 @@ public class FolderWatcher : IDisposable
 
     private static void _onError(object sender, ErrorEventArgs e)
     {
-        FileWatcherEventArgs? fileWatcherEventArgs = new(sender as FileSystemWatcher,
+        FileWatcherEventArgs fileWatcherEventArgs = new(sender as FileSystemWatcher,
             new FileSystemEventArgs(WatcherChangeTypes.All, "", ""));
 
         fileWatcherEventArgs.ErrorEventArgs = e;

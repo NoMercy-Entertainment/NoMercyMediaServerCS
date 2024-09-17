@@ -64,7 +64,7 @@ public class MediaScan : IDisposable, IAsyncDisposable
     {
         folderPath = Path.GetFullPath(folderPath.ToUtf8());
 
-        ConcurrentBag<MediaFolderExtend>? folders = [];
+        ConcurrentBag<MediaFolderExtend> folders = [];
 
         if (depth < 0) return folders;
 
@@ -146,7 +146,7 @@ public class MediaScan : IDisposable, IAsyncDisposable
                 });
             });
 
-            ConcurrentBag<MediaFolderExtend>? response = new(folders
+            ConcurrentBag<MediaFolderExtend> response = new(folders
                 .Where(f => f.Name is not "")
                 .OrderByDescending(f => f.Name));
 
@@ -220,7 +220,7 @@ public class MediaScan : IDisposable, IAsyncDisposable
                 });
             });
 
-            ConcurrentBag<MediaFolderExtend>? response = new(folders
+            ConcurrentBag<MediaFolderExtend> response = new(folders
                 .Where(f => f.Name is not "")
                 .OrderByDescending(f => f.Name));
 
@@ -320,7 +320,7 @@ public class MediaScan : IDisposable, IAsyncDisposable
                 files.Add(res);
             });
 
-            ConcurrentBag<MediaFile>? response = new(files
+            ConcurrentBag<MediaFile> response = new(files
                 // .Where(f => f.Name is not "")
                 .OrderBy(f => f.Name));
 

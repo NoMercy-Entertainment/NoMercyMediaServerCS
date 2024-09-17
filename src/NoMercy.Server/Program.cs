@@ -140,7 +140,7 @@ public static class Program
 
     private static IWebHostBuilder CreateWebHostBuilder(this IWebHostBuilder _)
     {
-        UriBuilder? url = new UriBuilder
+        UriBuilder url = new UriBuilder
         {
             Host = IPAddress.Any.ToString(),
             Port = NoMercyConfig.InternalServerPort,
@@ -190,7 +190,7 @@ public static class Program
         await RunStartup(startupTasks);
         
         await using MediaContext mediaContext = new();
-        List<Configuration>? configuration = mediaContext.Configuration.ToList();
+        List<Configuration> configuration = mediaContext.Configuration.ToList();
         
         foreach (Configuration? config in configuration)
         {
