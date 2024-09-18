@@ -66,10 +66,6 @@ public class Movie : ColorPaletteTimeStamps
 
     [JsonProperty("video_files")] public ICollection<VideoFile> VideoFiles { get; set; } = new HashSet<VideoFile>();
 
-    public Movie()
-    {
-    }
-
     // public Movie(Providers.TMDB.Models.Movies.TmdbMovie input, Ulid libraryId)
     // {
     //     Id = input.Id;

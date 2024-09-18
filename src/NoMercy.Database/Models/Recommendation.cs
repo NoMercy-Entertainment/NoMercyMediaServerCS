@@ -34,7 +34,4 @@ public class Recommendation : ColorPalettes
     [ForeignKey("RecommendationTo")] public int? MovieToId { get; set; }
     public Movie MovieTo { get; set; }
 
-    public Recommendation()
-    {
-    }
 }

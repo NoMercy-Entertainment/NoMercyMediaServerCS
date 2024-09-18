@@ -16,8 +16,4 @@ public class Progress : ProgressMeta
     [JsonProperty("current_time")] public double CurrentTime { get; set; }
     [JsonProperty("thumbnails")] public string Thumbnail { get; set; }
 
-    public Progress()
-    {
-        //
-    }
 }

@@ -21,7 +21,4 @@ public class Job
     [JsonProperty("credit_id")] public string? CreditId { get; set; }
     public Crew? Crew { get; set; }
 
-    public Job()
-    {
-    }
 }

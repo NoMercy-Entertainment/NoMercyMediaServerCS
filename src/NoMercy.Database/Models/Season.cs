@@ -31,7 +31,4 @@ public class Season : ColorPalettes
     [JsonProperty("images")] public ICollection<Image> Images { get; set; }
     [JsonProperty("translations")] public ICollection<Translation> Translations { get; set; }
 
-    public Season()
-    {
-    }
 }

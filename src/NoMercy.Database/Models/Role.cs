@@ -25,10 +25,6 @@ public class Role
     [JsonProperty("guest_star_id")] public int? GuestStarId { get; set; }
     public GuestStar? GuestStar { get; set; }
 
-    public Role()
-    {
-    }
-
     // public Role(TmdbAggregatedCreditRole role)
     // {
     //     Character = role.Character;

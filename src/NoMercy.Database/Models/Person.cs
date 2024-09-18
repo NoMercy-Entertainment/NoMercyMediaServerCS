@@ -60,7 +60,4 @@ public class Person : ColorPaletteTimeStamps
         set => _externalIds = JsonConvert.SerializeObject(value);
     }
 
-    public Person()
-    {
-    }
 }

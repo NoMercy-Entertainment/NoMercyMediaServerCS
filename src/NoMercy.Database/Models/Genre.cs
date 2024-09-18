@@ -18,10 +18,6 @@ public class Genre
     public ICollection<GenreMovie> GenreMovies { get; set; }
     public ICollection<GenreTv> GenreTvShows { get; set; }
 
-    public Genre()
-    {
-    }
-
     // public Genre(Providers.TMDB.Models.Shared.TmdbGenre tmdbGenre)
     // {
     //     Id = tmdbGenre.Id;

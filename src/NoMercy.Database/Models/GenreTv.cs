@@ -16,7 +16,4 @@ public class GenreTv
     [JsonProperty("tv_id")] public int TvId { get; set; }
     public Tv Tv { get; set; }
 
-    public GenreTv()
-    {
-    }
 }

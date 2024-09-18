@@ -15,10 +15,6 @@ public class MusicGenre
 
     [JsonProperty("name")] public string Name { get; set; }
 
-    public MusicGenre()
-    {
-    }
-
     // public MusicGenre(Providers.MusicBrainz.Models.MusicBrainzGenre musicBrainzGenre)
     // {
     //     Id = musicBrainzGenre.Id;

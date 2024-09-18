@@ -67,10 +67,6 @@ public class Tv : ColorPaletteTimeStamps
     [InverseProperty("TvTo")] public ICollection<Similar> SimilarTo { get; set; }
     [JsonProperty("tv_user")] public ICollection<TvUser> TvUser { get; set; }
 
-    public Tv()
-    {
-    }
-
     public string CreateFolderName()
     {
         return "/" + string

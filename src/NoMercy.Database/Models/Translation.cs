@@ -68,7 +68,4 @@ public class Translation : Timestamps
     [JsonProperty("release_id")] public Guid? AlbumId { get; set; }
     public Album Album { get; set; }
 
-    public Translation()
-    {
-    }
 }

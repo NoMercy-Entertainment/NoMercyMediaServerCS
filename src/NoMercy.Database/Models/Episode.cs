@@ -45,10 +45,6 @@ public class Episode : ColorPalettes
     [JsonProperty("files")] public ICollection<File> Files { get; set; }
     [JsonProperty("translations")] public ICollection<Translation> Translations { get; set; }
 
-    public Episode()
-    {
-    }
-
     // public Episode(TmdbEpisodeAppends e, int tvId, int seasonId)
     // {
     //     Id = e.Id;

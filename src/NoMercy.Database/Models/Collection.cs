@@ -35,10 +35,6 @@ public class Collection : ColorPalettes
 
     [JsonProperty("user_data")] public ICollection<UserData> UserData { get; set; }
 
-    public Collection()
-    {
-    }
-
     // public Collection(TmdbCollectionAppends tmdbCollection, Ulid libraryId)
     // {
     //     Id = tmdbCollection.Id;

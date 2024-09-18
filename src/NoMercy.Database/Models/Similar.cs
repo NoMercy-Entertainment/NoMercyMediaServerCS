@@ -34,7 +34,4 @@ public class Similar : ColorPalettes
     [JsonProperty("movie_to_id")] public int? MovieToId { get; set; }
     public Movie MovieTo { get; set; }
 
-    public Similar()
-    {
-    }
 }
