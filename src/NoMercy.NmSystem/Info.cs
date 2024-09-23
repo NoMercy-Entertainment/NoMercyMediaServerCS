@@ -88,6 +88,10 @@ public class Info
                 return item["Name"].ToString()?.Trim();
             }
         }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            return "Unknown";
+        }
         else
         {
             string output = ExecuteBashCommand("lscpu | grep 'Model name:'");
