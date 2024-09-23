@@ -21,8 +21,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoMercy.Api", "src\NoMercy.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoMercy.Data", "src\NoMercy.Data\NoMercy.Data.csproj", "{3637E9CA-1928-4169-B30F-1110C704B89B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoMercy.App", "src\NoMercy.App\NoMercy.App.csproj", "{A9BA46B8-9FE2-4453-8243-D999CE56EE75}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoMercy.MediaProcessing", "src\NoMercy.MediaProcessing\NoMercy.MediaProcessing.csproj", "{B6124942-5D33-4050-AEE0-45EAE7507469}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoMercy.Queue", "src\NoMercy.Queue\NoMercy.Queue.csproj", "{41D4358A-80AF-4D38-90C0-22E1BA00E9F0}"

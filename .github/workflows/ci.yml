@@ -24,10 +24,6 @@ jobs:
         with:
           dotnet-version: '8.0.x'
           
-      - name: Install Android Maui
-        if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
-        run: dotnet workload install maui
-
       - name: Restore dependencies
         run: dotnet restore NoMercy.Server.sln
 
