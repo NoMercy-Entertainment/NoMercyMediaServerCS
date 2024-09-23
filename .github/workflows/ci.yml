@@ -28,4 +28,9 @@ jobs:
         run: dotnet restore NoMercy.Server.sln
 
       - name: Test
-        run: dotnet test NoMercy.Server.sln --verbosity normal
+        run: >
+          dotnet test NoMercy.Server.sln 
+          --configuration Release
+          --collect:"XPlat Code Coverage"
+          --settings tests/coverletArgs.runsettings
+          --verbosity minimal

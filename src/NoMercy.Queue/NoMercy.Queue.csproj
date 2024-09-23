@@ -10,4 +10,9 @@
         <ProjectReference Include="..\NoMercy.Database\NoMercy.Database.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Castle.Core" Version="5.1.1" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    </ItemGroup>
+
 </Project>
