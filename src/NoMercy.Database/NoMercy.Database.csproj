@@ -8,7 +8,10 @@
         <Copyright>(c) 2023 NoMercy Entertainment</Copyright>
         <PackageProjectUrl>https://nomercy.tv</PackageProjectUrl>
         <Company>NoMercy Entertainment</Company>
-        <Product>NoMercy Database</Product>
+        <Product>NoMercy Database</Product>     <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
+    </PropertyGroup>
+    <PropertyGroup>
+        <IsTestProject>false</IsTestProject>
     </PropertyGroup>
 
     <ItemGroup>

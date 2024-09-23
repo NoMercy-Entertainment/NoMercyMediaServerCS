@@ -10,7 +10,10 @@
         <Company>NoMercy Entertainment</Company>
         <Product>NoMercy API Providers</Product>
         <LangVersion>12</LangVersion>
-        <BuildFrameworkVersion>6.0.2</BuildFrameworkVersion>
+        <BuildFrameworkVersion>6.0.2</BuildFrameworkVersion>     <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
+    </PropertyGroup>
+    <PropertyGroup>
+        <IsTestProject>false</IsTestProject>
     </PropertyGroup>
 
     <ItemGroup>
