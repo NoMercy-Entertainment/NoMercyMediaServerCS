@@ -8,7 +8,8 @@
         <Copyright>(c) 2023 NoMercy Entertainment</Copyright>
         <PackageProjectUrl>https://nomercy.tv</PackageProjectUrl>
         <Company>NoMercy Entertainment</Company>
-        <Product>NoMercy Helper Functions</Product>     <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
+        <Product>NoMercy Helper Functions</Product>
+        <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
     </PropertyGroup>
     <PropertyGroup>
         <IsTestProject>false</IsTestProject>

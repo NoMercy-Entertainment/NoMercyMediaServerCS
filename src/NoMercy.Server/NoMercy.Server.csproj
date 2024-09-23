@@ -13,7 +13,8 @@
         <Company>NoMercy Entertainment</Company>
         <Product>NoMercy MediaServer</Product>
         <LangVersion>12</LangVersion>
-        <BuildFrameworkVersion>6.0.2</BuildFrameworkVersion>        <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
+        <BuildFrameworkVersion>6.0.2</BuildFrameworkVersion>
+        <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
     </PropertyGroup>
     <PropertyGroup>
         <IsTestProject>false</IsTestProject>
