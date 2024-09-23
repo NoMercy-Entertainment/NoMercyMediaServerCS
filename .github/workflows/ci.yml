@@ -24,11 +24,8 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-#      - name: Install MAUI
-#        run: dotnet workload install maui --ignore-failed-sources
-
       - name: Restore dependencies
         run: dotnet restore NoMercy.Server.sln
 
       - name: Test
-        run: dotnet test NoMercy.Server.sln --verbosity normal --collect:"XPlat Code Coverage"
+        run: dotnet test NoMercy.Server.sln --verbosity normal
