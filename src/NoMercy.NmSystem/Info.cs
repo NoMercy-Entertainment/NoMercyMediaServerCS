@@ -132,6 +132,11 @@ public class Info
                 return ManagementDateTimeConverter.ToDateTime(item["LastBootUpTime"].ToString());
             }
         }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            string output = ExecuteBashCommand("sysctl -n kern.boottime");
+            return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(long.Parse(output.Split(' ').Last()));
+        }
         else
         {
             string output = ExecuteBashCommand("uptime -s");
