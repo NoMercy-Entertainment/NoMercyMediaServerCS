@@ -88,7 +88,7 @@ public class Info
                 return item["Name"].ToString()?.Trim();
             }
         }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
             return "Unknown";
         }
