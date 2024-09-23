@@ -1,8 +1,5 @@
 using JetBrains.Annotations;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
 using Moq;
-using NoMercy.Database;
 using NoMercy.Database.Models;
 using NoMercy.MediaProcessing.Jobs;
 using NoMercy.MediaProcessing.Movies;
@@ -21,47 +18,19 @@ public class MovieManagerTests
     private readonly TmdbMovieAppends _movieAppends;
     private readonly Library _library;
     private readonly int _movieId;
-    private readonly DbContextOptions<MediaContext> _dbContextOptions;
 
     public MovieManagerTests()
     {
         Mock<JobDispatcher> jobDispatcherMock = new();
         MovieResponseMocks mockDataProvider = new();
 
-        _dbContextOptions = new DbContextOptionsBuilder<MediaContext>()
-            .UseSqlite(CreateInMemoryDatabase())
-            .Options;
-        
-        var context = new MediaContext(_dbContextOptions);
-        var movieRepository = new MovieRepository(context); 
-
         _movieRepositoryMock = new Mock<IMovieRepository>();
         _movieClientMock = new Mock<ITmdbMovieClient>();
-        
-        _movieManager = new MovieManager(movieRepository, jobDispatcherMock.Object);
+
+        _movieManager = new MovieManager(_movieRepositoryMock.Object, jobDispatcherMock.Object);
         _movieAppends = mockDataProvider.MockMovieAppendsResponse()!;
         _library = new Library { Id = new Ulid(), Title = "Test Library" };
         _movieId = 1771;
-        
-        SeedDatabase();
-    }
-    
-    private static SqliteConnection CreateInMemoryDatabase()
-    {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        connection.Open();
-
-        return connection;
-    }
-
-    private void SeedDatabase()
-    {
-        using var context = new MediaContext(_dbContextOptions);
-        context.Database.EnsureCreated();
-
-        // Seed initial data if necessary
-        context.Libraries.Add(_library);
-        context.SaveChanges();
     }
 
     [Fact]
