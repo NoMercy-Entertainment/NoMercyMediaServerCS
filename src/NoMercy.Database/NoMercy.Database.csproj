@@ -17,7 +17,6 @@
 
     <ItemGroup>
         <PackageReference Include="Castle.Core" Version="5.1.1" />
-        <PackageReference Include="DateTimeRoutines" Version="1.0.16"/>
         <PackageReference Include="FlexLabs.EntityFrameworkCore.Upsert" Version="8.0.0"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.8"/>
