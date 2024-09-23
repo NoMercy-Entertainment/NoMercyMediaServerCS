@@ -32,11 +32,13 @@ public class MovieManagerTests
             .UseSqlite(CreateInMemoryDatabase())
             .Options;
         
-        var mockDbContext = new Mock<MediaContext>(_dbContextOptions);
-        _movieRepositoryMock = new Mock<IMovieRepository>(mockDbContext.Object);
+        var context = new MediaContext(_dbContextOptions);
+        var movieRepository = new MovieRepository(context); 
+
+        _movieRepositoryMock = new Mock<IMovieRepository>();
         _movieClientMock = new Mock<ITmdbMovieClient>();
         
-        _movieManager = new MovieManager(_movieRepositoryMock.Object, jobDispatcherMock.Object);
+        _movieManager = new MovieManager(movieRepository, jobDispatcherMock.Object);
         _movieAppends = mockDataProvider.MockMovieAppendsResponse()!;
         _library = new Library { Id = new Ulid(), Title = "Test Library" };
         _movieId = 1771;
