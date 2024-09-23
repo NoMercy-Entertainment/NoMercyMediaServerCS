@@ -4,14 +4,19 @@ using NoMercy.NmSystem;
 namespace NoMercy.Helpers.Monitoring;
 public class ResourceMonitor
 {
-    private static Computer? _computer;
+    private static readonly Computer Computer;
 
     static ResourceMonitor()
     {
         Logger.App("Initializing Resource Monitor");
-        if (_computer is not null) return;
+        if (Computer is not null) return;
         Logger.App("Creating new computer instance");
-        _computer = new Computer
+        Computer = CreateComputer();
+    }
+
+    private static Computer CreateComputer()
+    {
+        Computer computer = new()
         {
             IsCpuEnabled = true,
             IsGpuEnabled = true,
@@ -21,7 +26,9 @@ public class ResourceMonitor
             IsNetworkEnabled = false,
             IsStorageEnabled = false
         };
-        _computer.Open();
+        
+        computer.Open();
+        return computer;
     }
 
     private class UpdateVisitor : IVisitor
@@ -46,25 +53,24 @@ public class ResourceMonitor
         }
     }
 
-    public static Resource? Monitor()
+    public static Resource Monitor()
     {
+
+        Resource resource = new()
+        {
+            Cpu = new Cpu
+            {
+                Core = []
+            },
+            _gpu = new Dictionary<Identifier, Gpu>(),
+            Memory = new Memory()
+        };
+        
         try
         {
-            if (_computer is null) return null;
+            Computer.Accept(new UpdateVisitor());
 
-            _computer.Accept(new UpdateVisitor());
-
-            Resource resource = new()
-            {
-                Cpu = new Cpu
-                {
-                    Core = []
-                },
-                _gpu = new Dictionary<Identifier, Gpu>(),
-                Memory = new Memory()
-            };
-
-            foreach (IHardware? hardware in _computer.Hardware)
+            foreach (IHardware? hardware in Computer.Hardware)
             {
                 if (hardware.HardwareType is not HardwareType.Cpu and not HardwareType.Memory
                     and not HardwareType.GpuIntel and not HardwareType.GpuNvidia and not HardwareType.GpuAmd
@@ -207,37 +213,33 @@ public class ResourceMonitor
                                 throw new ArgumentOutOfRangeException();
                         }
                     }
-
-                    ;
                 }
                 catch
                 {
                     throw new Exception("Error while monitoring hardware");
                 }
             }
-
-            return resource;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             //
         }
-
-        return null;
+        
+        return resource;
     }
 
     public static void Start()
     {
-        _computer?.Open();
+        Computer.Open();
     }
 
     public static void Stop()
     {
-        _computer?.Close();
+        Computer.Close();
     }
 
     ~ResourceMonitor()
     {
-        _computer?.Close();
+        Computer.Close();
     }
 }

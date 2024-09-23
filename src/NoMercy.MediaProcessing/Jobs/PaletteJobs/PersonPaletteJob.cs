@@ -34,7 +34,14 @@ public class PersonPaletteJob : AbstractPaletteJob<Person>
             person._colorPalette = await MovieDbImageManager
                 .ColorPalette("person", person.Profile);
 
-        await context.SaveChangesAsync();
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            // ignored
+        }
 
         Logger.App($"Person palettes updated: {people.Count}", LogEventLevel.Verbose);
     }

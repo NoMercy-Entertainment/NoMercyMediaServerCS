@@ -9,6 +9,8 @@ namespace NoMercy.NmSystem;
 
 public static partial class Str
 {
+    public static string DirectorySeparator => Path.DirectorySeparatorChar.ToString();
+    
     public static double MatchPercentage(string strA, string strB)
     {
         int result = 0;
@@ -66,7 +68,7 @@ public static partial class Str
 
     public static string PathName(this string path)
     {
-        return Regex.Replace(path, @"[\/\\]", Path.DirectorySeparatorChar.ToString());
+        return Regex.Replace(path, @"[\/\\]", DirectorySeparator);
     }
 
     public static int ToInt(this string path)

@@ -34,7 +34,14 @@ public class ImagePaletteJob : AbstractPaletteJob<Image>
             image.UpdatedAt = DateTime.Now;
         }
 
-        await context.SaveChangesAsync();
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            // ignored
+        }
 
         Logger.App($"Image palettes updated: {images.Count}", LogEventLevel.Verbose);
     }

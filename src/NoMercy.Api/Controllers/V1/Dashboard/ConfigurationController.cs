@@ -8,6 +8,8 @@ using NoMercy.Api.Controllers.V1.Music;
 using NoMercy.Database;
 using NoMercy.Database.Models;
 using NoMercy.Networking;
+using NoMercy.NmSystem;
+using NoMercy.Queue;
 
 namespace NoMercy.Api.Controllers.V1.Dashboard;
 
@@ -24,9 +26,19 @@ public class ConfigurationController : BaseController
         if (!User.IsOwner())
             return UnauthorizedResponse("You do not have permission to view configuration");
 
-        return Ok(new PlaceholderResponse()
+        return Ok(new ConfigDto
         {
-            Data = []
+            Data = new ConfigDtoData
+            {
+                InternalServerPort = Config.InternalServerPort,
+                ExternalServerPort = Config.ExternalServerPort,
+                QueueWorkers = Config.QueueWorkers.Value,
+                EncoderWorkers = Config.EncoderWorkers.Value,
+                CronWorkers = Config.CronWorkers.Value,
+                DataWorkers = Config.DataWorkers.Value,
+                ImageWorkers = Config.ImageWorkers.Value,
+                RequestWorkers = Config.RequestWorkers.Value
+            }
         });
     }
 
@@ -43,10 +55,47 @@ public class ConfigurationController : BaseController
     }
 
     [HttpPatch]
-    public IActionResult Update()
+    public async Task<IActionResult> Update([FromBody] ConfigDtoData request)
     {
         if (!User.IsOwner())
             return UnauthorizedResponse("You do not have permission to update configuration");
+        
+        if (request.InternalServerPort != 0)
+            Config.InternalServerPort = request.InternalServerPort;
+        if (request.ExternalServerPort != 0)
+            Config.ExternalServerPort = request.ExternalServerPort;
+        
+        if (request.QueueWorkers is not null)
+        {
+            Config.QueueWorkers = new(Config.QueueWorkers.Key, (int)request.QueueWorkers);
+            await QueueRunner.SetWorkerCount(Config.QueueWorkers.Key, (int)request.QueueWorkers);
+        }
+        if (request.EncoderWorkers is not null)
+        {
+            Config.EncoderWorkers = new(Config.EncoderWorkers.Key, (int)request.EncoderWorkers);
+            await QueueRunner.SetWorkerCount(Config.EncoderWorkers.Key, (int)request.EncoderWorkers);
+        }
+        if (request.CronWorkers is not null)
+        {
+            Config.CronWorkers = new(Config.CronWorkers.Key, (int)request.CronWorkers);
+            await QueueRunner.SetWorkerCount(Config.CronWorkers.Key, (int)request.CronWorkers);
+        }
+        if (request.DataWorkers is not null)
+        {
+            Config.DataWorkers = new(Config.DataWorkers.Key, (int)request.DataWorkers);
+            await QueueRunner.SetWorkerCount(Config.DataWorkers.Key, (int)request.DataWorkers);
+        }
+        if (request.ImageWorkers is not null)
+        {
+            Config.ImageWorkers = new(Config.ImageWorkers.Key, (int)request.ImageWorkers);
+            await QueueRunner.SetWorkerCount("queue", (int)request.ImageWorkers);
+        }
+        if (request.RequestWorkers is not null)
+        {
+            Config.RequestWorkers = new(Config.RequestWorkers.Key, (int)request.RequestWorkers);
+            await QueueRunner.SetWorkerCount(Config.RequestWorkers.Key, (int)request.RequestWorkers);
+        }
+        
 
         return Ok(new PlaceholderResponse
         {

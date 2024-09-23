@@ -7,7 +7,6 @@ public class Vtt : BaseSubtitle
     public Vtt(string subtitleCodec = "webvtt")
     {
         SetSubtitleCodec(subtitleCodec);
-        AddCustomArgument("-f", subtitleCodec);
     }
 
     protected override CodecDto[] AvailableCodecs =>

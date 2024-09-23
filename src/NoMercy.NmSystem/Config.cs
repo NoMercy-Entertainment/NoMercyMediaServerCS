@@ -1,4 +1,4 @@
-namespace NoMercy.Networking;
+namespace NoMercy.NmSystem;
 
 public class Config
 {
@@ -12,6 +12,13 @@ public class Config
 
     public static int InternalServerPort { get; set; } = 7626;
     public static int ExternalServerPort { get; set; } = 7626;
+    
+    public static KeyValuePair<string, int> QueueWorkers { get; set; } = new("queue", 1);
+    public static KeyValuePair<string, int> EncoderWorkers { get; set; } = new("encoder", 2);
+    public static KeyValuePair<string, int> CronWorkers { get; set; } = new("cron", 1);
+    public static KeyValuePair<string, int> DataWorkers { get; set; } = new("data", 10);
+    public static KeyValuePair<string, int> ImageWorkers { get; set; } = new("image", 5);
+    public static KeyValuePair<string, int> RequestWorkers { get; set; } = new("request", 15);
 
     public static readonly string AppDataPath =
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);

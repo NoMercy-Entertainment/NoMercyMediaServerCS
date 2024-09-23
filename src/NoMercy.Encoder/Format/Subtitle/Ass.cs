@@ -7,7 +7,6 @@ public class Ass : BaseSubtitle
     public Ass(string subtitleCodec = "ass")
     {
         SetSubtitleCodec(subtitleCodec);
-        AddCustomArgument("-f", subtitleCodec);
     }
 
     protected override CodecDto[] AvailableCodecs =>

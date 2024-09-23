@@ -183,30 +183,27 @@ public class FfMpeg : Classes
 
                     Regex progressRegex = new(@"(\d{2}):(\d{2}):(\d{2})\.(\d+)");
                     dynamic? progressMatch =
-                        progressRegex.Match(enumerable2.TryGetValue("out_time", out dynamic? p) ? p : "");
+                        progressRegex.Match(enumerable2.GetValueOrDefault("out_time", ""));
 
                     if (progressMatch.Success)
                     {
-                        int hours = int.Parse(progressMatch.Groups[1].Value);
-                        int minutes = int.Parse(progressMatch.Groups[2].Value);
-                        int seconds = int.Parse(progressMatch.Groups[3].Value);
-                        int milliseconds = int.Parse(progressMatch.Groups[4].Value);
+                        int hours = int.Parse(progressMatch.Groups[1].Value, CultureInfo.InvariantCulture);
+                        int minutes = int.Parse(progressMatch.Groups[2].Value, CultureInfo.InvariantCulture);
+                        int seconds = int.Parse(progressMatch.Groups[3].Value, CultureInfo.InvariantCulture);
+                        int milliseconds = int.Parse(progressMatch.Groups[4].Value, CultureInfo.InvariantCulture);
 
                         currentTime = new TimeSpan(0, hours, minutes, seconds, milliseconds / 100);
                         progressPercentage = currentTime.TotalMilliseconds / totalDuration.TotalMilliseconds * 100;
                     }
 
-                    dynamic speed = enumerable2.TryGetValue("speed", out dynamic? s) ? s : 0;
+                    double speed = enumerable2.TryGetValue("speed", out dynamic? s) ? double.Parse(s.Replace("N/A", "0").TrimEnd('x'), CultureInfo.InvariantCulture) : 0;
+                    
+                    double fps = enumerable2.TryGetValue("fps", out dynamic? f) ? double.Parse(f, CultureInfo.InvariantCulture) : 0;
+                    int frame = enumerable2.TryGetValue("frame", out dynamic? f2) ? int.Parse(f2, CultureInfo.InvariantCulture) : 0;
+                    string bitrate = enumerable2.GetValueOrDefault("bitrate", "");
 
-                    string cleanedValue = speed.TrimEnd('x');
-                    speed = double.Parse(cleanedValue, CultureInfo.InvariantCulture);
-
-                    decimal fps = enumerable2.TryGetValue("fps", out dynamic? f) ? Convert.ToDecimal(f) : 0;
-                    int frame = enumerable2.TryGetValue("frame", out dynamic? f2) ? int.Parse(f2) : 0;
-                    string bitrate = enumerable2.TryGetValue("bitrate", out dynamic? b) ? b : "";
-
-                    dynamic? remaining =
-                        Math.Floor((totalDuration.TotalSeconds - currentTime.TotalSeconds) / (speed / 1000));
+                    double remaining =
+                        Math.Floor((totalDuration.TotalSeconds - currentTime.TotalSeconds) / speed);
 
                     string? thumbFolder = Directory.GetDirectories(meta.BaseFolder, "*thumbs_*")
                         .FirstOrDefault();
@@ -219,6 +216,8 @@ public class FfMpeg : Classes
                         thumbnail = Path.GetFileName(thumbnail);
                         thumbnailFolder = Path.GetFileNameWithoutExtension(thumbnail).Split("-").FirstOrDefault() ?? "";
                     }
+                    
+                    string remainingHMS = TimeSpan.FromSeconds(double.IsPositiveInfinity(remaining) || double.IsNegativeInfinity(remaining) ? 0 : remaining).ToString();
 
                     Progress progress = new()
                     {
@@ -227,13 +226,13 @@ public class FfMpeg : Classes
                         CurrentTime = currentTime.TotalSeconds,
                         Duration = totalDuration.TotalSeconds,
                         Remaining = remaining,
-                        RemainingHms = TimeSpan.FromSeconds(remaining == Single.PositiveInfinity ? 0 : remaining).ToString(),
-                        Fps = Convert.ToDouble(fps / 1000),
-                        Speed = Convert.ToDouble(speed / 1000),
+                        RemainingHms = remainingHMS,
+                        Fps = fps,
+                        Speed = speed,
                         Frame = frame,
                         Bitrate = bitrate,
-                        HasGpu = false,
-                        IsHDR = false,
+                        HasGpu = meta.HasGpu,
+                        IsHDR = meta.IsHDR,
                         VideoStreams = meta.VideoStreams,
                         AudioStreams = meta.AudioStreams,
                         SubtitleStreams = meta.SubtitleStreams,
@@ -249,7 +248,7 @@ public class FfMpeg : Classes
 
                     // Logger.Encoder(progress);
 
-                    // Networking.SendToAll("Encoder", "dashboardHub", progress);
+                    Networking.Networking.SendToAll("Encoder", "dashboardHub", progress);
                     output2 = new StringBuilder();
                 }
             }

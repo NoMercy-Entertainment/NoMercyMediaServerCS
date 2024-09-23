@@ -1,5 +1,8 @@
 using FFMpegCore;
+using NoMercy.Encoder.Core;
 using NoMercy.Encoder.Format.Rules;
+using NoMercy.NmSystem;
+using Serilog.Events;
 
 namespace NoMercy.Encoder.Format.Subtitle;
 
@@ -7,12 +10,7 @@ public class BaseSubtitle : Classes
 {
     #region Properties
 
-    public CodecDto SubtitleCodec { get; set; } = new()
-    {
-        Name = "ASS",
-        Value = "ass",
-        IsDefault = false
-    };
+    public CodecDto SubtitleCodec { get; set; } = SubtitleCodecs.Webvtt;
 
     protected internal SubtitleStream? SubtitleStream;
     internal List<SubtitleStream> SubtitleStreams { get; set; } = [];
@@ -29,12 +27,14 @@ public class BaseSubtitle : Classes
 
     private string _hlsSegmentFilename = "";
 
-    private string HlsSegmentFilename
+    internal string HlsSegmentFilename
     {
         get => _hlsSegmentFilename
             .Replace(":language:", Language)
             .Replace(":codec:", SubtitleCodec.SimpleValue)
-            .Replace(":type:", Type);
+            .Replace(":type:", Type)
+            .Replace("/", Str.DirectorySeparator)
+            .Replace("\\", Str.DirectorySeparator);
         set => _hlsSegmentFilename = value;
     }
 
@@ -45,7 +45,10 @@ public class BaseSubtitle : Classes
         get => _hlsPlaylistFilename
             .Replace(":language:", Language)
             .Replace(":codec:", SubtitleCodec.SimpleValue)
-            .Replace(":type:", Type);
+            .Replace(":type:", Type)
+            .Replace(":variant:", "full")
+            .Replace("/", Str.DirectorySeparator)
+            .Replace("\\", Str.DirectorySeparator);
         set => _hlsPlaylistFilename = value;
     }
 
@@ -106,11 +109,11 @@ public class BaseSubtitle : Classes
 
     public override BaseSubtitle ApplyFlags()
     {
-        AddCustomArgument("-map_metadata", -1);
-        AddCustomArgument("-fflags", "+bitexact");
-        AddCustomArgument("-flags:v", "+bitexact");
-        AddCustomArgument("-flags:a", "+bitexact");
-        AddCustomArgument("-flags:s", "+bitexact");
+        // AddCustomArgument("-map_metadata", -1);
+        // AddCustomArgument("-fflags", "+bitexact");
+        // AddCustomArgument("-flags:v", "+bitexact");
+        // AddCustomArgument("-flags:a", "+bitexact");
+        // AddCustomArgument("-flags:s", "+bitexact");
         return this;
     }
 
@@ -129,7 +132,9 @@ public class BaseSubtitle : Classes
             newStream.SubtitleStream = SubtitleStreams
                 .Find(stream => stream.Language == allowedLanguage)!;
 
-            newStream.Index = newStream.SubtitleStream.Index - 1;
+            newStream.Index = SubtitleStreams.IndexOf(newStream.SubtitleStream);
+            
+            newStream.Extension = GetExtension(newStream);
 
             streams.Add(newStream);
         }
@@ -137,22 +142,43 @@ public class BaseSubtitle : Classes
         return streams;
     }
 
+    private string GetExtension(BaseSubtitle stream)
+    {
+        string ext = "vtt";
+            
+        if (stream.SubtitleStream!.CodecName == "hdmv_pgs_subtitle" || stream.SubtitleStream.CodecName == "dvd_subtitle")
+        {
+            stream.SubtitleCodec = SubtitleCodecs.Copy;
+            stream.ConvertSubtitle = true;
+            ext = "sup";
+        }
+
+        return ext;
+    }
+
     public void AddToDictionary(Dictionary<string, dynamic> commandDictionary, int index)
     {
-        commandDictionary["-map"] = $"[s{index}_hls_0]";
+        // commandDictionary["-map"] = $"[s{index}_hls_0]";
+        commandDictionary["-map"] = $"s:{index}";
         commandDictionary["-c:s"] = SubtitleCodec.Value;
-
+        
+        if (!IsoLanguageMapper.IsoToLanguage.TryGetValue(Language, out string? language))
+        {
+            throw new Exception($"Language {Language} is not supported");
+        }
+        commandDictionary[$"-metadata:s:s:{index}"] = $"title=\"{language}\"";
         commandDictionary[$"-metadata:s:s:{index}"] = $"language=\"{Language}\"";
-        commandDictionary[$"-metadata:s:s:{index}"] = $"title=\"{Language} {SubtitleCodec.SimpleValue}\"";
 
         foreach (KeyValuePair<string, dynamic> extraParameter in _extraParameters)
+        {
             commandDictionary[extraParameter.Key] = extraParameter.Value;
+        }
     }
 
     public void CreateFolder()
     {
-        string path = Path.Combine(BasePath, HlsSegmentFilename.Split("/").First());
-        // Logger.Encoder($"Creating folder {path}");
+        string path = Path.Combine(BasePath, HlsPlaylistFilename.Split(Str.DirectorySeparator).First());
+        Logger.Encoder($"Creating folder {path}", LogEventLevel.Verbose);
 
         if (!Directory.Exists(path))
             Directory.CreateDirectory(path);

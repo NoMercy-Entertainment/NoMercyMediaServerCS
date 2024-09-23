@@ -7,7 +7,6 @@ public class Srt : BaseSubtitle
     public Srt(string subtitleCodec = "srt")
     {
         SetSubtitleCodec(subtitleCodec);
-        AddCustomArgument("-f", subtitleCodec);
     }
 
     protected override CodecDto[] AvailableCodecs =>

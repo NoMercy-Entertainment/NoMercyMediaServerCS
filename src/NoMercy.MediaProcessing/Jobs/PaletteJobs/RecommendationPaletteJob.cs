@@ -37,7 +37,14 @@ public class RecommendationPaletteJob : AbstractPaletteJob<Recommendation>
                     new BaseImageManager.MultiStringType("backdrop", recommendation.Backdrop)
                 ]);
 
-        await context.SaveChangesAsync();
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            // ignored
+        }
 
         Logger.App($"Recommendation palettes updated: {recommendations.Count}", LogEventLevel.Verbose);
     }

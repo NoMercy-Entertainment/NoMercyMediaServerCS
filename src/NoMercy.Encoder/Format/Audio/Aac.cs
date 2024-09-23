@@ -4,7 +4,7 @@ namespace NoMercy.Encoder.Format.Audio;
 
 public class Aac : BaseAudio
 {
-    public Aac(string audioCodec = "libfdk_aac")
+    public Aac(string audioCodec = "aac")
     {
         SetAudioCodec(audioCodec);
     }
@@ -12,7 +12,6 @@ public class Aac : BaseAudio
     protected override CodecDto[] AvailableCodecs =>
     [
         AudioCodecs.Aac,
-        AudioCodecs.LibFdkAac
     ];
 
     protected override string[] AvailableContainers =>

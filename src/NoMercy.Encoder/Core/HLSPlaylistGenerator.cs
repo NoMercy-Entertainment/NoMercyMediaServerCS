@@ -1,5 +1,7 @@
 using System.Diagnostics;
+using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 using NoMercy.NmSystem;
 using static NoMercy.Encoder.Core.IsoLanguageMapper;
 
@@ -124,9 +126,15 @@ public static class HlsPlaylistGenerator
 
     private static double GetVideoDuration(string videoPath)
     {
-        string output = RunProcess("ffprobe",
+        string output = RunProcess(AppFiles.FfProbePath,
             $"-v error -select_streams 0 -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 \"{videoPath}\"");
-        return double.Parse(output.Trim().Replace("N/A", "0"));
+        
+        var x = output.Trim().Replace("N/A", "0");
+        if (x == "")
+        {
+            return 0;
+        }
+        return double.Parse(x, CultureInfo.InvariantCulture);
     }
 
     private static string RunProcess(string command, string arguments)

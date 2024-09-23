@@ -6,10 +6,12 @@ using NoMercy.Encoder.Format.Image;
 using NoMercy.Encoder.Format.Rules;
 using NoMercy.Encoder.Format.Subtitle;
 using NoMercy.Encoder.Format.Video;
+using NoMercy.NmSystem;
+using Logger = NoMercy.NmSystem.Logger;
 
 namespace NoMercy.Encoder.Core;
 
-public class VideoAudioFile(MediaAnalysis fMediaAnalysis, string ffmpegPath) : Classes
+public partial class VideoAudioFile(MediaAnalysis fMediaAnalysis, string ffmpegPath) : Classes
 {
     public string FfmpegPath => ffmpegPath;
 
@@ -110,6 +112,8 @@ public class VideoAudioFile(MediaAnalysis fMediaAnalysis, string ffmpegPath) : C
 
     private string CropDetect(string path)
     {
+        Logger.Encoder($"Detecting crop for {path}");
+        
         const int sections = 10;
 
         double duration = fMediaAnalysis.Duration.TotalSeconds;
@@ -117,21 +121,19 @@ public class VideoAudioFile(MediaAnalysis fMediaAnalysis, string ffmpegPath) : C
         double step = Math.Floor(max / sections);
 
         Dictionary<string, int> counts = new();
-        Regex regex = new(@"crop=(\d+:\d+:\d+:\d+)", RegexOptions.Multiline);
+        Regex regex = CropDetectRegex();
 
-        List<Task<string>> promises = new();
+        List<string> results = [];
 
         for (int i = 0; i < sections; i++)
         {
             string execString =
-                $"-threads 1 -nostats -hide_banner -probesize 1024M -analyzeduration 99M -ss {i * step} -i \"{path}\" -max_muxing_queue_size 99 -vframes 2 -vf cropdetect -t {1} -f null -";
+                $"-threads 1 -nostats -hide_banner -ss {i * step} -i \"{path}\" -vframes 2 -vf cropdetect -t {1} -f null -";
 
-            Task<string> result = FfMpeg.Exec(execString, executable: FfmpegPath);
-            promises.Add(result);
+            string result = FfMpeg.Exec(execString, executable: FfmpegPath).Result;
+            results.Add(result);
         }
-
-        string[] results = Task.WhenAll(promises).Result;
-
+        
         foreach (string output in results)
         {
             MatchCollection matches = regex.Matches(output);
@@ -156,16 +158,14 @@ public class VideoAudioFile(MediaAnalysis fMediaAnalysis, string ffmpegPath) : C
 
         StringBuilder command = new();
 
-        command.Append(" -hide_banner -probesize 4092M -analyzeduration 9999M");
-        command.Append($" -threads {Math.Floor(threadCount * 0.7)} ");
+        // command.Append(" -hide_banner -probesize 4092M -analyzeduration 9999M");
+        command.Append($" -threads {Math.Floor(threadCount * 0.8)} ");
 
         if (HasGpu) command.Append(" -extra_hw_frames 3 -init_hw_device opencl=ocl -progress - ");
 
         command.Append($" -y -i \"{Container.InputFile}\" ");
 
-        command.Append(" -max_muxing_queue_size 9999 ");
-
-        command.Append(" -filter_complex \"");
+        // command.Append(" -max_muxing_queue_size 9999 ");
 
         bool isHdr = false;
 
@@ -199,15 +199,15 @@ public class VideoAudioFile(MediaAnalysis fMediaAnalysis, string ffmpegPath) : C
             if (index != Container.AudioStreams.Count - 1 && complexString.Length > 0) complexString.Append(';');
         }
 
-        if (Container.SubtitleStreams.Count > 0 && complexString.Length > 0) complexString.Append(';');
-        foreach (BaseSubtitle stream in Container.SubtitleStreams)
-        {
-            int index = Container!.SubtitleStreams.IndexOf(stream);
-
-            complexString.Append($"[s:{stream.Index}]overlay[s{index}_hls_0]");
-
-            if (index != Container.SubtitleStreams.Count - 1 && complexString.Length > 0) complexString.Append(';');
-        }
+        // if (Container.SubtitleStreams.Count > 0 && complexString.Length > 0) complexString.Append(';');
+        // foreach (BaseSubtitle stream in Container.SubtitleStreams)
+        // {
+        //     int index = Container!.SubtitleStreams.IndexOf(stream);
+        //
+        //     complexString.Append($"[s:{stream.Index}]overlay[s{index}_hls_0]");
+        //
+        //     if (index != Container.SubtitleStreams.Count - 1 && complexString.Length > 0) complexString.Append(';');
+        // }
 
         if (Container.ImageStreams.Count > 0 && complexString.Length > 0) complexString.Append(';');
         foreach (BaseImage stream in Container.ImageStreams)
@@ -224,7 +224,11 @@ public class VideoAudioFile(MediaAnalysis fMediaAnalysis, string ffmpegPath) : C
             if (index != Container.ImageStreams.Count - 1 && complexString.Length > 0) complexString.Append(';');
         }
 
-        command.Append(complexString + "\"");
+        if (complexString.Length > 0)
+        {
+            command.Append(" -filter_complex \"");
+            command.Append(complexString + "\"");
+        }
 
         foreach (BaseVideo stream in Container.VideoStreams)
         {
@@ -251,7 +255,7 @@ public class VideoAudioFile(MediaAnalysis fMediaAnalysis, string ffmpegPath) : C
             stream.CreateFolder();
         }
 
-        foreach (BaseAudio stream in Container!.AudioStreams)
+        foreach (BaseAudio stream in Container.AudioStreams)
         {
             Dictionary<string, dynamic> commandDictionary = new();
             int index = Container!.AudioStreams.IndexOf(stream);
@@ -273,24 +277,31 @@ public class VideoAudioFile(MediaAnalysis fMediaAnalysis, string ffmpegPath) : C
             stream.CreateFolder();
         }
 
-        foreach (BaseSubtitle stream in Container!.SubtitleStreams)
+        foreach (BaseSubtitle stream in Container.SubtitleStreams)
         {
             Dictionary<string, dynamic> commandDictionary = new();
-            int index = Container!.SubtitleStreams.IndexOf(stream);
-            stream.AddToDictionary(commandDictionary, index);
+            stream.AddToDictionary(commandDictionary, stream.Index);
 
-            foreach (KeyValuePair<string, dynamic> parameter in Container._extraParameters ??
-                                                                new Dictionary<string, dynamic>())
-                commandDictionary[parameter.Key] = parameter.Value;
+            // foreach (KeyValuePair<string, dynamic> parameter in Container._extraParameters ?? new Dictionary<string, dynamic>())
+            // {
+            //     commandDictionary[parameter.Key] = parameter.Value;
+            // }
 
             // commandDictionary["-t"] = 300;
-            if (Container.ContainerDto.Name == VideoContainers.Hls)
-            {
-                commandDictionary["-hls_segment_filename"] = $"\"./{stream.HlsPlaylistFilename}_%05d.vtt\"";
-                commandDictionary[""] = $"\"./{stream.HlsPlaylistFilename}.m3u8\"";
-            }
+            // if (Container.ContainerDto.Name == VideoContainers.Hls)
+            // {
+            //     commandDictionary["-hls_segment_filename"] = $"\"./{stream.HlsPlaylistFilename}_%05d.vtt\"";
+            //     commandDictionary[""] = $"\"./{stream.HlsPlaylistFilename}.m3u8\"";
+            // }
+
+            commandDictionary[""] = $"\"./{stream.HlsPlaylistFilename}.{stream.Extension}\"";
 
             command.Append(commandDictionary.Aggregate("", (acc, pair) => $"{acc} {pair.Key} {pair.Value}"));
+            
+            if (stream.ConvertSubtitle)
+            {
+                ConvertSubtitle = true;
+            }
 
             stream.CreateFolder();
         }
@@ -316,5 +327,40 @@ public class VideoAudioFile(MediaAnalysis fMediaAnalysis, string ffmpegPath) : C
         command.Append(" ");
         // command.Append(" 2>&1 ");
         return command.ToString();
+    }
+
+    [GeneratedRegex(@"crop=(\d+:\d+:\d+:\d+)", RegexOptions.Multiline)]
+    private static partial Regex CropDetectRegex();
+
+    public async Task<string> Run(string fullCommand, string basePath, ProgressMeta progressMeta)
+    {
+        // string result = await FfMpeg.Run(fullCommand, basePath, progressMeta);
+        
+        if (ConvertSubtitle)
+        {
+            Logger.Encoder($"Converting subtitle {FileName}");
+            ConvertSubtitles(Container.SubtitleStreams.Where(x => x.ConvertSubtitle).ToList());
+        }
+        
+        return "";
+    }
+
+    private void ConvertSubtitles(List<BaseSubtitle> subtitles)
+    {
+        List<Task> tasks = new();
+        subtitles.ForEach(subtitle =>
+        {        
+            string input = Path.Combine(BasePath, $"{subtitle.HlsPlaylistFilename}.{subtitle.Extension}");            
+            string output = Path.Combine(BasePath, $"{subtitle.HlsPlaylistFilename}.{subtitle.Extension}");
+            
+            // SupImageExtractor.ExtractImages(input, BasePath);
+
+            string arg = $" /convert \"{input}\" WebVtt /ocr -l {subtitle.Language} /output \"{output}\"";;
+            
+            Logger.Encoder(AppFiles.SubtitleEdit + arg);
+            tasks.Add(Shell.Exec(AppFiles.SubtitleEdit, arg));
+        });
+        
+        Task.WaitAll(tasks.ToArray());
     }
 }

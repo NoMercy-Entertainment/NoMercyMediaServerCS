@@ -185,7 +185,7 @@ public static class Logger
         { "tvdb", Color.DodgerBlue },
         { "anidb", Color.DodgerBlue },
         { "youtube", Color.DodgerBlue },
-        { "openSubs", Color.DodgerBlue },
+        { "opensubs", Color.DodgerBlue },
         { "musicbrainz", Color.DodgerBlue },
         { "acoustid", Color.DodgerBlue },
         { "coverart", Color.DodgerBlue },
@@ -270,7 +270,7 @@ public static class Logger
         { "tvdb", "Tvdb" },
 
         // { "youtube", "Youtube" },
-        // { "opensubs", "OpenSubs" },
+        { "opensubs", "OpenSubs" },
         // { "qbittorrent", "QBitTorrent" },
         // { "transmission", "Transmission" },
         // { "ruTorrent", "RuTorrent" },

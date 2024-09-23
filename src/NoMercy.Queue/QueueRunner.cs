@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using NoMercy.Database;
+using NoMercy.Database.Models;
 using NoMercy.NmSystem;
 using Serilog.Events;
 
@@ -11,12 +12,12 @@ public static class QueueRunner
         Dictionary<string, (int count, List<Worker> workerInstances, CancellationTokenSource _cancellationTokenSource)>
         Workers = new()
         {
-            ["queue"] = (0, [], new CancellationTokenSource()),
-            ["encoder"] = (2, [], new CancellationTokenSource()),
-            ["cron"] = (1, [], new CancellationTokenSource()),
-            ["data"] = (10, [], new CancellationTokenSource()),
-            ["image"] = (0, [], new CancellationTokenSource())
-            // ["request"] = (15, [], new CancellationTokenSource()),
+            [Config.QueueWorkers.Key] = (Config.QueueWorkers.Value, [], new CancellationTokenSource()),
+            [Config.EncoderWorkers.Key] = (Config.EncoderWorkers.Value, [], new CancellationTokenSource()),
+            [Config.CronWorkers.Key] = (Config.CronWorkers.Value, [], new CancellationTokenSource()),
+            [Config.DataWorkers.Key] = (Config.DataWorkers.Value, [], new CancellationTokenSource()),
+            [Config.ImageWorkers.Key] = (Config.ImageWorkers.Value, [], new CancellationTokenSource())
+            //[Config.RequestRunners.Key] = (Config.RequestRunners.Value, [], new CancellationTokenSource()),
         };
 
     private static bool _isInitialized;
@@ -154,6 +155,20 @@ public static class QueueRunner
     public static async Task<bool> SetWorkerCount(string name, int max)
     {
         if (!Workers.ContainsKey(name)) return false;
+        
+        await using MediaContext context = new();
+        await context.Configuration
+            .Upsert(new Configuration()
+            {
+                Key = $"{name}Runners",
+                Value = max.ToString()
+            })
+            .On(x => x.Key)
+            .WhenMatched(x => new Configuration
+            {
+                Value = max.ToString()
+            })
+            .RunAsync();
 
         Logger.Queue($"Setting queue {name} to {max} workers", LogEventLevel.Information);
         _isUpdating = true;

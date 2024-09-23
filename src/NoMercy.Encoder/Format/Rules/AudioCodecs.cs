@@ -9,14 +9,6 @@ public static class AudioCodecs
         IsDefault = true
     };
 
-    public static readonly Classes.CodecDto LibFdkAac = new()
-    {
-        Name = "Advanced Audio Coding",
-        Value = "libfdk_aac",
-        SimpleValue = "aac",
-        IsDefault = false
-    };
-
     public static readonly Classes.CodecDto Ac3 = new()
     {
         Name = "Dolby Digital",

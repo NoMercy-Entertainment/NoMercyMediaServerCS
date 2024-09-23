@@ -14,7 +14,7 @@ public static class SubtitleCodecs
         Name = "SubRip",
         Value = "srt",
         SimpleValue = "srt",
-        IsDefault = true
+        IsDefault = false
     };
 
     public static readonly Classes.CodecDto Webvtt = new()
@@ -22,6 +22,14 @@ public static class SubtitleCodecs
         Name = "WebVTT",
         Value = "webvtt",
         SimpleValue = "vtt",
+        IsDefault = true
+    };
+
+    public static readonly Classes.CodecDto Copy = new()
+    {
+        Name = "Copy",
+        Value = "copy",
+        SimpleValue = "copy",
         IsDefault = false
     };
 }

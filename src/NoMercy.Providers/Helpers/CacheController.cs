@@ -19,7 +19,7 @@ public static class CacheController
         return Convert.ToHexString(hashBytes);
     }
 
-    public static bool Read<T>(string url, out T? value) where T : class?
+    public static bool Read<T>(string url, out T? value, bool xml = false) where T : class?
     {
         string fullname = Path.Combine(AppFiles.ApiCachePath, GenerateFileName(url));
         lock (fullname)
@@ -34,7 +34,7 @@ public static class CacheController
             try
             {
                 string d = System.IO.File.ReadAllTextAsync(fullname).Result;
-                data = JsonHelper.FromJson<T>(d);
+                data = xml ? d.FromXml<T>() : d.FromJson<T>();
             }
             catch (Exception)
             {

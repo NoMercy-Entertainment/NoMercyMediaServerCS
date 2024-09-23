@@ -1,4 +1,5 @@
 using FFMpegCore;
+using NoMercy.Encoder.Core;
 using NoMercy.Encoder.Format.Rules;
 
 namespace NoMercy.Encoder.Format.Audio;
@@ -180,7 +181,7 @@ public abstract class BaseAudio : Classes
             newStream.AudioStream = AudioStreams
                 .Find(audioStream => audioStream.Language == allowedLanguage)!;
 
-            newStream.Index = newStream.AudioStream.Index - 1;
+            newStream.Index = AudioStreams.IndexOf(newStream.AudioStream);
 
             streams.Add(newStream);
         }
@@ -196,8 +197,12 @@ public abstract class BaseAudio : Classes
         if (AudioChannels != -1)
             commandDictionary["-ac"] = AudioChannels;
 
+        if (!IsoLanguageMapper.IsoToLanguage.TryGetValue(Language, out string? language))
+        {
+            throw new Exception($"Language {Language} is not supported");
+        }
+        commandDictionary[$"-metadata:s:a:{index}"] = $"title=\"{language} {AudioChannels}-{AudioCodec.SimpleValue}\"";
         commandDictionary[$"-metadata:s:a:{index}"] = $"language=\"{Language}\"";
-        commandDictionary[$"-metadata:s:a:{index}"] = $"title=\"{Language} {AudioChannels}-{AudioCodec.SimpleValue}\"";
 
         foreach (KeyValuePair<string, dynamic> extraParameter in _extraParameters)
             commandDictionary[extraParameter.Key] = extraParameter.Value;

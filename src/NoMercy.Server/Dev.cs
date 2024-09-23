@@ -11,8 +11,11 @@ using NoMercy.Encoder.Format.Rules;
 using NoMercy.Encoder.Format.Video;
 using NoMercy.MediaProcessing.Jobs;
 using NoMercy.MediaProcessing.Jobs.MediaJobs;
+using NoMercy.Networking;
 using NoMercy.NmSystem;
-using File = System.IO.File;
+using NoMercy.Providers.OpenSubtitles.Client;
+using NoMercy.Providers.OpenSubtitles.Models;
+using Vtt = NoMercy.Encoder.Format.Subtitle.Vtt;
 
 namespace NoMercy.Server;
 
@@ -20,6 +23,11 @@ public class Dev
 {
     public static async void Run()
     {
+        // OpenSubtitlesClient client = new();
+        // OpenSubtitlesClient subtitlesClient = await client.Login();
+        // SubtitleSearchResponse? x = await subtitlesClient.SearchSubtitles("Black Panther Wakanda Forever (2022)", "dut");
+        // Logger.OpenSubs(x);
+        
         // MediaContext mediaContext = new();
         // JobDispatcher jobDispatcher = new();
 
@@ -190,7 +198,7 @@ public class Dev
             .SetHlsSegmentFilename(":type:_:framesize:_SDR/:type:_:framesize:_SDR")
             .SetHlsPlaylistFilename(":type:_:framesize:_SDR/:type:_:framesize:_SDR")
             .SetColorSpace(ColorSpaces.Yuv420p)
-            .SetPreset(VideoPresets.Slow)
+            .SetPreset(VideoPresets.Fast)
             .SetTune(VideoTunes.Hq)
             .AddOpts("no-scenecut")
             .AddOpts("keyint=48")
@@ -203,7 +211,7 @@ public class Dev
             .SetHlsSegmentFilename(":type:_:framesize:_SDR/:type:_:framesize:_SDR")
             .SetHlsPlaylistFilename(":type:_:framesize:_SDR/:type:_:framesize:_SDR")
             .SetColorSpace(ColorSpaces.Yuv420p)
-            .SetPreset(VideoPresets.Slow)
+            .SetPreset(VideoPresets.Fast)
             .SetTune(VideoTunes.Hq)
             .AddOpts("no-scenecut")
             .AddOpts("keyint", 48)
@@ -226,85 +234,87 @@ public class Dev
         //     .SetHlsPlaylistFilename(":type:_:language:_:codec:/:type:_:language:_:codec:");
         
         var stream7 = new Sprite()
-            .SetScale(256)
+            .SetScale(320)
             .SetFilename("thumbs_:framesize:");
 
-        // var stream8 = new Vtt()
-        //     .SetAllowedLanguages([Languages.Dut, Languages.Eng, Languages.Jpn, Languages.Fre, Languages.Ger, Languages.Ita])
-        //     .SetHlsSegmentFilename(":type:_:language:_:codec:/:type:_:language:_:codec:")
-        //     .SetHlsPlaylistFilename(":type:_:language:_:codec:/:type:_:language:_:codec:");
+        var stream8 = new Vtt()
+            .SetAllowedLanguages([Languages.Dut, Languages.Eng, Languages.Jpn, Languages.Fre, Languages.Ger, Languages.Ita, Languages.Spa, Languages.Por, Languages.Rus, Languages.Kor, Languages.Chi, Languages.Ara, Languages.Hin, Languages.Tel, Languages.Tam, Languages.Mal, Languages.Kan, Languages.Guj, Languages.Mar, Languages.Ben, Languages.Pan, Languages.Ori, Languages.Urd, Languages.Tur, Languages.Vie, Languages.Lao, Languages.Khm, Languages.Fil, Languages.Ind, Languages.Swa, Languages.Som, Languages.Tir])
+            .SetHlsSegmentFilename(":type:_:language:_:codec:/_:language:_:codec:")
+            // .SetHlsPlaylistFilename(":type:_:language:_:codec:/:type:_:language:_:codec:");
+            .SetHlsPlaylistFilename("subtitles/Black.Panther.Wakanda.Forever.(2022).NoMercy.:language:.:variant:");
         
         var container = new Hls()
             .SetHlsFlags("independent_segments")
         // .AddStream(stream0)
         // .AddStream(stream1)
-        .AddStream(stream2)
-        .AddStream(stream3)
-        .AddStream(stream4)
+        // .AddStream(stream2)
+        // .AddStream(stream3)
+        // .AddStream(stream4)
         // .AddStream(stream5)
         // .AddStream(stream6)
-        .AddStream(stream7);
-        // .AddStream(stream8);
+        // .AddStream(stream7)
+        .AddStream(stream8);
 
-        var ffmpeg = new FfMpeg()
-        // .Open("G:\\Marvels\\Films\\Download\\Iron.Man.2.2010.2160p.US.BluRay.REMUX.HEVC.DTS-HD.MA.TrueHD.7.1.Atmos-FGT\\Iron.Man.2.2010.2160p.US.BluRay.REMUX.HEVC.DTS-HD.MA.TrueHD.7.1.Atmos-FGT.mkv");
-        .Open("M:\\Films\\Download\\Black.Panther.Wakanda.Forever.2022.1080p.BluRay.REMUX.AVC.DTS-HD.MA.TrueHD.7.1.Atmos-FGT\\Black.Panther.Wakanda.Forever.2022.1080p.BluRay.REMUX.AVC.DTS-HD.MA.TrueHD.7.1.Atmos-FGT.mkv");
+        // var ffmpeg = new FfMpeg()
+        // // .Open("G:\\Marvels\\Films\\Download\\Iron.Man.2.2010.2160p.US.BluRay.REMUX.HEVC.DTS-HD.MA.TrueHD.7.1.Atmos-FGT\\Iron.Man.2.2010.2160p.US.BluRay.REMUX.HEVC.DTS-HD.MA.TrueHD.7.1.Atmos-FGT.mkv");
+        // .Open($"{AppFiles.TranscodePath}\\Black.Panther.Wakanda.Forever.2022.1080p.BluRay.REMUX.AVC.DTS-HD.MA.TrueHD.7.1.Atmos-FGT.mkv");
         // .Open("M:\\Films\\Films\\Sintel.(2010)\\original\\[SDR-HEVC] Sintel.mkv");
-        // .Open("C:\\Users\\Stoney\\AppData\\Local\\NoMercy_C#\\cache\\transcode\\[HDR-HEVC] Cosmos.Laundromat.S01E01.First.Cycle.mkv");
+        // .Open($"{AppFiles.TranscodePath}\\[HDR-HEVC] Cosmos.Laundromat.S01E01.First.Cycle.mkv");
 
-        var movie = await mediaContext.Movies
-        // .FirstOrDefaultAsync(x => x.Id == 10138); // Iron Man 2
-        // .FirstOrDefaultAsync(x => x.Id == 45745); // Sintel
-        .FirstOrDefaultAsync(x => x.Id == 505642); // black panther wakanda forever
-        // .FirstOrDefaultAsync(x => x.Id == 358332); // Cosmos Laundromat
-        if (movie == null) return;
-
-        var folder = await mediaContext.Folders
-            .FirstOrDefaultAsync(x => x.Id == Ulid.Parse("01HQ5W67GRBPHJKNAZMDYKMVXA"));
-        if (folder == null) return;
-
-        var folderName = movie.CreateFolderName();
-        var title = movie.CreateTitle();
-        var fileName = movie.CreateFileName();
-        // var basePath = Path.Combine(folder.Path, folderName);
-        // var basePath = "C:\\Users\\Stoney\\AppData\\Local\\NoMercy_C#\\cache\\transcode\\ironman";
-        var basePath = "C:\\Users\\Stoney\\AppData\\Local\\NoMercy_C#\\cache\\transcode\\Black.Panther.Wakanda.Forever.(2022)";
-        // var basePath = "C:\\Users\\Stoney\\AppData\\Local\\NoMercy_C#\\cache\\transcode\\sintel";
-
-        ffmpeg.SetBasePath(basePath);
-        ffmpeg.SetTitle(title);
-        ffmpeg.ToFile(fileName);
-
-        ffmpeg.AddContainer(container);
-
-        ffmpeg.Build();
-        
-        var fullCommand = ffmpeg.GetFullCommand();
-        Logger.Encoder(fullCommand);
-        
-        // var ffmpegFile = Path.Combine(AppFiles.CachePath, "ffmpeg.json");
-        // await File.WriteAllTextAsync(ffmpegFile, fullCommand);
-
-        var progressMeta = new ProgressMeta()
-        {
-            Id = movie.Id,
-            Title = title,
-            BaseFolder = basePath,
-            ShareBasePath = folder.Id + "/" + folderName,
-            AudioStreams = container.AudioStreams.Select(x => $"{x.StreamIndex}:{x.Language}_{x.AudioCodec.SimpleValue}").ToList(),
-            VideoStreams = container.VideoStreams.Select(x => $"{x.StreamIndex}:{x.Scale.W}x{x.Scale.H}_{x.VideoCodec.SimpleValue}").ToList(),
-            SubtitleStreams = container.SubtitleStreams.Select(x => $"{x.StreamIndex}:{x.Language}_{x.SubtitleCodec.SimpleValue}").ToList(),
-            HasGpu = container.VideoStreams.Any(x =>
-                x.VideoCodec.Value == VideoCodecs.H264Nvenc.Value || x.VideoCodec.Value == VideoCodecs.H265Nvenc.Value),
-            IsHDR = container.VideoStreams.Any(x => x.IsHdr),
-        };
-
-        var result = await FfMpeg.Run(fullCommand, basePath, progressMeta);
-        Logger.Encoder(result);
-
-        await stream7.BuildSprite(progressMeta);
-
-        container.BuildMasterPlaylist();
+        // var movie = await mediaContext.Movies
+        // // .FirstOrDefaultAsync(x => x.Id == 10138); // Iron Man 2
+        // // .FirstOrDefaultAsync(x => x.Id == 45745); // Sintel
+        // .FirstOrDefaultAsync(x => x.Id == 505642); // black panther wakanda forever
+        // // .FirstOrDefaultAsync(x => x.Id == 358332); // Cosmos Laundromat
+        // if (movie == null) return;
+        //
+        // var folder = await mediaContext.Folders
+        //     .FirstOrDefaultAsync(x => x.Id == Ulid.Parse("01HQ5W67GRBPHJKNAZMDYKMVXA"));
+        // if (folder == null) return;
+        //
+        // var folderName = movie.CreateFolderName();
+        // var title = movie.CreateTitle();
+        // var fileName = movie.CreateFileName();
+        // // var basePath = Path.Combine(folder.Path, folderName);
+        // // var basePath = $"{AppFiles.TranscodePath}\\ironman";
+        // var basePath = $"{AppFiles.TranscodePath}\\Black.Panther.Wakanda.Forever.(2022)";
+        // // var basePath = $"{AppFiles.TranscodePath}\\sintel";
+        //
+        // ffmpeg.SetBasePath(basePath);
+        // ffmpeg.SetTitle(title);
+        // ffmpeg.ToFile(fileName);
+        //
+        // ffmpeg.AddContainer(container);
+        //
+        // ffmpeg.Build();
+        //
+        // var fullCommand = ffmpeg.GetFullCommand();
+        // Logger.Encoder(fullCommand);
+        //
+        // // var ffmpegFile = Path.Combine(AppFiles.CachePath, "ffmpeg.json");
+        // // await File.WriteAllTextAsync(ffmpegFile, fullCommand);
+        //
+        // var progressMeta = new ProgressMeta()
+        // {
+        //     Id = movie.Id,
+        //     Title = title,
+        //     BaseFolder = basePath,
+        //     // ShareBasePath = folder.Id + "/" + folderName,
+        //     ShareBasePath = "/transcode/" + folderName,
+        //     AudioStreams = container.AudioStreams.Select(x => $"{x.StreamIndex}:{x.Language}_{x.AudioCodec.SimpleValue}").ToList(),
+        //     VideoStreams = container.VideoStreams.Select(x => $"{x.StreamIndex}:{x.Scale.W}x{x.Scale.H}_{x.VideoCodec.SimpleValue}").ToList(),
+        //     SubtitleStreams = container.SubtitleStreams.Select(x => $"{x.StreamIndex}:{x.Language}_{x.SubtitleCodec.SimpleValue}").ToList(),
+        //     HasGpu = container.VideoStreams.Any(x =>
+        //         x.VideoCodec.Value == VideoCodecs.H264Nvenc.Value || x.VideoCodec.Value == VideoCodecs.H265Nvenc.Value),
+        //     IsHDR = container.VideoStreams.Any(x => x.IsHdr),
+        // };
+        //
+        // var result = await ffmpeg.Run(fullCommand, basePath, progressMeta);
+        // Logger.Encoder(result);
+        //
+        // // await stream7.BuildSprite(progressMeta);
+        // //
+        // container.BuildMasterPlaylist();
 
         // await Task.Run(async () =>
         // {

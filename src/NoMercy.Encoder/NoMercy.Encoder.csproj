@@ -4,9 +4,11 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\NoMercy.Networking\NoMercy.Networking.csproj" />
         <ProjectReference Include="..\NoMercy.NmSystem\NoMercy.NmSystem.csproj"/>
     </ItemGroup>
 

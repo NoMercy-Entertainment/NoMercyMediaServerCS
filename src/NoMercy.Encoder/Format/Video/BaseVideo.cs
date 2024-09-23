@@ -206,6 +206,8 @@ public abstract class BaseVideo : Classes
 
     public BaseVideo SetConstantRateFactor(int value)
     {
+        if (value < 0 || value > 51)
+            throw new Exception("Wrong constant rate factor value");
         ConstantRateFactor = value;
         return this;
     }
@@ -224,18 +226,24 @@ public abstract class BaseVideo : Classes
 
     public BaseVideo SetPreset(string value)
     {
+        if (!AvailablePresets.Contains(value))
+            throw new Exception($"Wrong preset value for {value}, available formats are {string.Join(", ", AvailablePresets)}");
         Preset = value;
         return this;
     }
 
     public BaseVideo SetProfile(string value)
     {
+        if (!AvailableProfiles.Contains(value))
+            throw new Exception($"Wrong profile value for {value}, available formats are {string.Join(", ", AvailableProfiles)}");
         Profile = value;
         return this;
     }
 
     public BaseVideo SetTune(string value)
     {
+        if (!AvailableTune.Contains(value))
+            throw new Exception($"Wrong tune value for {value}, available formats are {string.Join(", ", AvailableTune)}");
         Tune = value;
         return this;
     }

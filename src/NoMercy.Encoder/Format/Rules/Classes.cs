@@ -9,12 +9,14 @@ public class Classes
     protected internal string Title { get; set; } = "";
     protected internal string FileName { get; set; } = "";
     protected internal string InputFile { get; set; } = "";
+    protected internal string Extension { get; set; } = "";
 
     internal virtual bool IsVideo { get; set; }
     internal virtual bool IsAudio { get; set; }
     internal virtual bool IsImage { get; set; }
     internal virtual bool IsSubtitle { get; set; }
     internal int Index { get; set; }
+    internal bool ConvertSubtitle { get; set; }
     public BaseContainer Container { get; set; }
 
     internal string HlsFlags { get; set; } = "independent_segments";
