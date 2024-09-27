@@ -164,9 +164,10 @@ public static class QueueRunner
                 Value = max.ToString()
             })
             .On(x => x.Key)
-            .WhenMatched(x => new Configuration
+            .WhenMatched((s, i) => new Configuration
             {
-                Value = max.ToString()
+                Value = max.ToString(),
+                UpdatedAt = i.UpdatedAt
             })
             .RunAsync();
 

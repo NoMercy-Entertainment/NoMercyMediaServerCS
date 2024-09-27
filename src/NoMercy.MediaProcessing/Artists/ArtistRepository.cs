@@ -12,7 +12,6 @@ public class ArtistRepository(MediaContext context) : IArtistRepository
             .On(e => new { e.Id })
             .WhenMatched((s, i) => new Artist
             {
-                UpdatedAt = DateTime.UtcNow,
                 Id = i.Id,
                 Name = i.Name,
                 Disambiguation = i.Disambiguation,
@@ -21,7 +20,8 @@ public class ArtistRepository(MediaContext context) : IArtistRepository
                 Folder = i.Folder,
                 HostFolder = i.HostFolder,
                 LibraryId = i.LibraryId,
-                FolderId = i.FolderId
+                FolderId = i.FolderId,
+                UpdatedAt = i.UpdatedAt
             })
             .RunAsync();
     }

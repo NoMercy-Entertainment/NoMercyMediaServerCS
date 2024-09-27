@@ -141,6 +141,8 @@ public class MoviesController : BaseController
         Movie? movie = await mediaContext.Movies
             .AsNoTracking()
             .Include(movie => movie.Library)
+            .ThenInclude(f => f.FolderLibraries)
+            .ThenInclude(f => f.Folder)
             .FirstOrDefaultAsync(movie => movie.Id == id);
 
         if (movie is null)

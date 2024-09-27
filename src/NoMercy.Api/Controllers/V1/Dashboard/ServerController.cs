@@ -260,7 +260,7 @@ public class ServerController : BaseController
     private static string DeviceName()
     {
         MediaContext mediaContext = new();
-        Configuration? device = mediaContext.Configuration.FirstOrDefault(device => device.Key == "server_name");
+        Configuration? device = mediaContext.Configuration.FirstOrDefault(device => device.Key == "serverName");
         return device?.Value ?? Environment.MachineName;
     }
 
@@ -495,7 +495,7 @@ public class ServerController : BaseController
         await using MediaContext mediaContext = new();
         Configuration? configuration = await mediaContext.Configuration
             .AsTracking()
-            .FirstOrDefaultAsync(configuration => configuration.Key == "server_name");
+            .FirstOrDefaultAsync(configuration => configuration.Key == "serverName");
 
         try
         {
@@ -503,7 +503,7 @@ public class ServerController : BaseController
             {
                 configuration = new Configuration
                 {
-                    Key = "server_name",
+                    Key = "serverName",
                     Value = request.Name,
                     ModifiedBy = userId
                 };

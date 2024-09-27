@@ -12,6 +12,7 @@ public class ConfigDtoData
     [JsonProperty("internal_server_port")] public int InternalServerPort { get; set; }
     [JsonProperty("external_server_port")] public int ExternalServerPort { get; set; }
     
+    [JsonProperty("server_name")] public string? ServerName { get; set; }
     [JsonProperty("queue_workers")] public int? QueueWorkers { get; set; }
     [JsonProperty("encoder_workers")] public int? EncoderWorkers { get; set; }
     [JsonProperty("cron_workers")] public int? CronWorkers { get; set; }

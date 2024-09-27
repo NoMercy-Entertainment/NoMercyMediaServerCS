@@ -156,5 +156,4 @@ public class LibraryManager(
             _ => 1
         };
     }
-
 }

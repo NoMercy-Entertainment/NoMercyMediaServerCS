@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NoMercy.Api.Controllers.V1.Dashboard.DTO;
+using NoMercy.Api.Controllers.V1.DTO;
 using NoMercy.Api.Controllers.V1.Music;
 using NoMercy.Database;
 using NoMercy.Database.Models;
@@ -37,9 +38,18 @@ public class ConfigurationController : BaseController
                 CronWorkers = Config.CronWorkers.Value,
                 DataWorkers = Config.DataWorkers.Value,
                 ImageWorkers = Config.ImageWorkers.Value,
-                RequestWorkers = Config.RequestWorkers.Value
+                RequestWorkers = Config.RequestWorkers.Value,
+                ServerName = DeviceName()
             }
         });
+    }
+    
+    [NonAction]
+    private static string DeviceName()
+    {
+        MediaContext mediaContext = new();
+        Configuration? device = mediaContext.Configuration.FirstOrDefault(device => device.Key == "serverName");
+        return device?.Value ?? Environment.MachineName;
     }
 
     [HttpPost]
@@ -61,9 +71,44 @@ public class ConfigurationController : BaseController
             return UnauthorizedResponse("You do not have permission to update configuration");
         
         if (request.InternalServerPort != 0)
+        {
             Config.InternalServerPort = request.InternalServerPort;
+            MediaContext mediaContext = new();
+            await mediaContext.Configuration.Upsert(new Configuration
+                {
+                    Key = "InternalServerPort",
+                    Value = request.InternalServerPort.ToString(),
+                    ModifiedBy = User.UserId()
+                })
+                .On(e => e.Key)
+                .WhenMatched((o, n) =>new Configuration
+                {
+                    Id = o.Id,
+                    Value = n.Value,
+                    UpdatedAt = n.UpdatedAt
+                })
+                .RunAsync();
+        }
+        
         if (request.ExternalServerPort != 0)
+        {
             Config.ExternalServerPort = request.ExternalServerPort;
+            MediaContext mediaContext = new();
+            await mediaContext.Configuration.Upsert(new Configuration
+                {
+                    Key = "ExternalServerPort",
+                    Value = request.ExternalServerPort.ToString(),
+                    ModifiedBy = User.UserId()
+                })
+                .On(e => e.Key)
+                .WhenMatched((o, n) =>new Configuration
+                {
+                    Id = o.Id,
+                    Value = n.Value,
+                    UpdatedAt = n.UpdatedAt
+                })
+                .RunAsync();
+        }
         
         if (request.QueueWorkers is not null)
         {
@@ -88,7 +133,7 @@ public class ConfigurationController : BaseController
         if (request.ImageWorkers is not null)
         {
             Config.ImageWorkers = new(Config.ImageWorkers.Key, (int)request.ImageWorkers);
-            await QueueRunner.SetWorkerCount("queue", (int)request.ImageWorkers);
+            await QueueRunner.SetWorkerCount(Config.ImageWorkers.Key, (int)request.ImageWorkers);
         }
         if (request.RequestWorkers is not null)
         {
@@ -96,10 +141,30 @@ public class ConfigurationController : BaseController
             await QueueRunner.SetWorkerCount(Config.RequestWorkers.Key, (int)request.RequestWorkers);
         }
         
-
-        return Ok(new PlaceholderResponse
+        if (request.ServerName is not null)
         {
-            Data = []
+            MediaContext mediaContext = new();
+            await mediaContext.Configuration.Upsert(new Configuration
+            {
+                Key = "serverName",
+                Value = request.ServerName,
+                ModifiedBy = User.UserId()
+            })
+            .On(e => e.Key)
+            .WhenMatched((o, n) =>new Configuration
+            {
+                Id = o.Id,
+                Value = request.ServerName,
+                UpdatedAt = n.UpdatedAt
+            })
+            .RunAsync();
+        }
+        
+        return Ok(new StatusResponseDto<string>
+        {
+            Message = "Configuration updated successfully",
+            Status = "success",
+            Args = [],
         });
     }
 

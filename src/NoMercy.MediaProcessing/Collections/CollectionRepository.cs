@@ -20,7 +20,7 @@ public class CollectionRepository(MediaContext context) : ICollectionRepository
                 Parts = ti.Parts,
                 LibraryId = ti.LibraryId,
                 TitleSort = ti.TitleSort,
-                _colorPalette = ti._colorPalette
+                _colorPalette = ti._colorPalette,
             })
             .RunAsync();
     }
@@ -74,7 +74,8 @@ public class CollectionRepository(MediaContext context) : ICollectionRepository
                 SeasonId = ti.SeasonId,
                 EpisodeId = ti.EpisodeId,
                 CollectionId = ti.CollectionId,
-                PersonId = ti.PersonId
+                PersonId = ti.PersonId,
+                UpdatedAt = ti.UpdatedAt
             })
             .RunAsync();
     }
@@ -94,7 +95,8 @@ public class CollectionRepository(MediaContext context) : ICollectionRepository
                 VoteCount = ti.VoteCount,
                 Width = ti.Width,
                 Type = ti.Type,
-                CollectionId = ti.CollectionId
+                CollectionId = ti.CollectionId,
+                UpdatedAt = ti.UpdatedAt
             })
             .RunAsync();
     }

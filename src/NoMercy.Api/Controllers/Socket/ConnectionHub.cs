@@ -92,7 +92,8 @@
 //                 Name = di.Name,
 //                 Os = di.Os,
 //                 Type = di.Type,
-//                 Version = di.Version
+//                 Version = di.Versionl,
+//                 UpdatedAt = di.UpdatedAt
 //             })
 //             .RunAsync();
 //

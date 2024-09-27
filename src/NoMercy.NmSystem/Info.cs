@@ -88,6 +88,10 @@ public class Info
                 return item["Name"].ToString()?.Trim();
             }
         }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            return "Unknown";
+        }
         else
         {
             string output = ExecuteBashCommand("lscpu | grep 'Model name:'");
@@ -127,6 +131,11 @@ public class Info
                 ManagementObject? item = (ManagementObject)o;
                 return ManagementDateTimeConverter.ToDateTime(item["LastBootUpTime"].ToString());
             }
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            string output = ExecuteBashCommand("sysctl -n kern.boottime");
+            return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(long.Parse(output.Split(' ').Last()));
         }
         else
         {

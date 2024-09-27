@@ -12,12 +12,12 @@ public class RecordingRepository(MediaContext context) : IRecordingRepository
             .On(e => new { e.Id })
             .WhenMatched((ts, ti) => new Track
             {
-                UpdatedAt = DateTime.UtcNow,
                 Id = ti.Id,
                 Name = ti.Name,
                 DiscNumber = ti.DiscNumber,
                 TrackNumber = ti.TrackNumber,
                 Date = ti.Date,
+                UpdatedAt = ti.UpdatedAt,
 
                 Folder = update ? ts.Folder : ti.Folder,
                 FolderId = update ? ts.FolderId : ti.FolderId,

@@ -12,7 +12,6 @@ public class ReleaseRepository(MediaContext context) : IReleaseRepository
             .On(e => new { e.Id })
             .WhenMatched((s, i) => new Album
             {
-                UpdatedAt = DateTime.UtcNow,
                 Id = i.Id,
                 Name = i.Name,
                 Disambiguation = i.Disambiguation,
@@ -20,6 +19,7 @@ public class ReleaseRepository(MediaContext context) : IReleaseRepository
                 Year = i.Year,
                 Country = i.Country,
                 Tracks = i.Tracks,
+                UpdatedAt = i.UpdatedAt,
 
                 LibraryId = i.LibraryId,
                 Folder = i.Folder,

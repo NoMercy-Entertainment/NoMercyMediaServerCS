@@ -130,7 +130,6 @@ public class FanArtImagesJob : IShouldQueue
                 .On(v => new { v.FilePath, v.ArtistId })
                 .WhenMatched((s, i) => new Image
                 {
-                    UpdatedAt = DateTime.UtcNow,
                     Id = i.Id,
                     AspectRatio = i.AspectRatio,
                     Height = i.Height,
@@ -140,7 +139,8 @@ public class FanArtImagesJob : IShouldQueue
                     ArtistId = i.ArtistId,
                     Type = i.Type,
                     Site = i.Site,
-                    _colorPalette = i._colorPalette
+                    _colorPalette = i._colorPalette,
+                    UpdatedAt = i.UpdatedAt
                 })
                 .RunAsync();
         }
@@ -220,7 +220,6 @@ public class FanArtImagesJob : IShouldQueue
                 .On(v => new { v.FilePath, v.AlbumId })
                 .WhenMatched((s, i) => new Image
                 {
-                    UpdatedAt = DateTime.UtcNow,
                     Id = i.Id,
                     AspectRatio = i.AspectRatio,
                     Name = i.Name,
@@ -231,7 +230,8 @@ public class FanArtImagesJob : IShouldQueue
                     AlbumId = i.AlbumId,
                     Type = i.Type,
                     Site = i.Site,
-                    _colorPalette = i._colorPalette
+                    _colorPalette = i._colorPalette,
+                    UpdatedAt = i.UpdatedAt
                 })
                 .RunAsync();
         }

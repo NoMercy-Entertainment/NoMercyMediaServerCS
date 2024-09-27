@@ -293,12 +293,12 @@ public partial class MusicLogic : IAsyncDisposable
                 .On(e => new { e.Id })
                 .WhenMatched((s, i) => new ReleaseGroup
                 {
-                    UpdatedAt = DateTime.UtcNow,
                     Id = i.Id,
                     Title = i.Title,
                     Description = i.Description,
                     Year = i.Year,
-                    LibraryId = i.LibraryId
+                    LibraryId = i.LibraryId,
+                    UpdatedAt = i.UpdatedAt
                 })
                 .RunAsync();
 
@@ -360,7 +360,6 @@ public partial class MusicLogic : IAsyncDisposable
                 .On(e => new { e.Id })
                 .WhenMatched((s, i) => new Album
                 {
-                    UpdatedAt = DateTime.UtcNow,
                     Id = i.Id,
                     Name = i.Name,
                     Disambiguation = i.Disambiguation,
@@ -372,7 +371,8 @@ public partial class MusicLogic : IAsyncDisposable
                     LibraryId = i.LibraryId,
                     Folder = i.Folder,
                     FolderId = i.FolderId,
-                    HostFolder = i.HostFolder
+                    HostFolder = i.HostFolder,
+                    UpdatedAt = i.UpdatedAt
                 })
                 .RunAsync();
 
@@ -432,7 +432,6 @@ public partial class MusicLogic : IAsyncDisposable
                 .On(e => new { e.Id })
                 .WhenMatched((s, i) => new Artist
                 {
-                    UpdatedAt = DateTime.UtcNow,
                     Id = i.Id,
                     Name = i.Name,
                     Disambiguation = i.Disambiguation,
@@ -441,7 +440,8 @@ public partial class MusicLogic : IAsyncDisposable
                     Folder = i.Folder,
                     HostFolder = i.HostFolder,
                     LibraryId = i.LibraryId,
-                    FolderId = i.FolderId
+                    FolderId = i.FolderId,
+                    UpdatedAt = i.UpdatedAt
                 })
                 .RunAsync();
         }
@@ -518,12 +518,12 @@ public partial class MusicLogic : IAsyncDisposable
                 .On(e => new { e.Id })
                 .WhenMatched((ts, ti) => new Track
                 {
-                    UpdatedAt = DateTime.UtcNow,
                     Id = ti.Id,
                     Name = ti.Name,
                     DiscNumber = ti.DiscNumber,
                     TrackNumber = ti.TrackNumber,
                     Date = ti.Date,
+                    UpdatedAt = ti.UpdatedAt,
 
                     Folder = file == "" ? ts.Folder : ti.Folder,
                     FolderId = file == "" ? ts.FolderId : ti.FolderId,

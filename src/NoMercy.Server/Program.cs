@@ -172,6 +172,46 @@ public static class Program
     {
         ApiInfo.RequestInfo().Wait();
 
+        await using MediaContext mediaContext = new();
+        List<Configuration> configuration = mediaContext.Configuration.ToList();
+        
+        foreach (Configuration? config in configuration)
+        {
+            Logger.App($"Configuration: {config.Key} = {config.Value}");
+            if (config.Key == "InternalServerPort")
+            {
+                Config.InternalServerPort = int.Parse(config.Value);
+            }
+            else if (config.Key == "ExternalServerPort")
+            {
+                Config.ExternalServerPort = int.Parse(config.Value);
+            }
+            else if (config.Key == "queueRunners")
+            {
+                Config.QueueWorkers = new(Config.QueueWorkers.Key, config.Value.ToInt());
+            }
+            else if (config.Key == "encoderRunners")
+            {
+                Config.EncoderWorkers = new(Config.EncoderWorkers.Key, config.Value.ToInt());
+            }
+            else if (config.Key == "cronRunners")
+            {
+                Config.CronWorkers = new(Config.CronWorkers.Key, config.Value.ToInt());
+            }
+            else if (config.Key == "dataRunners")
+            {
+                Config.DataWorkers = new(Config.DataWorkers.Key, config.Value.ToInt());
+            }
+            else if (config.Key == "imageRunners")
+            {
+                Config.ImageWorkers = new(Config.ImageWorkers.Key, config.Value.ToInt());
+            }
+            else if (config.Key == "requestRunners")
+            {
+                Config.RequestWorkers = new(Config.RequestWorkers.Key, config.Value.ToInt());
+            }
+        }
+
         List<TaskDelegate> startupTasks =
         [
             new (ConsoleMessages.Logo),
@@ -188,46 +228,6 @@ public static class Program
         AppDomain.CurrentDomain.ProcessExit += (_, _) => { AniDbBaseClient.Dispose(); };
 
         await RunStartup(startupTasks);
-        
-        await using MediaContext mediaContext = new();
-        List<Configuration> configuration = mediaContext.Configuration.ToList();
-        
-        foreach (Configuration? config in configuration)
-        {
-            Logger.App($"Configuration: {config.Key} = {config.Value}");
-            if (config.Key == "InternalServerPort")
-            {
-                Config.InternalServerPort = int.Parse(config.Value);
-            }
-            else if (config.Key == "ExternalServerPort")
-            {
-                Config.ExternalServerPort = int.Parse(config.Value);
-            }
-            else if (config.Key == "QueueRunners")
-            {
-                Config.QueueWorkers = new(Config.QueueWorkers.Key, config.Value.ToInt());
-            }
-            else if (config.Key == "EncoderRunners")
-            {
-                Config.EncoderWorkers = new(Config.EncoderWorkers.Key, config.Value.ToInt());
-            }
-            else if (config.Key == "CronRunners")
-            {
-                Config.CronWorkers = new(Config.CronWorkers.Key, config.Value.ToInt());
-            }
-            else if (config.Key == "DataRunners")
-            {
-                Config.DataWorkers = new(Config.DataWorkers.Key, config.Value.ToInt());
-            }
-            else if (config.Key == "ImageRunners")
-            {
-                Config.ImageWorkers = new(Config.ImageWorkers.Key, config.Value.ToInt());
-            }
-            else if (config.Key == "RequestRunners")
-            {
-                Config.RequestWorkers = new(Config.RequestWorkers.Key, config.Value.ToInt());
-            }
-        }
 
         Thread t = new(new Task(() => QueueRunner.Initialize().Wait()).Start)
         {

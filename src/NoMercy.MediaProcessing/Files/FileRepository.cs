@@ -11,7 +11,7 @@ public class FileRepository(MediaContext context) : IFileRepository
     {
         return context.VideoFiles.Upsert(videoFile)
             .On(vf => vf.Filename)
-            .WhenMatched((vs, vi) => new VideoFile()
+            .WhenMatched((vs, vi) => new VideoFile
             {
                 Id = vi.Id,
                 EpisodeId = vi.EpisodeId,
@@ -24,7 +24,9 @@ public class FileRepository(MediaContext context) : IFileRepository
                 Chapters = vi.Chapters,
                 Languages = vi.Languages,
                 Quality = vi.Quality,
-                Subtitles = vi.Subtitles
+                Subtitles = vi.Subtitles,
+                _tracks = vi._tracks,
+                UpdatedAt = vi.UpdatedAt
             })
             .RunAsync();
     }

@@ -9,6 +9,7 @@ using NoMercy.Api.Middleware;
 using NoMercy.Data.Repositories;
 using NoMercy.Database;
 using NoMercy.Database.Models;
+using NoMercy.MediaProcessing.Files;
 using NoMercy.MediaProcessing.Jobs;
 using NoMercy.MediaProcessing.Jobs.MediaJobs;
 using NoMercy.Networking;
@@ -108,6 +109,7 @@ public class LibrariesController : BaseController
             library.SpecialSeasonName = request.SpecialSeasonName;
             library.Type = request.Type;
             library.LanguageLibraries.Clear();
+            
             List<Language> languages = await _languageRepository.GetLanguagesAsync();
             foreach (string subtitle in request.Subtitles)
             {
@@ -257,10 +259,10 @@ public class LibrariesController : BaseController
                 statusCode: StatusCodes.Status403Forbidden, type: "/docs/errors/internal-server-error");
         }
     }
-
+    
     [HttpPost]
     [Route("rescan")]
-    public async Task<IActionResult> RescanAll()
+    public async Task<IActionResult> Rescan()
     {
         if (!User.IsModerator())
             return UnauthorizedResponse("You do not have permission to rescan all libraries");
@@ -271,6 +273,82 @@ public class LibrariesController : BaseController
             return NotFound(new StatusResponseDto<List<string?>>
             {
                 Status = "error", Message = "No libraries found to rescan.", Args = []
+            });
+
+        await using MediaContext mediaContext = new();
+        JobDispatcher jobDispatcher = new();
+        
+        foreach (Library library in librariesList)
+        {
+            foreach (var movie in library.LibraryMovies)
+            {
+                FileRepository fileRepository = new(mediaContext);
+                FileManager fileManager = new(fileRepository, jobDispatcher);
+                await fileManager.FindFiles(movie.MovieId, library);
+            }
+            
+            foreach (var show in library.LibraryTvs)
+            {
+                FileRepository fileRepository = new(mediaContext);
+                FileManager fileManager = new(fileRepository, jobDispatcher);
+                await fileManager.FindFiles(show.TvId, library);
+            }
+        }
+
+        return Ok(new StatusResponseDto<List<string?>>
+        {
+            Status = "ok", Message = "Rescanning all libraries."
+        });
+
+    }
+    
+    [HttpPost]
+    [Route("{id:ulid}/rescan")]
+    public async Task<IActionResult> Rescan(Ulid id)
+    {
+        if (!User.IsModerator())
+            return UnauthorizedResponse("You do not have permission to refresh the library");
+
+        Library? library = await _libraryRepository.GetLibraryByIdAsync(id);
+        if (library is null)
+            return NotFound(new StatusResponseDto<string> { Status = "error", Data = "Library not found" });
+        
+        await using MediaContext mediaContext = new();
+        JobDispatcher jobDispatcher = new();
+        
+        foreach (var movie in library.LibraryMovies)
+        {
+            FileRepository fileRepository = new(mediaContext);
+            FileManager fileManager = new(fileRepository, jobDispatcher);
+            await fileManager.FindFiles(movie.MovieId, library);
+        }
+        
+        foreach (var show in library.LibraryTvs)
+        {
+            FileRepository fileRepository = new(mediaContext);
+            FileManager fileManager = new(fileRepository, jobDispatcher);
+            await fileManager.FindFiles(show.TvId, library);
+        }
+
+        return Ok(new StatusResponseDto<List<dynamic>>
+        {
+            Status = "ok", Message = "Rescanning {0} library.", Args = [id]
+        });
+    }
+
+    [HttpPost]
+    [Route("refresh")]
+    public async Task<IActionResult> RefreshAll()
+    {
+        if (!User.IsModerator())
+            return UnauthorizedResponse("You do not have permission to refresh all libraries");
+
+        List<Library> librariesList = await _libraryRepository.GetAllLibrariesAsync();
+
+        if (librariesList.Count == 0)
+            return NotFound(new StatusResponseDto<List<string?>>
+            {
+                Status = "error", Message = "No libraries found to refresh.", Args = []
             });
 
         List<string?> titles = [];
@@ -287,11 +365,11 @@ public class LibrariesController : BaseController
     }
 
     [HttpPost]
-    [Route("{id:ulid}/rescan")]
-    public async Task<IActionResult> Rescan(Ulid id)
+    [Route("{id:ulid}/refresh")]
+    public async Task<IActionResult> Refresh(Ulid id)
     {
         if (!User.IsModerator())
-            return UnauthorizedResponse("You do not have permission to rescan the library");
+            return UnauthorizedResponse("You do not have permission to refresh the library");
 
         JobDispatcher jobDispatcher = new();
         jobDispatcher.DispatchJob<RescanLibraryJob>(id);
@@ -301,7 +379,7 @@ public class LibrariesController : BaseController
             Status = "ok", Message = "Rescanning {0} library.", Args = [id]
         });
     }
-
+    
     [HttpPost]
     [Route("{id:ulid}/folders")]
     public async Task<IActionResult> AddFolder(Ulid id, [FromBody] FolderRequest request)

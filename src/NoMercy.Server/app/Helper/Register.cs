@@ -10,10 +10,10 @@ namespace NoMercy.Server.app.Helper;
 
 public static class Register
 {
-    private static string DeviceName()
+    public static string DeviceName()
     {
         MediaContext mediaContext = new();
-        Configuration? device = mediaContext.Configuration.FirstOrDefault(device => device.Key == "server_name");
+        Configuration? device = mediaContext.Configuration.FirstOrDefault(device => device.Key == "serverName");
         return device?.Value ?? Environment.MachineName;
     }
 

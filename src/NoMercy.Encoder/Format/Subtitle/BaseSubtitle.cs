@@ -185,4 +185,14 @@ public class BaseSubtitle : Classes
     }
 
     #endregion
+
+    public static BaseSubtitle Create(string profileCodec)
+    {
+        return profileCodec switch
+        {
+            "vtt" => new Vtt(),
+            "srt" => new Srt(),
+            "_" => throw new Exception($"Subtitle {profileCodec} is not supported"),
+        };
+    }
 }

@@ -182,7 +182,8 @@ public partial class FileLogic(int id, Library library) : IDisposable, IAsyncDis
                     Chapters = vi.Chapters,
                     Languages = vi.Languages,
                     Quality = vi.Quality,
-                    Subtitles = vi.Subtitles
+                    Subtitles = vi.Subtitles,
+                    UpdatedAt = vi.UpdatedAt
                 })
                 .RunAsync();
         }

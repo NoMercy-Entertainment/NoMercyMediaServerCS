@@ -77,14 +77,4 @@ public class Tv : ColorPaletteTimeStamps
             .Concat(Title.CleanFileName(), ".(", FirstAirDate.ParseYear(), ")")
             .CleanFileName();
     }
-
-    public string CreateTitle()
-    {
-        return string.Concat(Title, " (", FirstAirDate.ParseYear(), ") NoMercy");
-    }
-
-    public string CreateFileName()
-    {
-        return string.Concat(Title.CleanFileName(), ".(", FirstAirDate.ParseYear(), ").NoMercy");
-    }
 }

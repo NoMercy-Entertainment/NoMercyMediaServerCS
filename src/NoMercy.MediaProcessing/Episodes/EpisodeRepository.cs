@@ -46,7 +46,8 @@ public class EpisodeRepository(MediaContext context) : IEpisodeRepository
                 EpisodeId = ti.EpisodeId,
                 MovieId = ti.MovieId,
                 CollectionId = ti.CollectionId,
-                PersonId = ti.PersonId
+                PersonId = ti.PersonId,
+                UpdatedAt = ti.UpdatedAt
             })
             .RunAsync();
     }
@@ -66,7 +67,8 @@ public class EpisodeRepository(MediaContext context) : IEpisodeRepository
                 VoteCount = ti.VoteCount,
                 Width = ti.Width,
                 Type = ti.Type,
-                EpisodeId = ti.EpisodeId
+                EpisodeId = ti.EpisodeId,
+                UpdatedAt =ti.UpdatedAt
             })
             .RunAsync();
     }

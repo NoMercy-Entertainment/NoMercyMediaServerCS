@@ -83,13 +83,12 @@ public class JobQueue(QueueContext context, byte maxAttempts = 3)
         }
         catch (Exception e)
         {
-            if (attempt < 3)
+            Logger.Queue(e, LogEventLevel.Error);
+            if (attempt < 10)
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(2000);
                 return ReserveJob(name, currentJobId, attempt + 1);
             }
-            
-            Logger.Queue(e, LogEventLevel.Error);
         }
         
         return null;
@@ -124,14 +123,15 @@ public class JobQueue(QueueContext context, byte maxAttempts = 3)
         }
         catch (Exception e)
         {
-            if (attempt < 3)
+            Logger.Queue(e, LogEventLevel.Error);
+            if (attempt < 10)
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(2000);
                 FailJob(queueJob, exception, attempt + 1);
             }
             else
             {
-                Logger.Queue(e, LogEventLevel.Error);
+                //
             }
         }
     }
@@ -149,15 +149,19 @@ public class JobQueue(QueueContext context, byte maxAttempts = 3)
         }
         catch (Exception e)
         {
-            if (attempt < 3)
-            {
-                Thread.Sleep(1000);
-                DeleteJob(queueJob, attempt + 1);
-            }
-            else
-            {
-                Logger.Queue(e, LogEventLevel.Error);
-            }
+            // if (e.Message.Contains("affected 0 row(s)"))
+            // {
+            //     
+            // }
+            // else if (attempt < 10)
+            // {
+            //     Thread.Sleep(2000);
+            //     DeleteJob(queueJob, attempt + 1);
+            // }
+            // else
+            // {
+            //     Logger.Queue(e, LogEventLevel.Error);
+            // }
         }
     }
 
@@ -184,9 +188,9 @@ public class JobQueue(QueueContext context, byte maxAttempts = 3)
         }
         catch (Exception e)
         {
-            if (attempt < 3)
+            if (attempt < 10)
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(2000);
                 RequeueFailedJob(failedJobId, attempt + 1);
             }
             else

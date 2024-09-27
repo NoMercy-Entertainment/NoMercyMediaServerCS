@@ -16,6 +16,7 @@ public class AccessLogMiddleware
         "/images",
         "/swagger",
         "/index",
+        "/oauth2",
         "/styles",
         "/scripts"
     ];

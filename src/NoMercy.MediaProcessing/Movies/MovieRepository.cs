@@ -34,7 +34,7 @@ public class MovieRepository(MediaContext context) : IMovieRepository
                 Folder = ti.Folder,
                 LibraryId = ti.LibraryId,
                 UpdatedAt = ti.UpdatedAt,
-                _colorPalette = ti._colorPalette
+                _colorPalette = ti._colorPalette,
             })
             .RunAsync();
     }
@@ -83,7 +83,8 @@ public class MovieRepository(MediaContext context) : IMovieRepository
                 SeasonId = ti.SeasonId,
                 EpisodeId = ti.EpisodeId,
                 CollectionId = ti.CollectionId,
-                PersonId = ti.PersonId
+                PersonId = ti.PersonId,
+                UpdatedAt = ti.UpdatedAt
             })
             .RunAsync();
     }
@@ -162,7 +163,8 @@ public class MovieRepository(MediaContext context) : IMovieRepository
                 MovieId = ti.MovieId,
                 Name = ti.Name,
                 Site = ti.Site,
-                Size = ti.Size
+                Size = ti.Size,
+                UpdatedAt = ti.UpdatedAt
             })
             .RunAsync();
     }
@@ -182,7 +184,8 @@ public class MovieRepository(MediaContext context) : IMovieRepository
                 VoteCount = ti.VoteCount,
                 Width = ti.Width,
                 Type = ti.Type,
-                MovieId = ti.MovieId
+                MovieId = ti.MovieId,
+                UpdatedAt = ti.UpdatedAt
             })
             .RunAsync();
     }

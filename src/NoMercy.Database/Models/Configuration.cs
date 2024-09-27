@@ -7,11 +7,12 @@ using Newtonsoft.Json;
 namespace NoMercy.Database.Models;
 
 [PrimaryKey(nameof(Id))]
+[Index(nameof(Key), IsUnique = true)]
 public class Configuration : Timestamps
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonProperty("id")]
-    public string Id { get; set; }
+    public int Id { get; set; }
 
     [JsonProperty("key")] public string Key { get; set; }
 

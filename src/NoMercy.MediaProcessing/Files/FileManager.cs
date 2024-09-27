@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using NoMercy.Database;
 using NoMercy.Database.Models;
 using NoMercy.MediaProcessing.Jobs;
 using NoMercy.NmSystem;
@@ -104,12 +105,13 @@ public partial class FileManager(
 
     private async Task StoreVideoItem(MediaFile item)
     {
-        Folder folder = Folders.FirstOrDefault(folder => item.Path.Contains(folder.Path))!;
+        Folder? folder = Folders.FirstOrDefault(folder => item.Path.Contains(folder.Path));
+        if (folder == null) return;
 
         string fileName = Path.DirectorySeparatorChar + Path.GetFileName(item.Path);
         string hostFolder = item.Path.Replace(fileName, "");
-        string baseFolder = Path.DirectorySeparatorChar + (Movie?.Folder ?? Show?.Folder ?? "").Replace("/", "")
-                                                        + item.Path.Replace(folder.Path, "")
+        string baseFolder = (Path.DirectorySeparatorChar + (Movie?.Folder ?? Show?.Folder ?? "").Replace("/", "")
+                                                         + item.Path.Replace(folder.Path, ""))
                                                             .Replace(fileName, "");
 
         string subtitleFolder = Path.Combine(hostFolder, "subtitles");
@@ -138,8 +140,57 @@ public partial class FileManager(
 
         Episode? episode = await fileRepository.GetEpisode(Show?.Id, item);
 
+        List<IVideoTrack> tracks = [];
+        
+        string[] files = Directory.GetFiles(hostFolder);
+        foreach (string file in files)
+        {
+            var name = Path.GetFileName(file);
+            if (name.StartsWith("chapter"))
+            {
+                tracks.Add(new IVideoTrack
+                {
+                    File = "/" + name,
+                    Kind = "chapters"
+                });
+            }
+            else if (name.StartsWith("skipper"))
+            {
+                tracks.Add(new IVideoTrack
+                {
+                    File = "/" + name,
+                    Kind = "skippers"
+                });
+            }
+            else if ((name.StartsWith("sprite") || name.StartsWith("preview") || name.StartsWith("thumb")) && file.EndsWith("vtt"))
+            {
+                tracks.Add(new IVideoTrack
+                {
+                    File = "/" + name,
+                    Kind = "thumbnails"
+                });
+            }
+            else if ((name.StartsWith("sprite") || name.StartsWith("thumb")) && file.EndsWith("webp"))
+            {
+                tracks.Add(new IVideoTrack
+                {
+                    File = "/" + name,
+                    Kind = "sprite"
+                });
+            }
+            else if (name.StartsWith("fonts"))
+            {
+                tracks.Add(new IVideoTrack
+                {
+                    File = "/" + name,
+                    Kind = "fonts"
+                });
+            }
+        }
+        
         try
         {
+            Logger.App($"Storing video file: {episode?.Id}, {Movie?.Id}");
             VideoFile videoFile = new()
             {
                 EpisodeId = episode?.Id,
@@ -157,7 +208,8 @@ public partial class FileManager(
                 Languages = JsonConvert.SerializeObject(item.FFprobe?.AudioStreams.Select(stream => stream.Language)
                     .Where(stream => stream != null && stream != "und")),
                 Quality = item.FFprobe?.VideoStreams.FirstOrDefault()?.Width.ToString() ?? "",
-                Subtitles = JsonConvert.SerializeObject(subtitles)
+                Subtitles = JsonConvert.SerializeObject(subtitles),
+                _tracks = JsonConvert.SerializeObject(tracks),
             };
 
             await fileRepository.StoreVideoFile(videoFile);

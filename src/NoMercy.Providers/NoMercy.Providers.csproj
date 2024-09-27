@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net8.0;net8.0-windows10.0.17763.0</TargetFrameworks>
+        <TargetFrameworks>net8.0</TargetFrameworks>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <Authors>NoMercy Entertainment</Authors>
@@ -11,6 +11,10 @@
         <Product>NoMercy API Providers</Product>
         <LangVersion>12</LangVersion>
         <BuildFrameworkVersion>6.0.2</BuildFrameworkVersion>
+        <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
+    </PropertyGroup>
+    <PropertyGroup>
+        <IsTestProject>false</IsTestProject>
     </PropertyGroup>
 
     <ItemGroup>
@@ -25,6 +29,7 @@
 
     <ItemGroup>
         <PackageReference Include="AcoustID.NET" Version="1.3.3"/>
+        <PackageReference Include="Castle.Core" Version="5.1.1" />
         <PackageReference Include="ExtendedNumerics.BigRational" Version="2023.1000.2.328"/>
         <PackageReference Include="MusixmatchClientLib" Version="1.1.9"/>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>

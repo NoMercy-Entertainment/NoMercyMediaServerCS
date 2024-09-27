@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using NoMercy.Database;
 using NoMercy.Database.Models;
 using NoMercy.NmSystem;
 
@@ -25,8 +26,7 @@ public record PlaylistResponseDto
     [JsonProperty("sources")] public SourceDto[] Sources { get; set; }
     [JsonProperty("fonts")] public List<FontDto?>? Fonts { get; set; }
     [JsonProperty("fontsFile")] public string FontsFile { get; set; }
-    [JsonProperty("textTracks")] public List<TextTrackDto> TextTracks { get; set; }
-    [JsonProperty("tracks")] public List<TextTrackDto> Tracks { get; set; }
+    [JsonProperty("tracks")] public List<IVideoTrack> Tracks { get; set; }
 
     [JsonProperty("season")] public int? Season { get; set; }
     [JsonProperty("episode")] public int? Episode { get; set; }
@@ -92,37 +92,14 @@ public record PlaylistResponseDto
             }
         ];
         
-        List<TextTrackDto> tracks =
-        [
-            new()
-            {
-                File = $"{baseFolder}/previews.vtt",
-                Kind = "thumbnails"
-            },
-            new()
-            {
-                File = $"{baseFolder}/chapters.vtt",
-                Kind = "chapters"
-            },
-            new()
-            {
-                File = $"{baseFolder}/skippers.vtt",
-                Kind = "skippers"
-            },
-            new()
-            {
-                File = $"{baseFolder}/sprite.webp",
-                Kind = "sprite"
-            },
-            new()
-            {
-                File = $"{baseFolder}/fonts.json",
-                Kind = "fonts"
-            }
-        ];
+        Tracks = videoFile.Tracks.Select(t => new IVideoTrack
+        {
+            Label = t.Label,
+            File = $"{baseFolder}{t.File}",
+            Language = t.Language,
+            Kind = t.Kind
+        }).Concat(subs.TextTracks).ToList();
         
-        Tracks = tracks.Concat(subs.TextTracks).ToList();
-
         Season = index is not null ? 0 : episode.SeasonNumber;
         Episode = index ?? episode.EpisodeNumber;
         SeasonName = episode.Season.Title;
@@ -178,45 +155,14 @@ public record PlaylistResponseDto
             }
         ];
         
-        List<TextTrackDto> tracks =
-        [
-            new()
-            {
-                File = $"{baseFolder}/previews.vtt",
-                Kind = "thumbnails"
-            },
-            new()
-            {
-                File = $"{baseFolder}/chapters.vtt",
-                Kind = "chapters"
-            },
-            new()
-            {
-                File = $"{baseFolder}/skippers.vtt",
-                Kind = "skippers"
-            },
-            new()
-            {
-                File = $"{baseFolder}/sprite.webp",
-                Kind = "sprite"
-            },
-            new()
-            {
-                File = $"{baseFolder}/fonts.json",
-                Kind = "fonts"
-            },
-
-            new()
-            {
-                File = "",
-                Kind = "thumbnails"
-            },
-        ];
+        Tracks = videoFile.Tracks.Select(t => new IVideoTrack
+        {
+            Label = t.Label,
+            File = $"{baseFolder}{t.File}",
+            Language = t.Language,
+            Kind = t.Kind
+        }).Concat(subs.TextTracks).ToList();
         
-        Tracks = tracks.Concat(subs.TextTracks).ToList();
-        
-        TextTracks = subs.TextTracks;
-
         if (index is null) return;
         SeasonName = "Collection";
         Season = 0;
@@ -226,9 +172,9 @@ public record PlaylistResponseDto
 
     private record Subs
     {
-        public List<TextTrackDto> TextTracks { get; set; }
+        public List<IVideoTrack> TextTracks { get; set; } = [];
         public List<FontDto?>? Fonts { get; set; }
-        public string FontsFile { get; set; }
+        public string FontsFile { get; set; } = "";
     }
 
     public class Subtitle
@@ -245,7 +191,7 @@ public record PlaylistResponseDto
         string subtitles = videoFile.Subtitles ?? "[]";
         List<Subtitle>? subtitleList = JsonConvert.DeserializeObject<List<Subtitle>>(subtitles);
 
-        List<TextTrackDto> textTracks = [];
+        List<IVideoTrack> textTracks = [];
         bool search = false;
 
         foreach (Subtitle sub in subtitleList ?? [])
@@ -256,7 +202,7 @@ public record PlaylistResponseDto
 
             if (ext == "ass") search = true;
 
-            textTracks.Add(new TextTrackDto
+            textTracks.Add(new IVideoTrack
             {
                 Label = type,
                 File = $"{baseFolder}/subtitles{videoFile?.Filename

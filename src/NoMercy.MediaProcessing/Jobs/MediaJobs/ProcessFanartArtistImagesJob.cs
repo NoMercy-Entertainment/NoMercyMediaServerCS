@@ -44,7 +44,7 @@ public class ProcessFanartArtistImagesJob : AbstractFanArtDataJob
             try
             {
                 Database.Models.Image? artistCover = await imageManager.StoreArtistImages(fanArt, Id1, dbArtist);
-                if (artistCover is not null)
+                if (artistCover is not null && dbArtist.Cover is not null && dbArtist._colorPalette is not "")
                 {
                     dbArtist.Cover = artistCover?.FilePath ?? dbArtist.Cover;
 

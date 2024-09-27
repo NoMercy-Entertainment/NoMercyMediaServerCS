@@ -72,7 +72,8 @@ public class MusicDescriptionJob : IShouldQueue
                 {
                     ArtistId = s.ArtistId,
                     Iso31661 = s.Iso31661,
-                    Description = s.Description
+                    Description = s.Description,
+                    UpdatedAt = s.UpdatedAt
                 })
                 .RunAsync();
         }
@@ -121,7 +122,8 @@ public class MusicDescriptionJob : IShouldQueue
                 {
                     ReleaseGroupId = s.ReleaseGroupId,
                     Iso31661 = s.Iso31661,
-                    Description = s.Description
+                    Description = s.Description,
+                    UpdatedAt = i.UpdatedAt
                 })
                 .RunAsync();
         }

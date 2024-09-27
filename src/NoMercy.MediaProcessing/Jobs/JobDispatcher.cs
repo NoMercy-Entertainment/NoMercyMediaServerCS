@@ -7,6 +7,13 @@ namespace NoMercy.MediaProcessing.Jobs;
 
 public class JobDispatcher
 {
+
+    public void DispatchJob<TJob>(TJob job)
+        where TJob : AbstractEncoderJob, new()
+    {
+        Queue.JobDispatcher.Dispatch(job, job.QueueName, job.Priority);
+    }
+    
     public void DispatchJob<TJob>(int id, Ulid libraryId)
         where TJob : AbstractMediaJob, new()
     {

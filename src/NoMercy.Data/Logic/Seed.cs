@@ -187,7 +187,8 @@ public class Seed : IDisposable, IAsyncDisposable
                 Id = vi.Id,
                 Name = vi.Name,
                 Container = vi.Container,
-                Param = vi.Param
+                Param = vi.Param,
+                UpdatedAt = vi.UpdatedAt
             })
             .RunAsync();
     }
