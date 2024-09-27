@@ -26,6 +26,17 @@ public class LibraryRepository(MediaContext context) : ILibraryRepository
             .FirstOrDefaultAsync(library => library.Id == id);
     }
 
+    public Task<Folder?> GetLibraryFolder(Ulid folderId)
+    {
+        return context.Folders
+            .AsNoTracking()
+            .Include(folder => folder.FolderLibraries)
+                .ThenInclude(folderLibrary => folderLibrary.Library)
+            .Include(folder => folder.EncoderProfileFolder)
+                .ThenInclude(encoderProfileFolder => encoderProfileFolder.EncoderProfile)
+            .FirstOrDefaultAsync(folder => folder.Id == folderId);
+    }
+
     public void Dispose()
     {
         context.Dispose();

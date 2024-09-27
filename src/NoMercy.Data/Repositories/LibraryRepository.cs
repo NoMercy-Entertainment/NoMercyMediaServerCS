@@ -9,16 +9,15 @@ public class LibraryRepository(MediaContext context) : ILibraryRepository
     public IQueryable<Library> GetLibrariesAsync(Guid userId)
     {
         return context.Libraries
-            .AsNoTracking()
             .Where(library => library.LibraryUsers
                 .FirstOrDefault(u => u.UserId == userId) != null
             )
             .Include(library => library.FolderLibraries)
-            .ThenInclude(folderLibrary => folderLibrary.Folder)
-            .ThenInclude(folder => folder.EncoderProfileFolder)
-            .ThenInclude(library => library.EncoderProfile)
+                .ThenInclude(folderLibrary => folderLibrary.Folder)
+                    .ThenInclude(folder => folder.EncoderProfileFolder)
+                        .ThenInclude(library => library.EncoderProfile)
             .Include(library => library.LanguageLibraries)
-            .ThenInclude(languageLibrary => languageLibrary.Language);
+                .ThenInclude(languageLibrary => languageLibrary.Language);
     }
 
     public Task<Library> GetLibraryByIdAsync(Ulid libraryId, Guid userId, string language, int take, int page)
@@ -170,6 +169,10 @@ public class LibraryRepository(MediaContext context) : ILibraryRepository
     {
         return context.Libraries
             .Include(library => library.LanguageLibraries)
+            .Include(library => library.FolderLibraries)
+                .ThenInclude(folderLibrary => folderLibrary.Folder)
+            .Include(library => library.LibraryMovies)
+            .Include(library => library.LibraryTvs)
             .FirstOrDefaultAsync(library => library.Id == id);
     }
 
@@ -188,7 +191,8 @@ public class LibraryRepository(MediaContext context) : ILibraryRepository
                 Realtime = li.Realtime,
                 SpecialSeasonName = li.SpecialSeasonName,
                 Type = li.Type,
-                Order = li.Order
+                Order = li.Order,
+                UpdatedAt = li.UpdatedAt
             })
             .RunAsync();
 
@@ -223,6 +227,8 @@ public class LibraryRepository(MediaContext context) : ILibraryRepository
         return context.Libraries
             .Include(library => library.FolderLibraries)
             .ThenInclude(folderLibrary => folderLibrary.Folder)
+            .Include(library => library.LibraryMovies)
+            .Include(library => library.LibraryTvs)
             .ToListAsync();
     }
 

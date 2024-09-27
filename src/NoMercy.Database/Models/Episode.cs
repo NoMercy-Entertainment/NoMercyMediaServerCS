@@ -3,6 +3,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using NoMercy.NmSystem;
 
 namespace NoMercy.Database.Models;
 
@@ -49,22 +50,34 @@ public class Episode : ColorPalettes
     {
     }
 
-    // public Episode(TmdbEpisodeAppends e, int tvId, int seasonId)
-    // {
-    //     Id = e.Id;
-    //     Title = e.Name;
-    //     AirDate = e.AirDate;
-    //     EpisodeNumber = e.EpisodeNumber;
-    //     ImdbId = e.TmdbEpisodeExternalIds.ImdbId;
-    //     Overview = e.Overview;
-    //     ProductionCode = e.ProductionCode;
-    //     SeasonNumber = e.SeasonNumber;
-    //     Still = e.StillPath;
-    //     TvdbId = e.TmdbEpisodeExternalIds.TvdbId;
-    //     VoteAverage = e.VoteAverage;
-    //     VoteCount = e.VoteCount;
-    //
-    //     TvId = tvId;
-    //     SeasonId = seasonId;
-    // }
+    public string CreateFolderName()
+    {
+        return "/" + string
+            .Concat( 
+                Tv.Title.CleanFileName(),
+                ".S", SeasonNumber.ToString("00"), 
+                "E", EpisodeNumber.ToString("00")
+           ).CleanFileName();
+    }
+
+    public string CreateTitle()
+    {
+        return string. Concat( 
+            Tv.Title,
+            " S", SeasonNumber.ToString("00"), 
+            "E", EpisodeNumber.ToString("00"),
+            " ", Title,
+            " NoMercy");
+    }
+
+    public string CreateFileName()
+    {
+        return string.Concat(
+            Tv.Title.CleanFileName(),
+            ".S", SeasonNumber.ToString("00"),
+            "E", EpisodeNumber.ToString("00"),
+            ".", Title.CleanFileName(),
+            ".NoMercy"
+        );
+    }
 }

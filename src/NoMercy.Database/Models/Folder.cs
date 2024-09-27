@@ -15,8 +15,10 @@ public class Folder
     public Ulid Id { get; set; }
 
     [JsonProperty("path")] public string Path { get; set; }
-
-
+    
     [JsonProperty("encoder_profile_folder")]
     public ICollection<EncoderProfileFolder> EncoderProfileFolder { get; set; }
+    
+    [JsonProperty("folder_libraries")] public ICollection<FolderLibrary> FolderLibraries { get; set; }
+
 }

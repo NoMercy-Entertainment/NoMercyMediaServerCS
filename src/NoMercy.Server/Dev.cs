@@ -28,8 +28,22 @@ public class Dev
         // SubtitleSearchResponse? x = await subtitlesClient.SearchSubtitles("Black Panther Wakanda Forever (2022)", "dut");
         // Logger.OpenSubs(x);
         
-        // MediaContext mediaContext = new();
-        // JobDispatcher jobDispatcher = new();
+        await using MediaContext mediaContext = new();
+        JobDispatcher jobDispatcher = new();
+        
+        Folder? folder = await mediaContext.Folders
+            .Include(f => f.FolderLibraries)
+            .ThenInclude(f => f.Library)
+            .Include(f => f.EncoderProfileFolder)
+            .ThenInclude(f => f.EncoderProfile)
+            .FirstOrDefaultAsync(f => f.Id == Ulid.Parse("01HQ5W4Y1ZHYZKS87P0AG24ERE"));
+
+        jobDispatcher.DispatchJob(new EncodeVideoJob
+        {
+            FolderId = folder!.Id,
+            Id = 1830793,
+            InputFile = "M:\\Download\\complete\\[kmplx] A Certain Scientific Accelerator (BD 1080p x265 10-Bit FLAC) [Dual-Audio]\\Episode 01 - Accelerator (Academy City's Mightiest Esper).mkv",
+        });
 
         // Library? movieLibrary = await mediaContext.Libraries
         //     .Where(f => f.Type == "movie")
@@ -162,7 +176,7 @@ public class Dev
 
         // Parallel.ForEach(tasks, task => task.Start());
 
-        await using MediaContext mediaContext = new();
+        // await using MediaContext mediaContext = new();
 
         // var stream0 = new X264(VideoCodecs.H264Nvenc.Value)
         //     .SetScale(FrameSizes._4k.Width, -2)
@@ -190,38 +204,38 @@ public class Dev
         //     .AddOpts("no-scenecut")
         //     .AddOpts("keyint", 48)
         //     .AddCustomArgument("-x264opts", "no-scenecut");
-        
-        var stream2 = new X264(VideoCodecs.H264Nvenc.Value)
-            .SetScale(FrameSizes._4k.Width, -2)
-            .SetConstantRateFactor(20)
-            .ConvertHdrToSdr()
-            .SetHlsSegmentFilename(":type:_:framesize:_SDR/:type:_:framesize:_SDR")
-            .SetHlsPlaylistFilename(":type:_:framesize:_SDR/:type:_:framesize:_SDR")
-            .SetColorSpace(ColorSpaces.Yuv420p)
-            .SetPreset(VideoPresets.Fast)
-            .SetTune(VideoTunes.Hq)
-            .AddOpts("no-scenecut")
-            .AddOpts("keyint=48")
-            .AddCustomArgument("-x264opts", "no-scenecut");
-        
-        var stream3 = new X264(VideoCodecs.H264Nvenc.Value)
-            .SetScale(FrameSizes._1080p.Width)
-            .SetConstantRateFactor(20)
-            .ConvertHdrToSdr()
-            .SetHlsSegmentFilename(":type:_:framesize:_SDR/:type:_:framesize:_SDR")
-            .SetHlsPlaylistFilename(":type:_:framesize:_SDR/:type:_:framesize:_SDR")
-            .SetColorSpace(ColorSpaces.Yuv420p)
-            .SetPreset(VideoPresets.Fast)
-            .SetTune(VideoTunes.Hq)
-            .AddOpts("no-scenecut")
-            .AddOpts("keyint", 48)
-            .AddCustomArgument("-x264opts", "no-scenecut");
-        
-        var stream4 = new Aac()
-            .SetAudioChannels(2)
-            .SetAllowedLanguages([Languages.Eng, Languages.Jpn, Languages.Fre, Languages.Ger, Languages.Ita])
-            .SetHlsSegmentFilename(":type:_:language:_:codec:/:type:_:language:_:codec:")
-            .SetHlsPlaylistFilename(":type:_:language:_:codec:/:type:_:language:_:codec:");
+        //
+        // var stream2 = new X264(VideoCodecs.H264Nvenc.Value)
+        //     .SetScale(FrameSizes._4k.Width, -2)
+        //     .SetConstantRateFactor(20)
+        //     .ConvertHdrToSdr()
+        //     .SetHlsSegmentFilename(":type:_:framesize:_SDR/:type:_:framesize:_SDR")
+        //     .SetHlsPlaylistFilename(":type:_:framesize:_SDR/:type:_:framesize:_SDR")
+        //     .SetColorSpace(ColorSpaces.Yuv420p)
+        //     .SetPreset(VideoPresets.Fast)
+        //     .SetTune(VideoTunes.Hq)
+        //     .AddOpts("no-scenecut")
+        //     .AddOpts("keyint=48")
+        //     .AddCustomArgument("-x264opts", "no-scenecut");
+        //
+        // var stream3 = new X264(VideoCodecs.H264Nvenc.Value)
+        //     .SetScale(FrameSizes._1080p.Width)
+        //     .SetConstantRateFactor(20)
+        //     .ConvertHdrToSdr()
+        //     .SetHlsSegmentFilename(":type:_:framesize:_SDR/:type:_:framesize:_SDR")
+        //     .SetHlsPlaylistFilename(":type:_:framesize:_SDR/:type:_:framesize:_SDR")
+        //     .SetColorSpace(ColorSpaces.Yuv420p)
+        //     .SetPreset(VideoPresets.Fast)
+        //     .SetTune(VideoTunes.Hq)
+        //     .AddOpts("no-scenecut")
+        //     .AddOpts("keyint", 48)
+        //     .AddCustomArgument("-x264opts", "no-scenecut");
+        //
+        // var stream4 = new Aac()
+        //     .SetAudioChannels(2)
+        //     .SetAllowedLanguages([Languages.Eng, Languages.Jpn, Languages.Fre, Languages.Ger, Languages.Ita])
+        //     .SetHlsSegmentFilename(":type:_:language:_:codec:/:type:_:language:_:codec:")
+        //     .SetHlsPlaylistFilename(":type:_:language:_:codec:/:type:_:language:_:codec:");
         //
         // var stream5 = new DolbyDigitalPlus()
         //     .SetAllowedLanguages([Languages.Eng])
@@ -232,19 +246,19 @@ public class Dev
         //     .SetAllowedLanguages([Languages.Eng])
         //     .SetHlsSegmentFilename(":type:_:language:_:codec:/:type:_:language:_:codec:")
         //     .SetHlsPlaylistFilename(":type:_:language:_:codec:/:type:_:language:_:codec:");
-        
-        var stream7 = new Sprite()
-            .SetScale(320)
-            .SetFilename("thumbs_:framesize:");
-
-        var stream8 = new Vtt()
-            .SetAllowedLanguages([Languages.Dut, Languages.Eng, Languages.Jpn, Languages.Fre, Languages.Ger, Languages.Ita, Languages.Spa, Languages.Por, Languages.Rus, Languages.Kor, Languages.Chi, Languages.Ara, Languages.Hin, Languages.Tel, Languages.Tam, Languages.Mal, Languages.Kan, Languages.Guj, Languages.Mar, Languages.Ben, Languages.Pan, Languages.Ori, Languages.Urd, Languages.Tur, Languages.Vie, Languages.Lao, Languages.Khm, Languages.Fil, Languages.Ind, Languages.Swa, Languages.Som, Languages.Tir])
-            .SetHlsSegmentFilename(":type:_:language:_:codec:/_:language:_:codec:")
-            // .SetHlsPlaylistFilename(":type:_:language:_:codec:/:type:_:language:_:codec:");
-            .SetHlsPlaylistFilename("subtitles/Black.Panther.Wakanda.Forever.(2022).NoMercy.:language:.:variant:");
-        
-        var container = new Hls()
-            .SetHlsFlags("independent_segments")
+        //
+        // var stream7 = new Sprite()
+        //     .SetScale(320)
+        //     .SetFilename("thumbs_:framesize:");
+        //
+        // var stream8 = new Vtt()
+        //     .SetAllowedLanguages([Languages.Dut, Languages.Eng, Languages.Jpn, Languages.Fre, Languages.Ger, Languages.Ita, Languages.Spa, Languages.Por, Languages.Rus, Languages.Kor, Languages.Chi, Languages.Ara, Languages.Hin, Languages.Tel, Languages.Tam, Languages.Mal, Languages.Kan, Languages.Guj, Languages.Mar, Languages.Ben, Languages.Pan, Languages.Ori, Languages.Urd, Languages.Tur, Languages.Vie, Languages.Lao, Languages.Khm, Languages.Fil, Languages.Ind, Languages.Swa, Languages.Som, Languages.Tir])
+        //     .SetHlsSegmentFilename(":type:_:language:_:codec:/_:language:_:codec:")
+        //     // .SetHlsPlaylistFilename(":type:_:language:_:codec:/:type:_:language:_:codec:");
+        //     .SetHlsPlaylistFilename("subtitles/Black.Panther.Wakanda.Forever.(2022).NoMercy.:language:.:variant:");
+        //
+        // var container = new Hls()
+        //     .SetHlsFlags("independent_segments")
         // .AddStream(stream0)
         // .AddStream(stream1)
         // .AddStream(stream2)
@@ -253,7 +267,7 @@ public class Dev
         // .AddStream(stream5)
         // .AddStream(stream6)
         // .AddStream(stream7)
-        .AddStream(stream8);
+        // .AddStream(stream8);
 
         // var ffmpeg = new FfMpeg()
         // // .Open("G:\\Marvels\\Films\\Download\\Iron.Man.2.2010.2160p.US.BluRay.REMUX.HEVC.DTS-HD.MA.TrueHD.7.1.Atmos-FGT\\Iron.Man.2.2010.2160p.US.BluRay.REMUX.HEVC.DTS-HD.MA.TrueHD.7.1.Atmos-FGT.mkv");

@@ -216,4 +216,17 @@ public abstract class BaseAudio : Classes
         if (!Directory.Exists(path))
             Directory.CreateDirectory(path);
     }
+
+    public static BaseAudio Create(string profileCodec)
+    {
+        return profileCodec switch
+        {
+            "aac" => new Aac(),
+            "opus" => new Opus(),
+            "mp3" => new Mp3(),
+            "flac" => new Flac(),
+            "vorbis" => new Vorbis(),
+            _ => throw new Exception($"Audio codec {profileCodec} is not supported")
+        };
+    }
 }

@@ -17,7 +17,7 @@ public abstract class BaseVideo : Classes
     protected internal virtual bool BFramesSupport => false;
 
     protected internal virtual int Modulus { get; set; }
-    protected internal long Bitrate { get; set; }
+    protected internal int Bitrate { get; set; }
     internal int BufferSize { get; set; }
     internal string Tune { get; set; }
     internal string Profile { get; set; }
@@ -117,12 +117,14 @@ public abstract class BaseVideo : Classes
 
     #region Setters
 
-    public BaseVideo SetKiloBitrate(int kiloBitrate)
+    public BaseVideo SetKiloBitrate(int?  kiloBitrate = 0)
     {
+        if (kiloBitrate is null) return this;
+
         if (kiloBitrate < 0)
             throw new Exception("Wrong bitrate value");
 
-        Bitrate = kiloBitrate;
+        Bitrate = kiloBitrate.Value;
 
         return this;
     }
@@ -195,11 +197,15 @@ public abstract class BaseVideo : Classes
         return this;
     }
 
-    public BaseVideo SetScale(int width, int height)
+    public BaseVideo SetScale(int width, int? height)
     {
         OutputWidth = width;
         OutputHeight = height;
-        ScaleValue = $"{width}:{height}";
+
+        if (height == null)
+            ScaleValue = $"{width}:-2";
+        else
+            ScaleValue = $"{width}:{height}";
 
         return this;
     }
@@ -355,9 +361,20 @@ public abstract class BaseVideo : Classes
     public void CreateFolder()
     {
         string path = Path.Combine(BasePath, HlsSegmentFilename.Split("/").First());
-        // Logger.Encoder($"Creating folder {path}");
+        Logger.Encoder($"Creating folder {path}");
 
         if (!Directory.Exists(path))
             Directory.CreateDirectory(path);
+    }
+
+    public static BaseVideo Create(string profileCodec)
+    {
+        return profileCodec switch
+        {
+            "libx264" or "h264_nvenc" => new X264(profileCodec),
+            "libx265" or "h265_nvenc" => new X265(profileCodec),
+            "vp9" or "libvpx-vp9" => new Vp9(profileCodec),
+            _ => throw new Exception($"Video codec {profileCodec} is not supported")
+        };
     }
 }
